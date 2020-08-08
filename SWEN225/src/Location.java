@@ -20,14 +20,11 @@ public class Location
   private boolean wallUp;
   private boolean wallDown;
 
-  private Player playerOn;
-  private Room roomIn;
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Location(int aX, int aY, boolean aWallLeft, boolean aWallRight, boolean aWallUp, boolean aWallDown, Player aPlayerOn, Room aRoomIn)
+  public Location(int aX, int aY, boolean aWallLeft, boolean aWallRight, boolean aWallUp, boolean aWallDown)
   {
     x = aX;
     y = aY;
@@ -35,9 +32,6 @@ public class Location
     wallRight = aWallRight;
     wallUp = aWallUp;
     wallDown = aWallDown;
-    playerOn = aPlayerOn;
-    roomIn = aRoomIn;
-
   }
 
   //------------------------
@@ -120,14 +114,6 @@ public class Location
   public boolean getWallDown()
   {
     return wallDown;
-  }
-
-  public Player getPlayerOn() {
-    return playerOn;
-  }
-
-  public Room getRoomIn() {
-    return roomIn;
   }
 
   public void delete()

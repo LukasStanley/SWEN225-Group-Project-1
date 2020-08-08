@@ -2,13 +2,5 @@
 SWEN225/.idea/misc.xml
 SWEN225/.idea/modules.xml
 SWEN225/.idea/workspace.xml
-SWEN225/bin/Accugestion.class
-SWEN225/bin/Board.class
-SWEN225/bin/Card.class
-SWEN225/bin/Location.class
-SWEN225/bin/PersonCard.class
-SWEN225/bin/Player.class
-SWEN225/bin/Room.class
-SWEN225/bin/RoomCard.class
-SWEN225/bin/WeaponCard.class
 SWEN225/SWEN225.iml
+*.class

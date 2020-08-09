@@ -367,6 +367,22 @@ distributionCards.addAll(cardList);
     rooms.clear();
     players.clear();
   }
+	
+   public void displayInfo(Player playerTurn) {
+	  System.out.println("You are " + playerTurn.getPlayerName());
+	  System.out.println("The other players are:");
+	  for(Player p : players) {
+		  if(p!= playerTurn) {
+			  System.out.print("	"+p.getPlayerName());
+		  }
+	  }
+	  System.out.println("use MOVE followed by any number of u(up) d(down) l(left) r(right) to move. Move once at a time, or using a long combination. Non u/d/r/l are ignored.");
+	  System.out.println("use END to finish your turn without doing anything else");
+	  System.out.println("use SUGGEST followed by a name, weapon and location to suggest a certain sequence of events. Seperate these with a space, not a comma.");
+	  System.out.println("use ACCUSE followed by a name, weapon and location to accuse a certain person. Seperate these with a space, not a comma. Fail = game over. Succeed = win!");
+	  System.out.println("use MAP to redisplay the map");
+	  System.out.println("use CARDS to display your hand");
+  }
   
   public void displayCards(Player playerTurn){
 	System.out.flush();
@@ -385,7 +401,7 @@ distributionCards.addAll(cardList);
 	}
 }
 
-private static void excecuteTurn() {
+private static boolean excecuteTurn(Player p) {
 	String inputLine = takeStringInput();
 	int turnType = findTurn(inputLine);
 	//For storing the weapons etc of a accusation or suggestion.
@@ -393,17 +409,44 @@ private static void excecuteTurn() {
 	
 	//MOVE
 	if(turnType == 2) {
+		if(p.getSteps()==0) {
+			return false;
+		}
 		//Raw list of inputs, needs to be cut down/checked for size
-		ArrayList<Integer> movementArray = movementInputs(inputLine.substring(commands[2].length()));
+		ArrayList<Integer> movementArrayFullSize = movementInputs(inputLine.substring(commands[2].length()));
+		//Cut down the number of inputs to the number of remaining steps for the player.
+		ArrayList<Integer> movementArray = (ArrayList<Integer>) movementArrayFullSize.subList(0, p.getSteps()-1);
+		//Let the player simulate how far they can reach
+		Location playerNewLoc = p.movePlayer(movementArray);
+		//Move them this distance
+		if(playerNewLoc != null) {
+			movePlayerToLocation(p, playerNewLoc);
+		}
+		
 	}
 	//ACCUSE
 	else if(turnType == 0) {
 		parameters = inputLine.substring(commands[0].length()).split(" ");
+		if(parameters.length < 3){
+			return false;
+		}
 	}
 	//SUGGEST
 	else if(turnType == 1) {
 		parameters = inputLine.substring(commands[1].length()).split(" ");
+		if(parameters.length < 3){
+			return false;
+		}
 	}
+	//NO COMMAND FOUND
+	else if(turnType == -1) {
+		return false;
+	}
+	//Go to next turn
+	else if(turnType == 6) {
+		return true;
+	}
+	return true;
 }
 
 private static int findTurn(String inputLine) {

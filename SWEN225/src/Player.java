@@ -300,7 +300,7 @@ public class Player
             "  " + "currentLocation" + "=" + (getCurrentLocation() != null ? !getCurrentLocation().equals(this)  ? getCurrentLocation().toString().replaceAll("  ","    ") : "this" : "null");
   }
   
-
+  public Card checkHand(PersonCard person, RoomCard room, WeaponCard weapon) {
 	List<Card> potential = new ArrayList<Card>();
 	Scanner sc = new Scanner(System.in);
 	if(hand.contains(person)) { potential.add(person);}

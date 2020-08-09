@@ -69,12 +69,15 @@ distributionCards.addAll(cardList);
   }
   
   private void movePlayerToRoom(Player p, Room r) {
-	  for(Location l : r.getLocations()) {
-		  if(l.getPlayerOn() == null) {
-			  movePlayerToLocation(p, l);
-			  break;
-		  }
-	  }
+//      This method is now broken with the updated Room class.
+//      Pls fix it if you want to use it.
+
+//	  for(Location l : r.getLocations()) {
+//		  if(l.getPlayerOn() == null) {
+//			  movePlayerToLocation(p, l);
+//			  break;
+//		  }
+//	  }
   }
   
  
@@ -532,7 +535,6 @@ private void loadMapFromCSV(){
 
   for(int i=0;i<25;i++){
     for(int j=0;j<24;j++){
-      System.out.println(i+","+j);
       String current = rows[i][j];
       if(current.equals("")){
         continue;
@@ -570,39 +572,32 @@ private void loadMapFromCSV(){
   }
 
   //Load Room Data
-//  rows = new String[25][];
-//  line = "";
-//  try{
-//    BufferedReader br = new BufferedReader(new FileReader(roomFile));
-//    int index = 0;
-//    while((line = br.readLine()) != null){
-//      String[] row = line.split(csvDelimiter);
-//      rows[index] = row;
-//      index++;
-//    }
-//  }catch(Exception e){
-////    System.out.println(e);
-//  }
-//
-//  for(int i=0;i<25;i++){
-//    for(int j=0;j<24;j++) {
-//      String current = rows[i][j];
-//      if(current.equals("")){
-//        continue;
-//      }else{
-//        switch (Integer.parseInt(current)){
-//          case 1:
-//            //placeholder room
-//            locations[i][j].setRoomIn(new Room(new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null)));
-//            break;
-//          default:
-//            //placeholder room
-//            locations[i][j].setRoomIn(new Room(new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null)));
-//            break;
-//        }
-//      }
-//    }
-//  }
+  rows = new String[25][];
+  line = "";
+  try{
+    BufferedReader br = new BufferedReader(new FileReader(roomFile));
+    int index = 0;
+    while((line = br.readLine()) != null){
+      String[] row = line.split(csvDelimiter);
+      rows[index] = row;
+      index++;
+    }
+  }catch(Exception e){
+//    System.out.println(e);
+  }
+
+  for(int i=0;i<25;i++){
+    for(int j=0;j<24;j++) {
+      String current = "";
+      try{current = rows[i][j];}catch (Exception e){System.out.println(i+","+j);}
+      if(current.equals("")){
+        continue;
+      }else{
+          //Placeholder room
+          locations[i][j].setRoomIn(new Room("a"));
+      }
+    }
+  }
 
 }
 
@@ -611,17 +606,11 @@ private void displayMap(){
   for(int i=0; i<25; i++) {
     for(int j=0; j<24; j++) {
 
-      if(i>0 && j>0 && locations[i][j].getRoomIn()!=null && locations[i-1][j-1].getRoomIn()!=null){
-        System.out.println(" ");
-      }else {
-        System.out.print("+");
-      }
+      System.out.print("+");
 
       if (locations[i][j].getWallUp()) {
-        System.out.print("----");
-      }else if (i > 0 && locations[i - 1][j].getRoomIn() != null) {
-        System.out.print("   ");
-      } else {
+          System.out.print("----");
+      }else{
         System.out.print("    ");
       }
     }
@@ -637,15 +626,15 @@ private void displayMap(){
         String name = locations[i][j].getPlayerOn().getPlayerName().getName();
         switch (name){
           case "White":
-            System.out.print("W");
+            System.out.print("W ");
             break;
 
           case "Green":
-            System.out.print("G");
+            System.out.print("G ");
             break;
 
           case "Mustard":
-            System.out.print("M");
+            System.out.print("M ");
             break;
 
           case "Peacock":
@@ -657,13 +646,14 @@ private void displayMap(){
             break;
 
           case "Scarlett":
-            System.out.print("S");
+            System.out.print("S ");
             break;
 
         }
       }else {
         System.out.print("  ");
       }
+
       if(j<23){
         System.out.print(" ");
       }
@@ -675,8 +665,6 @@ private void displayMap(){
     System.out.print("+");
     if (locations[24][j].getWallDown()) {
       System.out.print("----");
-    }else if (locations[24][j].getRoomIn() != null) {
-      System.out.print("   ");
     } else {
       System.out.print("    ");
     }

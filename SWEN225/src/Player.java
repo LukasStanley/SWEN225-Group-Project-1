@@ -195,12 +195,12 @@ public class Player
   {
     return isPlaying;
   }
-  /* Code from template attribute_IsBoolean */
+
   public boolean isIsPlaying()
   {
     return isPlaying;
   }
-  /* Code from template association_GetMany */
+
   public Card getHand(int index)
   {
     Card aHand = hand.get(index);
@@ -211,6 +211,13 @@ public class Player
   {
     List<Card> newHand = Collections.unmodifiableList(hand);
     return newHand;
+  }
+  
+  public boolean handContains(String s) {
+	  for(int i = 0; i < hand.size(); i++) {
+		  if(hand.get(i).getName() == s) { return true;}
+	  }
+	  return false;
   }
 
   public int numberOfHand()
@@ -270,4 +277,21 @@ public class Player
             "  " + "currentRoom" + "=" + (getCurrentRoom() != null ? !getCurrentRoom().equals(this)  ? getCurrentRoom().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "currentLocation" + "=" + (getCurrentLocation() != null ? !getCurrentLocation().equals(this)  ? getCurrentLocation().toString().replaceAll("  ","    ") : "this" : "null");
   }
+  
+
+	List<Card> potential = new ArrayList<Card>();
+	Scanner sc = new Scanner(System.in);
+	if(hand.contains(person)) { potential.add(person);}
+	if(hand.contains(weapon)) { potential.add(weapon);}
+	if(hand.contains(room)) { potential.add(room);}
+	if(potential.size() == 1) {return potential.get(0);}
+	if(potential.size() == 2) {System.out.println("The suggestion involves two of your cards, pick which one to show the current player. Press 0 for " + potential.get(0) + " or press 1 for " + potential.get(1)); int choice = sc.nextInt(); return potential.get(choice);}
+	if(potential.size() == 3) {
+			System.out.println("The suggestion involves three of your cards, pick which one to show the current player. Press 0 for " + potential.get(0) + ", press 1 for " + potential.get(1) + " or press 2 for " + potential.get(2)); 
+				int choice = sc.nextInt(); return potential.get(choice);}
+	
+	return weapon;
+	
+	
+}
 }

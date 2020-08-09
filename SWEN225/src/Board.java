@@ -23,18 +23,18 @@ public class Board
   public Board(Accugestion aMurder)
   {
     murder = aMurder;
+    Location[][] locations = new Location[25][24];
     cards = new ArrayList<Card>();
     rooms = new ArrayList<Room>();
     players = new ArrayList<Player>();
-    locations = new ArrayList<Location>();
     generateCards();
   }
 
   private void generateCards() {
- List<Card> cardList = Arrays.asList(new Card("PEACOCK"), new Card("PLUM"),new Card("MUSTARD"), new Card("WHITE"), new Card("GREEN"), new Card("SCARLETT"), new Card("GUN"), new Card("KNIFE"), 
-		 								new Card("PIPE"), new Card("ROPE"), new Card("CANDLESTICK"), new Card("SPANNER"), new Card("DINING"), new Card("KITCHEN"),new Card("BALLROOM"), new Card("CONSERVATORY"),
-		 									new Card("BILLIARD"), new Card("LIBRARY"), new Card("STUDY"), new Card("HALL"), new Card("LOUNGE"));
- cards.addAll(cardList);
+	  List<Card> cardList = Arrays.asList(new PersonCard("PEACOCK"), new PersonCard("PLUM"),new PersonCard("MUSTARD"), new PersonCard("WHITE"), new PersonCard("GREEN"), new PersonCard("SCARLETT"), new WeaponCard("GUN"), new WeaponCard("KNIFE"), 
+				new WeaponCard("PIPE"), new WeaponCard("ROPE"), new WeaponCard("CANDLESTICK"), new RoomCard("SPANNER"), new RoomCard("DINING"), new RoomCard("KITCHEN"),new RoomCard("BALLROOM"), new RoomCard("CONSERVATORY"),
+					new RoomCard("BILLIARD"), new RoomCard("LIBRARY"), new RoomCard("STUDY"), new RoomCard("HALL"), new RoomCard("LOUNGE"));
+cards.addAll(cardList);
 	
 }
 
@@ -439,10 +439,17 @@ public class Board
             "  " + "murder" + "=" + (getMurder() != null ? !getMurder().equals(this)  ? getMurder().toString().replaceAll("  ","    ") : "this" : "null");
   }
 
-public static void makeSuggestion(Accugestion suggestion) {
+  public static void makeSuggestion(Accugestion suggestion) {
 
-	for(Player p : players){}
-}
+		for(Player p : players){
+		
+			if( p.handContains(suggestion.getPerson().getName()) || p.handContains(suggestion.getRoom().getName()) || p.handContains(suggestion.getWeapon().getName()) ) {
+				Card c = p.checkHand(suggestion.getPerson(), suggestion.getRoom(), suggestion.getWeapon());
+				System.out.println(c + " has been refuted");
+			}
+			else{System.out.println("Your suggestion has not been refuted by any other player");}
+		}
+	}
 
 public void displayMap(){
 
@@ -451,7 +458,6 @@ public void displayMap(){
 
 
 public static void main(String[] args){
-  Location[][] locations = new Location[25][24];
 
   for(int i=0;i<locations.length;i++) {
     for(int j=0; j<locations[i].length;j++){
@@ -460,7 +466,6 @@ public static void main(String[] args){
     }
   }
 
-	for(Player p : players){}
 }
   for(int i=0; i<25; i++) {
     for (int j=0; j<24; j++) {

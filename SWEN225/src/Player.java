@@ -74,6 +74,10 @@ public class Player
 			 }
 			 //right
 			 else if(current == 1) {
+				 if(currentLocationStep.getX()==23) {
+					 stillMovin = false;
+					 break;
+				 }
 				 nextLocation = locationArray[currentLocationStep.getY()][currentLocationStep.getX()+1];
 				 if(nextLocation.getWallLeft()){
 					 stillMovin = false;
@@ -82,6 +86,10 @@ public class Player
 			 }
 			 //down
 			 else if(current == 2) {
+				 if(currentLocationStep.getY()==24) {
+					 stillMovin = false;
+					 break;
+				 }
 				 nextLocation = locationArray[currentLocationStep.getY()+1][currentLocationStep.getX()];
 				 if(nextLocation.getWallUp()){
 					 stillMovin = false;
@@ -90,6 +98,10 @@ public class Player
 			 }
 			 //left or invalid (defaults to left)
 			 else{
+				 if(currentLocationStep.getX()==0) {
+					 stillMovin = false;
+					 break;
+				 }
 				 nextLocation = locationArray[currentLocationStep.getY()][currentLocationStep.getX()-1];
 				 if(nextLocation.getWallRight()){
 					 stillMovin = false;

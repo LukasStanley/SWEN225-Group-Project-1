@@ -19,6 +19,7 @@ public class Board
   private List<Room> rooms;
   private static List<Player> players;
   private static Location[][] locations = new Location[25][24];
+  static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP"};
 
   //------------------------
   // CONSTRUCTOR
@@ -403,6 +404,89 @@ public void displayMap(){
 
 }
 
+private static void excecuteTurn() {
+	String inputLine = takeStringInput();
+	int turnType = findTurn(inputLine);
+	//For storing the weapons etc of a accusation or suggestion.
+	String[] parameters;
+	
+	//MOVE
+	if(turnType == 2) {
+		//Raw list of inputs, needs to be cut down/checked for size
+		ArrayList<Integer> movementArray = movementInputs(inputLine.substring(commands[2].length()));
+	}
+	//ACCUSE
+	else if(turnType == 0) {
+		parameters = inputLine.substring(commands[0].length()).split(" ");
+	}
+	//SUGGEST
+	else if(turnType == 1) {
+		parameters = inputLine.substring(commands[1].length()).split(" ");
+	}
+}
+
+private static int findTurn(String inputLine) {
+	boolean commandFound = true;
+	int commandIndex = -1;
+	for(String command : commands) {
+		commandIndex ++;
+		commandFound = true;
+		if(command.length() <= inputLine.length()) {
+			for (int i=0; i < command.length(); i++) {	
+				if(inputLine.charAt(i) != command.charAt(i)) {
+					commandFound = false;
+				}
+			}
+		}
+		else {
+			commandFound = false;
+		}
+		
+		if(commandFound == true) {
+			break;
+		}
+	}
+	
+	if(commandFound) {
+		return commandIndex;
+	}
+	else {
+		return -1;
+	}	
+}
+
+private static ArrayList<Integer> movementInputs(String movementString) {
+	ArrayList<Integer> movements = new ArrayList<Integer>();
+	for (int i=0; i < movementString.length(); i++) {
+	    if(movementString.charAt(i) == 'd' || movementString.charAt(i) == 'D') {
+	    	movements.add(2);
+	    }
+	    else if(movementString.charAt(i) == 'u' || movementString.charAt(i) == 'U') {
+	    	movements.add(0);
+	    }
+	    else if(movementString.charAt(i) == 'l' || movementString.charAt(i) == 'L') {
+	    	movements.add(3);
+	    }
+	    else if(movementString.charAt(i) == 'r' || movementString.charAt(i) == 'R') {
+	    	movements.add(1);
+	    }
+	}
+	
+	return movements;
+}
+
+private static String takeStringInput() {
+	  InputStreamReader isr = new InputStreamReader(System.in);
+	  BufferedReader br = new BufferedReader(isr);
+	  String line = "woah";
+	  try {
+		line = br.readLine();
+	  } catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	  }
+	  return line;
+}
 
 public static void main(String[] args){
 

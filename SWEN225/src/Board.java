@@ -1,8 +1,8 @@
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.FileReader;
 import java.util.*;
+
 public class Board
 {
   //------------------------
@@ -21,7 +21,6 @@ public class Board
   private List<Room> rooms;
   private static List<Player> players;
   private static Location[][] locations = new Location[25][24];
-  static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
 
   //------------------------
   // CONSTRUCTOR
@@ -401,146 +400,136 @@ distributionCards.addAll(cardList);
 	
 	}
 
-public void displayMap(){
-	System.out.flush();
-
-}
-
-public void displayCards(Player playerTurn){
-	System.out.flush();
-	for(Card c :playerTurn.getHand()) {
-		if(c instanceof PersonCard) {
-			System.out.print("Person: ");
-		}
-		else if(c instanceof WeaponCard) {
-			System.out.print("Weapon: ");
-		}
-		else{
-			System.out.print("Room: ");
-		}
-			System.out.println(c.getName());
-		
-	}
-}
-
-private static void excecuteTurn() {
-	String inputLine = takeStringInput();
-	int turnType = findTurn(inputLine);
-	//For storing the weapons etc of a accusation or suggestion.
-	String[] parameters;
-	
-	//MOVE
-	if(turnType == 2) {
-		//Raw list of inputs, needs to be cut down/checked for size
-		ArrayList<Integer> movementArray = movementInputs(inputLine.substring(commands[2].length()));
-	}
-	//ACCUSE
-	else if(turnType == 0) {
-		parameters = inputLine.substring(commands[0].length()).split(" ");
-	}
-	//SUGGEST
-	else if(turnType == 1) {
-		parameters = inputLine.substring(commands[1].length()).split(" ");
-	}
-}
-
-private static int findTurn(String inputLine) {
-	boolean commandFound = true;
-	int commandIndex = -1;
-	for(String command : commands) {
-		commandIndex ++;
-		commandFound = true;
-		if(command.length() <= inputLine.length()) {
-			for (int i=0; i < command.length(); i++) {	
-				if(inputLine.charAt(i) != command.charAt(i)) {
-					commandFound = false;
-				}
-			}
-		}
-		else {
-			commandFound = false;
-		}
-		
-		if(commandFound == true) {
-			break;
-		}
-	}
-	
-	if(commandFound) {
-		return commandIndex;
-	}
-	else {
-		return -1;
-	}	
-}
-
-private static ArrayList<Integer> movementInputs(String movementString) {
-	ArrayList<Integer> movements = new ArrayList<Integer>();
-	for (int i=0; i < movementString.length(); i++) {
-	    if(movementString.charAt(i) == 'd' || movementString.charAt(i) == 'D') {
-	    	movements.add(2);
-	    }
-	    else if(movementString.charAt(i) == 'u' || movementString.charAt(i) == 'U') {
-	    	movements.add(0);
-	    }
-	    else if(movementString.charAt(i) == 'l' || movementString.charAt(i) == 'L') {
-	    	movements.add(3);
-	    }
-	    else if(movementString.charAt(i) == 'r' || movementString.charAt(i) == 'R') {
-	    	movements.add(1);
-	    }
-	}
-	
-	return movements;
-}
-
-private static String takeStringInput() {
-	  InputStreamReader isr = new InputStreamReader(System.in);
-	  BufferedReader br = new BufferedReader(isr);
-	  String line = "woah";
-	  try {
-		line = br.readLine();
-	  } catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	  }
-	  return line;
-}
-
-public static void main(String[] args){
-
+private void loadMapFromCSV(){
+  //Populate blank array of locations
   for(int i=0;i<locations.length;i++) {
     for(int j=0; j<locations[i].length;j++){
-
       locations[i][j] = new Location(i,j,false,false,false,false,null,null);
     }
   }
 
+  String wallFile = "./src/walls.csv";
+  String roomFile = "./src/rooms.csv";
+  String line = "";
+  String csvDelimiter = ",";
+
+  String[][] rows = new String[25][];
+
+  try{
+    BufferedReader br = new BufferedReader(new FileReader(wallFile));
+    int index = 0;
+    while((line = br.readLine()) != null){
+      String[] row = line.split(csvDelimiter);
+      rows[index] = row;
+      index++;
+    }
+    br.close();
+  }catch(Exception e){
+    System.out.println(e);
+  }
+
+  for(int i=0;i<25;i++){
+    for(int j=0;j<24;j++){
+      System.out.println(i+","+j);
+      String current = rows[i][j];
+      if(current.equals("")){
+        continue;
+      }
+      switch(current.charAt(0)){
+        case 'U':
+          locations[i][j].setWallUp(true);
+          break;
+        case 'D':
+          locations[i][j].setWallDown(true);
+          break;
+        case 'B':
+          locations[i][j].setWallUp(true);
+          locations[i][j].setWallDown(true);
+          break;
+        case 'N':
+          break;
+      }
+
+      switch(current.charAt(1)){
+        case 'L':
+          locations[i][j].setWallLeft(true);
+          break;
+        case 'R':
+          locations[i][j].setWallRight(true);
+          break;
+        case 'B':
+          locations[i][j].setWallLeft(true);
+          locations[i][j].setWallRight(true);
+          break;
+        case 'N':
+          break;
+      }
+    }
+  }
+
+  //Load Room Data
+  rows = new String[25][];
+  line = "";
+  try{
+    BufferedReader br = new BufferedReader(new FileReader(roomFile));
+    int index = 0;
+    while((line = br.readLine()) != null){
+      String[] row = line.split(csvDelimiter);
+      rows[index] = row;
+      index++;
+    }
+  }catch(Exception e){
+    System.out.println(e);
+  }
+
+  for(int i=0;i<25;i++){
+    for(int j=0;j<24;j++) {
+      String current = rows[i][j];
+      if(current.equals("")){
+        continue;
+      }else{
+        switch (Integer.parseInt(current)){
+          case 1:
+            //placeholder room
+            locations[i][j].setRoomIn(new Room(new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null)));
+            break;
+          default:
+            //placeholder room
+            locations[i][j].setRoomIn(new Room(new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null)));
+            break;
+        }
+      }
+    }
+  }
+
+}
+
+private void displayMap(){
 
   for(int i=0; i<25; i++) {
-    for (int j=0; j<24; j++) {
-      System.out.print("+");
-      if (locations[i][j].getWallUp()) {
-        System.out.print("====");
+    for(int j=0; j<24; j++) {
+
+      if(i>0 && j>0 && locations[i][j].getRoomIn()!=null && locations[i-1][j-1].getRoomIn()!=null){
+        System.out.println(" ");
+      }else {
+        System.out.print("+");
       }
-      if (i > 0 && locations[i - 1][j].getRoomIn() != null) {
+
+      if (locations[i][j].getWallUp()) {
+        System.out.print("----");
+      }else if (i > 0 && locations[i - 1][j].getRoomIn() != null) {
         System.out.print("   ");
       } else {
-        System.out.print("----");
+        System.out.print("    ");
       }
     }
     System.out.println("+");
 
     for (int j=0; j<24; j++) {
-      if(j>0 && locations[i][j-1].getRoomIn()!=null){
-        System.out.print(" ");
-      }else{
-        System.out.print("|");
-      }
       if(locations[i][j].getWallLeft()){
-        System.out.print("|");
+        System.out.print("| ");
       }else {
-        System.out.print(" ");
+        System.out.print("  ");
       }
       if(locations[i][j].getPlayerOn()!=null) {
         String name = locations[i][j].getPlayerOn().getPlayerName().getName();
@@ -577,33 +566,24 @@ public static void main(String[] args){
         System.out.print(" ");
       }
     }
-    if(locations[i][23].getWallRight()){
-      System.out.println("||");
-    }else{
-      System.out.println(" |");
-    }
+    System.out.println(" |");
+
   }
   for (int j=0; j<24; j++) {
     System.out.print("+");
-    if (locations[24][j].getWallUp()) {
-      System.out.print("====");
-    }
-    if (locations[24][j].getRoomIn() != null) {
+    if (locations[24][j].getWallDown()) {
+      System.out.print("----");
+    }else if (locations[24][j].getRoomIn() != null) {
       System.out.print("   ");
     } else {
-      System.out.print("----");
+      System.out.print("    ");
     }
   }
   System.out.println("+");
-//  Board myBoard = new Board();
-//  myBoard.displayMap();
-  
-  isRunning = true;
-  playGame();
 
 }
 
-private static void playGame() {
+  private void playGame() {
 	while(isRunning) {
 		for(Player player : players) {
 			if(player.getIsPlaying());
@@ -612,10 +592,16 @@ private static void playGame() {
 		}
 		
 	}
-	
 }
 
+  public static void main(String[] args) {
+    Board myBoard = new Board();
+    myBoard.generateCards();
 
+    myBoard.loadMapFromCSV();
+    myBoard.displayMap();
 
-
+    isRunning = true;
+    myBoard.playGame();
+  }
 }

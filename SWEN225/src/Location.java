@@ -134,6 +134,10 @@ public class Location
     return roomIn;
   }
 
+  public void setRoomIn(Room roomIn) {
+    this.roomIn = roomIn;
+  }
+
   public void delete()
   {}
 

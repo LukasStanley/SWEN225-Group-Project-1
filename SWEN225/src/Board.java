@@ -468,39 +468,39 @@ private void loadMapFromCSV(){
   }
 
   //Load Room Data
-  rows = new String[25][];
-  line = "";
-  try{
-    BufferedReader br = new BufferedReader(new FileReader(roomFile));
-    int index = 0;
-    while((line = br.readLine()) != null){
-      String[] row = line.split(csvDelimiter);
-      rows[index] = row;
-      index++;
-    }
-  }catch(Exception e){
-    System.out.println(e);
-  }
-
-  for(int i=0;i<25;i++){
-    for(int j=0;j<24;j++) {
-      String current = rows[i][j];
-      if(current.equals("")){
-        continue;
-      }else{
-        switch (Integer.parseInt(current)){
-          case 1:
-            //placeholder room
-            locations[i][j].setRoomIn(new Room(new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null)));
-            break;
-          default:
-            //placeholder room
-            locations[i][j].setRoomIn(new Room(new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null)));
-            break;
-        }
-      }
-    }
-  }
+//  rows = new String[25][];
+//  line = "";
+//  try{
+//    BufferedReader br = new BufferedReader(new FileReader(roomFile));
+//    int index = 0;
+//    while((line = br.readLine()) != null){
+//      String[] row = line.split(csvDelimiter);
+//      rows[index] = row;
+//      index++;
+//    }
+//  }catch(Exception e){
+////    System.out.println(e);
+//  }
+//
+//  for(int i=0;i<25;i++){
+//    for(int j=0;j<24;j++) {
+//      String current = rows[i][j];
+//      if(current.equals("")){
+//        continue;
+//      }else{
+//        switch (Integer.parseInt(current)){
+//          case 1:
+//            //placeholder room
+//            locations[i][j].setRoomIn(new Room(new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null)));
+//            break;
+//          default:
+//            //placeholder room
+//            locations[i][j].setRoomIn(new Room(new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null),new Location(0,0,false,false,false,false,null,null)));
+//            break;
+//        }
+//      }
+//    }
+//  }
 
 }
 

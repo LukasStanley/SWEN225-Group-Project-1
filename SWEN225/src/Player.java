@@ -53,111 +53,75 @@ public class Player
 	  Location currentLocationStep = currentLocation;
 	  Location nextLocation = currentLocation;
 	  boolean stillMovin = true;
+	  boolean firstLoop = true;
 	  for(Integer current : movements) {
 		  
 		 //The current location of the player as they are trying to perform their inputs. nextLocation will be initialized to the previous (valid) move.
 		 currentLocationStep = nextLocation;
-		  
-		  //If not inside a room
-		 if(currentLocationStep.getRoomIn() == null) {
-			  //up
-			 if(current == 0) {
-				 if(currentLocationStep.getY()==0) {
-					 stillMovin = false;
-					 break;
-				 }
-				 nextLocation = locationArray[currentLocationStep.getY()-1][currentLocationStep.getX()];
-				 if(nextLocation.getWallDown()){
-					 stillMovin = false;
-					 break;
-				 }
+		 if(firstLoop) {
+			 firstLoop = false;
+		 }
+		 else {
+			 if(currentLocationStep.getRoomIn() == null) {
+				 stepsRemaining--;
+			 }				 
+		 }
+		  //up
+		 if(current == 0) {
+			 if(currentLocationStep.getY()==0) {
+				 stillMovin = false;
+				 break;
 			 }
-			 //right
-			 else if(current == 1) {
-				 nextLocation = locationArray[currentLocationStep.getY()][currentLocationStep.getX()+1];
-				 if(nextLocation.getWallLeft()){
-					 stillMovin = false;
-					 break;
-				 }
-			 }
-			 //down
-			 else if(current == 2) {
-				 nextLocation = locationArray[currentLocationStep.getY()+1][currentLocationStep.getX()];
-				 if(nextLocation.getWallUp()){
-					 stillMovin = false;
-					 break;
-				 }
-			 }
-			 //left or invalid (defaults to left)
-			 else{
-				 nextLocation = locationArray[currentLocationStep.getY()][currentLocationStep.getX()-1];
-				 if(nextLocation.getWallRight()){
-					 stillMovin = false;
-					 break;
-				 }
-			 }
-			 
-			 //Trying to land on a tile with a player
-			 if(nextLocation.getPlayerOn() != null) {
+			 nextLocation = locationArray[currentLocationStep.getY()-1][currentLocationStep.getX()];
+			 if(nextLocation.getWallDown()){
 				 stillMovin = false;
 				 break;
 			 }
 		 }
-		 //Inside a room
-		 else {
-			  //up
-			 if(current == 0) {
-				 if(currentLocationStep.getRoomIn().getTop() == null) {
-					 stillMovin = false;
-					 break;
-				 }
-				 else {
-					 nextLocation = currentLocationStep.getRoomIn().getTop();
-				 }
+		 //right
+		 else if(current == 1) {
+			 if(currentLocationStep.getX()==23) {
+				 stillMovin = false;
+				 break;
 			 }
-			 //right
-			 else if(current == 1) {
-				 if(currentLocationStep.getRoomIn().getRight() == null) {
-					 stillMovin = false;
-					 break;
-				 }
-				 else {
-					 nextLocation = currentLocationStep.getRoomIn().getRight();
-				 }
+			 nextLocation = locationArray[currentLocationStep.getY()][currentLocationStep.getX()+1];
+			 if(nextLocation.getWallLeft()){
+				 stillMovin = false;
+				 break;
 			 }
-			 //down
-			 else if(current == 2) {
-				 if(currentLocationStep.getRoomIn().getBottom() == null) {
-					 stillMovin = false;
-					 break;
-				 }
-				 else {
-					 nextLocation = currentLocationStep.getRoomIn().getBottom();
-				 }
+		 }
+		 //down
+		 else if(current == 2) {
+			 if(currentLocationStep.getY()==24) {
+				 stillMovin = false;
+				 break;
 			 }
-			 //left or invalid (defaults to left)
-			 else{
-				 if(currentLocationStep.getRoomIn().getLeft() == null) {
-					 stillMovin = false;
-					 break;
-				 }
-				 else {
-					 nextLocation = currentLocationStep.getRoomIn().getLeft();
-				 }
+			 nextLocation = locationArray[currentLocationStep.getY()+1][currentLocationStep.getX()];
+			 if(nextLocation.getWallUp()){
+				 stillMovin = false;
+				 break;
+			 }
+		 }
+		 //left or invalid (defaults to left)
+		 else{
+			 if(currentLocationStep.getX()==0) {
+				 stillMovin = false;
+				 break;
+			 }
+			 nextLocation = locationArray[currentLocationStep.getY()][currentLocationStep.getX()-1];
+			 if(nextLocation.getWallRight()){
+				 stillMovin = false;
+				 break;
 			 }
 		 }
 		 
-		 if(stillMovin) {
-			 try {
-				 stepsRemaining--;
-			 }
-			 catch (Exception e) {
-		            e.printStackTrace();
-		     }
+		 //Trying to land on a tile with a player
+		 if(nextLocation.getPlayerOn() != null) {
+			 stillMovin = false;
+			 break;
 		 }
-		 
-		 
 	  }
+		 
 	  if(currentLocationStep == currentLocation) {
 		  return null;
 	  }

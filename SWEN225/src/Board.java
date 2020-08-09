@@ -21,7 +21,7 @@ public class Board
   private List<Room> rooms;
   private static List<Player> players;
   private static Location[][] locations = new Location[25][24];
-  static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP"};
+  static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
 
   //------------------------
   // CONSTRUCTOR
@@ -402,8 +402,25 @@ distributionCards.addAll(cardList);
 	}
 
 public void displayMap(){
+	System.out.flush();
 
+}
 
+public void displayCards(Player playerTurn){
+	System.out.flush();
+	for(Card c :playerTurn.getHand()) {
+		if(c instanceof PersonCard) {
+			System.out.print("Person: ");
+		}
+		else if(c instanceof WeaponCard) {
+			System.out.print("Weapon: ");
+		}
+		else{
+			System.out.print("Room: ");
+		}
+			System.out.println(c.getName());
+		
+	}
 }
 
 private static void excecuteTurn() {

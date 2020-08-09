@@ -16,6 +16,7 @@ public class Player
   private Room currentRoom;
   private Location currentLocation;
   private boolean isPlaying;
+  private Location[][] locationArray;
 
   //Player Associations
   private List<Card> hand;
@@ -24,19 +25,125 @@ public class Player
   // CONSTRUCTOR
   //------------------------
 
-  public Player(PersonCard aPlayerName, Room aCurrentRoom, Location aCurrentLocation, boolean aIsPlaying)
+  public Player(PersonCard aPlayerName, Room aCurrentRoom, Location aCurrentLocation, boolean aIsPlaying, Location [][] locations)
   {
     playerName = aPlayerName;
     currentRoom = aCurrentRoom;
     currentLocation = aCurrentLocation;
     isPlaying = aIsPlaying;
     hand = new ArrayList<Card>();
+    locationArray = locations;
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
+  //direction is 0 = up 1 = right 2 = down 3 = left
+  public Location movePlayer(ArrayList<Integer> movements) {
+	  Location currentLocationStep = currentLocation;
+	  Location nextLocation = currentLocation;
+	  boolean stillMovin = true;
+	  for(Integer current : movements) {
+		  
+		 //The current location of the player as they are trying to perform their inputs. nextLocation will be initialized to the previous (valid) move.
+		 currentLocationStep = nextLocation;
+		  
+		  //If not inside a room
+		 if(currentLocationStep.getRoomIn() == null) {
+			  //up
+			 if(current == 0) {
+				 nextLocation = locationArray[currentLocationStep.getY()-1][currentLocationStep.getX()];
+				 if(nextLocation.getWallDown()){
+					 stillMovin = false;
+					 break;
+				 }
+			 }
+			 //right
+			 else if(current == 1) {
+				 nextLocation = locationArray[currentLocationStep.getY()][currentLocationStep.getX()+1];
+				 if(nextLocation.getWallLeft()){
+					 stillMovin = false;
+					 break;
+				 }
+			 }
+			 //down
+			 else if(current == 2) {
+				 nextLocation = locationArray[currentLocationStep.getY()+1][currentLocationStep.getX()];
+				 if(nextLocation.getWallUp()){
+					 stillMovin = false;
+					 break;
+				 }
+			 }
+			 //left or invalid (defaults to left)
+			 else{
+				 nextLocation = locationArray[currentLocationStep.getY()][currentLocationStep.getX()-1];
+				 if(nextLocation.getWallRight()){
+					 stillMovin = false;
+					 break;
+				 }
+			 }
+			 
+			 //Trying to land on a tile with a player
+			 if(nextLocation.getPlayerOn() != null) {
+				 stillMovin = false;
+				 break;
+			 }
+		 }
+		 //Inside a room
+		 else {
+			  //up
+			 if(current == 0) {
+				 if(currentLocationStep.getRoomIn().getTop() == null) {
+					 stillMovin = false;
+					 break;
+				 }
+				 else {
+					 nextLocation = currentLocationStep.getRoomIn().getTop();
+				 }
+			 }
+			 //right
+			 else if(current == 1) {
+				 if(currentLocationStep.getRoomIn().getRight() == null) {
+					 stillMovin = false;
+					 break;
+				 }
+				 else {
+					 nextLocation = currentLocationStep.getRoomIn().getRight();
+				 }
+			 }
+			 //down
+			 else if(current == 2) {
+				 if(currentLocationStep.getRoomIn().getBottom() == null) {
+					 stillMovin = false;
+					 break;
+				 }
+				 else {
+					 nextLocation = currentLocationStep.getRoomIn().getBottom();
+				 }
+			 }
+			 //left or invalid (defaults to left)
+			 else{
+				 if(currentLocationStep.getRoomIn().getLeft() == null) {
+					 stillMovin = false;
+					 break;
+				 }
+				 else {
+					 nextLocation = currentLocationStep.getRoomIn().getLeft();
+				 }
+			 }
+		 }
+		 
+		 
+	  }
+	  if(currentLocationStep == currentLocation) {
+		  return null;
+	  }
+	  
+	  else {
+		  return currentLocationStep;
+	  }
+  }
   public boolean setPlayerName(PersonCard aPlayerName)
   {
     boolean wasSet = false;
@@ -118,16 +225,6 @@ public class Player
     return has;
   }
 
-  public int indexOfHand(Card aHand)
-  {
-    int index = hand.indexOf(aHand);
-    return index;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfHand()
-  {
-    return 0;
-  }
   /* Code from template association_AddUnidirectionalMany */
   public boolean addHand(Card aHand)
   {
@@ -147,38 +244,6 @@ public class Player
       wasRemoved = true;
     }
     return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addHandAt(Card aHand, int index)
-  {  
-    boolean wasAdded = false;
-    if(addHand(aHand))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfHand()) { index = numberOfHand() - 1; }
-      hand.remove(aHand);
-      hand.add(index, aHand);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveHandAt(Card aHand, int index)
-  {
-    boolean wasAdded = false;
-    if(hand.contains(aHand))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfHand()) { index = numberOfHand() - 1; }
-      hand.remove(aHand);
-      hand.add(index, aHand);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addHandAt(aHand, index);
-    }
-    return wasAdded;
   }
 
   public void delete()

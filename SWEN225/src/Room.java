@@ -15,19 +15,53 @@ public class Room
 
   //Room Associations
   private List<Location> locations;
+  
+  private Location topExit;
+  private Location bottomExit;
+  private Location leftExit;
+  private Location rightExit;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Room()
+  public Room(Location top, Location bottom, Location left, Location right)
   {
     locations = new ArrayList<Location>();
+    if(top != null) {
+    	topExit = top;
+    }
+    if(bottom != null) {
+    	bottomExit = bottom;
+    }
+    if(left != null) {
+    	leftExit = left;
+    }
+    if(top != null) {
+    	rightExit = right;
+    }
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+  
+  public Location getTop() {
+	  return topExit;
+  }
+  
+  public Location getLeft() {
+	  return leftExit;
+  }
+  
+  public Location getRight() {
+	  return rightExit;
+  }
+  
+  public Location getBottom() {
+	  return bottomExit;
+  }
+  
   /* Code from template association_GetMany */
   public Location getLocation(int index)
   {

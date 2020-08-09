@@ -26,10 +26,9 @@ public class Player
   // CONSTRUCTOR
   //------------------------
 
-  public Player(PersonCard aPlayerName, Room aCurrentRoom, Location aCurrentLocation, boolean aIsPlaying, Location[][] locations)
+  public Player(PersonCard aPlayerName, Location aCurrentLocation, boolean aIsPlaying, Location[][] locations)
   {
     playerName = aPlayerName;
-    currentRoom = aCurrentRoom;
     currentLocation = aCurrentLocation;
     isPlaying = aIsPlaying;
     hand = new ArrayList<Card>();
@@ -64,52 +63,57 @@ public class Player
 		 else {
 			 if(currentLocationStep.getRoomIn() == null) {
 				 stepsRemaining--;
-			 }				 
+				 System.out.println("reduced by 1");
+			 }	
+			 else {
+				 System.out.println(currentLocationStep.getRoomIn().getName());
+			 }
 		 }
-		  //up
-		 if(current == 0) {
+		  //left
+		 if(current == 3) {
 			 if(currentLocationStep.getY()==0) {
 				 stillMovin = false;
 				 break;
 			 }
-			 nextLocation = locationArray[currentLocationStep.getY()-1][currentLocationStep.getX()];
-			 if(nextLocation.getWallDown()){
-				 stillMovin = false;
-				 break;
-			 }
-		 }
-		 //right
-		 else if(current == 1) {
-			 if(currentLocationStep.getX()==23) {
-				 stillMovin = false;
-				 break;
-			 }
-			 nextLocation = locationArray[currentLocationStep.getY()][currentLocationStep.getX()+1];
-			 if(nextLocation.getWallLeft()){
+			 nextLocation = locationArray[currentLocationStep.getX()][currentLocationStep.getY()-1];
+			 if(nextLocation.getWallRight()){
 				 stillMovin = false;
 				 break;
 			 }
 		 }
 		 //down
 		 else if(current == 2) {
-			 if(currentLocationStep.getY()==24) {
+			 if(currentLocationStep.getX()==23) {
 				 stillMovin = false;
 				 break;
 			 }
-			 nextLocation = locationArray[currentLocationStep.getY()+1][currentLocationStep.getX()];
+			 nextLocation = locationArray[currentLocationStep.getX()+1][currentLocationStep.getY()];
 			 if(nextLocation.getWallUp()){
 				 stillMovin = false;
 				 break;
 			 }
 		 }
-		 //left or invalid (defaults to left)
+		 //right
+		 else if(current == 1) {
+			 if(currentLocationStep.getY()==24) {
+				 stillMovin = false;
+				 break;
+			 }
+			 nextLocation = locationArray[currentLocationStep.getX()][currentLocationStep.getY()+1];
+			 if(nextLocation.getWallLeft()){
+				 stillMovin = false;
+				 break;
+			 }
+		 }
+		 //up or invalid (defaults to up)
 		 else{
+			 System.out.println(currentLocationStep);
 			 if(currentLocationStep.getX()==0) {
 				 stillMovin = false;
 				 break;
 			 }
-			 nextLocation = locationArray[currentLocationStep.getY()][currentLocationStep.getX()-1];
-			 if(nextLocation.getWallRight()){
+			 nextLocation = locationArray[currentLocationStep.getX()-1][currentLocationStep.getY()];
+			 if(nextLocation.getWallDown()){
 				 stillMovin = false;
 				 break;
 			 }
@@ -206,17 +210,6 @@ public class Player
 	  return false;
   }
 
-  public int numberOfHand()
-  {
-    int number = hand.size();
-    return number;
-  }
-
-  public boolean hasHand()
-  {
-    boolean has = hand.size() > 0;
-    return has;
-  }
 
   /* Code from template association_AddUnidirectionalMany */
   public boolean addHand(Card aHand)

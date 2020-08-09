@@ -21,9 +21,11 @@ public class Board
   private static List<Card> cards;
   private static List<Card> distributionCards;
   private List<Room> rooms;
-  private static List<Player> players;
   private static Location[][] locations = new Location[25][24];
+  private static Player[] players = new Player[6];
+  private static int playersPlaying;
   static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
+  static int[][] startingPoints = {{6, 3}, {7, 3}, {16, 3}, {17, 3}, {7, 23}, {15, 23}};
 
   //------------------------
   // CONSTRUCTOR
@@ -34,7 +36,6 @@ public class Board
     cards = new ArrayList<Card>();
     distributionCards = new ArrayList<Card>();
     rooms = new ArrayList<Room>();
-    players = new ArrayList<Player>();
     generateCards();
     chooseMurder();
   }
@@ -45,16 +46,24 @@ public class Board
 	 mRoom = (RoomCard) cards.get(randomGeneration(12,17));
 	distributionCards.remove(mPerson); distributionCards.remove(mWeapon); distributionCards.remove(mRoom);
 	
-}
+  }
 
-private void generateCards() {
-	  List<Card> cardList = Arrays.asList(new PersonCard("PEACOCK"), new PersonCard("PLUM"),new PersonCard("MUSTARD"), new PersonCard("WHITE"), new PersonCard("GREEN"), new PersonCard("SCARLETT"), new WeaponCard("GUN"), new WeaponCard("KNIFE"), 
-				new WeaponCard("PIPE"), new WeaponCard("ROPE"), new WeaponCard("CANDLESTICK"), new RoomCard("SPANNER"), new RoomCard("DINING"), new RoomCard("KITCHEN"),new RoomCard("BALLROOM"), new RoomCard("CONSERVATORY"),
-					new RoomCard("BILLIARD"), new RoomCard("LIBRARY"), new RoomCard("STUDY"), new RoomCard("HALL"), new RoomCard("LOUNGE"));
-cards.addAll(cardList);
-distributionCards.addAll(cardList);
-	
-}
+  private void generateCards() {
+		  List<Card> cardList = Arrays.asList(new PersonCard("PEACOCK"), new PersonCard("PLUM"),new PersonCard("MUSTARD"), new PersonCard("WHITE"), new PersonCard("GREEN"), new PersonCard("SCARLETT"), 
+				  new WeaponCard("GUN"), new WeaponCard("KNIFE"), new WeaponCard("PIPE"), new WeaponCard("ROPE"), new WeaponCard("CANDLESTICK"), new WeaponCard("SPANNER"), 
+				  new RoomCard("DINING"), new RoomCard("KITCHEN"),new RoomCard("BALLROOM"), new RoomCard("CONSERVATORY"), new RoomCard("BILLIARD"), new RoomCard("LIBRARY"), new RoomCard("STUDY"), new RoomCard("HALL"), new RoomCard("LOUNGE"));
+	cards.addAll(cardList);
+	distributionCards.addAll(cardList);
+		
+  }
+  
+  private void generatePlayers() {
+  	  for(int i = 0; i<players.length; i++) {
+  		  players[i] = new Player((PersonCard) cards.get(i), locations[startingPoints[i][1]][startingPoints[i][0]], true, locations);
+  		  locations[startingPoints[i][1]][startingPoints[i][0]].setPlayerOn(players[i]);
+	  }
+  }
+
 
 
 //------------------------
@@ -62,7 +71,7 @@ distributionCards.addAll(cardList);
   //------------------------
 
 
-  private void movePlayerToLocation(Player p, Location l){
+  private static void movePlayerToLocation(Player p, Location l){
 	  p.getCurrentLocation().setPlayerOn(null);
 	  p.setCurrentLocation(l);
 	  l.setPlayerOn(p);
@@ -87,295 +96,24 @@ distributionCards.addAll(cardList);
 			int result = r.nextInt(high-low) + low;
 			return result;
 		}
-  
-
-
-  //Card Stuff
-  public Card getCard(int index)
-  {
-    Card aCard = cards.get(index);
-    return aCard;
-  }
-
-  public List<Card> getCards()
-  {
-    List<Card> newCards = Collections.unmodifiableList(cards);
-    return newCards;
-  }
-
-  public int numberOfCards()
-  {
-    int number = cards.size();
-    return number;
-  }
-
-  public boolean hasCards()
-  {
-    boolean has = cards.size() > 0;
-    return has;
-  }
-
-  public int indexOfCard(Card aCard)
-  {
-    int index = cards.indexOf(aCard);
-    return index;
-  }
-  /* Code from template association_GetMany */
-  public Room getRoom(int index)
-  {
-    Room aRoom = rooms.get(index);
-    return aRoom;
-  }
-
-  // Room stuff
-  public List<Room> getRooms()
-  {
-    List<Room> newRooms = Collections.unmodifiableList(rooms);
-    return newRooms;
-  }
-
-  public int numberOfRooms()
-  {
-    int number = rooms.size();
-    return number;
-  }
-
-  public boolean hasRooms()
-  {
-    boolean has = rooms.size() > 0;
-    return has;
-  }
-
-  public int indexOfRoom(Room aRoom)
-  {
-    int index = rooms.indexOf(aRoom);
-    return index;
-  }
-  /* Code from template association_GetMany */
-  public Player getPlayer(int index)
-  {
-    Player aPlayer = players.get(index);
-    return aPlayer;
-  }
-
-  // Player Stuff
-  public List<Player> getPlayers()
-  {
-    List<Player> newPlayers = Collections.unmodifiableList(players);
-    return newPlayers;
-  }
-
-  public int numberOfPlayers()
-  {
-    int number = players.size();
-    return number;
-  }
-
-  public boolean hasPlayers()
-  {
-    boolean has = players.size() > 0;
-    return has;
-  }
-
-  public int indexOfPlayer(Player aPlayer)
-  {
-    int index = players.indexOf(aPlayer);
-    return index;
-  }
-
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfCards()
-  {
-    return 0;
-  }
-  /* Code from template association_AddUnidirectionalMany */
-  public boolean addCard(Card aCard)
-  {
-    boolean wasAdded = false;
-    if (cards.contains(aCard)) { return false; }
-    cards.add(aCard);
-    wasAdded = true;
-    return wasAdded;
-  }
-
-  public boolean removeCard(Card aCard)
-  {
-    boolean wasRemoved = false;
-    if (cards.contains(aCard))
-    {
-      cards.remove(aCard);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addCardAt(Card aCard, int index)
-  {  
-    boolean wasAdded = false;
-    if(addCard(aCard))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfCards()) { index = numberOfCards() - 1; }
-      cards.remove(aCard);
-      cards.add(index, aCard);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveCardAt(Card aCard, int index)
-  {
-    boolean wasAdded = false;
-    if(cards.contains(aCard))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfCards()) { index = numberOfCards() - 1; }
-      cards.remove(aCard);
-      cards.add(index, aCard);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addCardAt(aCard, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfRooms()
-  {
-    return 0;
-  }
-  /* Code from template association_AddUnidirectionalMany */
-  public boolean addRoom(Room aRoom)
-  {
-    boolean wasAdded = false;
-    if (rooms.contains(aRoom)) { return false; }
-    rooms.add(aRoom);
-    wasAdded = true;
-    return wasAdded;
-  }
-
-  public boolean removeRoom(Room aRoom)
-  {
-    boolean wasRemoved = false;
-    if (rooms.contains(aRoom))
-    {
-      rooms.remove(aRoom);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addRoomAt(Room aRoom, int index)
-  {  
-    boolean wasAdded = false;
-    if(addRoom(aRoom))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfRooms()) { index = numberOfRooms() - 1; }
-      rooms.remove(aRoom);
-      rooms.add(index, aRoom);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveRoomAt(Room aRoom, int index)
-  {
-    boolean wasAdded = false;
-    if(rooms.contains(aRoom))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfRooms()) { index = numberOfRooms() - 1; }
-      rooms.remove(aRoom);
-      rooms.add(index, aRoom);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addRoomAt(aRoom, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfPlayers()
-  {
-    return 0;
-  }
-  /* Code from template association_AddUnidirectionalMany */
-  public boolean addPlayer(Player aPlayer)
-  {
-    boolean wasAdded = false;
-    if (players.contains(aPlayer)) { return false; }
-    players.add(aPlayer);
-    wasAdded = true;
-    return wasAdded;
-  }
-
-  public boolean removePlayer(Player aPlayer)
-  {
-    boolean wasRemoved = false;
-    if (players.contains(aPlayer))
-    {
-      players.remove(aPlayer);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addPlayerAt(Player aPlayer, int index)
-  {  
-    boolean wasAdded = false;
-    if(addPlayer(aPlayer))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
-      players.remove(aPlayer);
-      players.add(index, aPlayer);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMovePlayerAt(Player aPlayer, int index)
-  {
-    boolean wasAdded = false;
-    if(players.contains(aPlayer))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfPlayers()) { index = numberOfPlayers() - 1; }
-      players.remove(aPlayer);
-      players.add(index, aPlayer);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addPlayerAt(aPlayer, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfLocations()
-  {
-    return 0;
-  }
-
 
   public void delete()
   {
     cards.clear();
     rooms.clear();
-    players.clear();
   }
 	
-   public void displayInfo(Player playerTurn) {
-	  System.out.println("You are " + playerTurn.getPlayerName());
+   public static void displayInfo(Player playerTurn) {
+	  System.out.println("DEBUG: COORDS " + playerTurn.getCurrentLocation().getX() + " , " + playerTurn.getCurrentLocation().getY());
+	  System.out.println("You are " + playerTurn.getPlayerName().getName());
 	  System.out.println("The other players are:");
 	  for(Player p : players) {
 		  if(p!= playerTurn) {
-			  System.out.print("	"+p.getPlayerName());
+			  System.out.print("	"+p.getPlayerName().getName());
 		  }
 	  }
+	  System.out.println();
+	  System.out.println("You have "+ playerTurn.getSteps()+" moves remaining. You can move infinitely within a room.");
 	  System.out.println("use MOVE followed by any number of u(up) d(down) l(left) r(right) to move. Move once at a time, or using a long combination. Non u/d/r/l are ignored.");
 	  System.out.println("use END to finish your turn without doing anything else");
 	  System.out.println("use SUGGEST followed by a name, weapon and location to suggest a certain sequence of events. Seperate these with a space, not a comma.");
@@ -384,7 +122,7 @@ distributionCards.addAll(cardList);
 	  System.out.println("use CARDS to display your hand");
   }
   
-  public void displayCards(Player playerTurn){
+  public static void displayCards(Player playerTurn){
 	System.out.flush();
 	for(Card c :playerTurn.getHand()) {
 		if(c instanceof PersonCard) {
@@ -415,7 +153,13 @@ private static boolean excecuteTurn(Player p) {
 		//Raw list of inputs, needs to be cut down/checked for size
 		ArrayList<Integer> movementArrayFullSize = movementInputs(inputLine.substring(commands[2].length()));
 		//Cut down the number of inputs to the number of remaining steps for the player.
-		ArrayList<Integer> movementArray = (ArrayList<Integer>) movementArrayFullSize.subList(0, p.getSteps()-1);
+		ArrayList<Integer> movementArray;
+		if(movementArrayFullSize.size()>p.getSteps()) {
+			movementArray = (ArrayList<Integer>) movementArrayFullSize.subList(0, p.getSteps()-1);
+		}
+		else {
+			movementArray = movementArrayFullSize;
+		}
 		//Let the player simulate how far they can reach
 		Location playerNewLoc = p.movePlayer(movementArray);
 		//Move them this distance
@@ -430,6 +174,7 @@ private static boolean excecuteTurn(Player p) {
 		if(parameters.length < 3){
 			return false;
 		}
+		System.out.println("Trying to ACCUSE with "+parameters);
 	}
 	//SUGGEST
 	else if(turnType == 1) {
@@ -437,6 +182,7 @@ private static boolean excecuteTurn(Player p) {
 		if(parameters.length < 3){
 			return false;
 		}
+		System.out.println("Trying to SUGGEST with "+parameters);
 	}
 	//NO COMMAND FOUND
 	else if(turnType == -1) {
@@ -445,6 +191,16 @@ private static boolean excecuteTurn(Player p) {
 	//Go to next turn
 	else if(turnType == 6) {
 		return true;
+	}
+	//Cards
+	else if(turnType == 3) {
+		displayCards(p);
+		displayInfo(p);
+	}
+	//Map
+	else if(turnType == 3) {
+		displayMap();
+		displayInfo(p);
 	}
 	return true;
 }
@@ -496,6 +252,7 @@ private static ArrayList<Integer> movementInputs(String movementString) {
 	    }
 	}
 	
+	System.out.println(movements);
 	return movements;
 }
 
@@ -644,8 +401,8 @@ private void loadMapFromCSV(){
 
 }
 
-private void displayMap(){
-
+private static void displayMap(){
+ System.out.flush();
   for(int i=0; i<25; i++) {
     for(int j=0; j<24; j++) {
 
@@ -668,27 +425,27 @@ private void displayMap(){
       if(locations[i][j].getPlayerOn()!=null) {
         String name = locations[i][j].getPlayerOn().getPlayerName().getName();
         switch (name){
-          case "White":
+          case "WHITE":
             System.out.print("W ");
             break;
 
-          case "Green":
+          case "GREEN":
             System.out.print("G ");
             break;
 
-          case "Mustard":
+          case "MUSTARD":
             System.out.print("M ");
             break;
 
-          case "Peacock":
+          case "PEACOCK":
             System.out.print("Pe");
             break;
 
-          case "Plum":
+          case "PLUM":
             System.out.print("Pl");
             break;
 
-          case "Scarlett":
+          case "SCARLETT":
             System.out.print("S ");
             break;
 
@@ -717,11 +474,18 @@ private void displayMap(){
 }
 
   private void playGame() {
+	boolean currentTurnActive = true;
 	while(isRunning) {
 		for(Player player : players) {
-			if(player.getIsPlaying());
+			currentTurnActive = true;
 			player.setSteps(Board.rollDice());
-			
+			while(currentTurnActive) {
+				if(player.getIsPlaying()) {
+					displayMap();
+					displayInfo(player);
+					currentTurnActive = excecuteTurn(player);
+				}
+			}
 		}
 		
 	}
@@ -730,9 +494,15 @@ private void displayMap(){
   public static void main(String[] args) {
     Board myBoard = new Board();
     myBoard.generateCards();
-
     myBoard.loadMapFromCSV();
-    myBoard.displayMap();
+    
+    playersPlaying = 7;
+    while(playersPlaying > 6 || playersPlaying <2) {
+    	System.out.println("Pick the number of players:");
+    	playersPlaying = Character.getNumericValue(takeStringInput().charAt(0));
+    }
+    System.out.println(playersPlaying + " Players selected.");
+    myBoard.generatePlayers();
 
     isRunning = true;
     myBoard.playGame();

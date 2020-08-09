@@ -14,7 +14,7 @@ public class Board
   private List<Card> cards;
   private List<Room> rooms;
   private static List<Player> players;
-  private List<Location> locations;
+  private static Location[][] locations;
 
   //------------------------
   // CONSTRUCTOR
@@ -23,7 +23,7 @@ public class Board
   public Board(Accugestion aMurder)
   {
     murder = aMurder;
-    Location[][] locations = new Location[25][24];
+    locations = new Location[25][24];
     cards = new ArrayList<Card>();
     rooms = new ArrayList<Room>();
     players = new ArrayList<Player>();
@@ -149,36 +149,6 @@ cards.addAll(cardList);
     return index;
   }
 
-//Location stuff
-  public Location getLocation(int index)
-  {
-    Location aLocation = locations.get(index);
-    return aLocation;
-  }
-
-  public List<Location> getLocations()
-  {
-    List<Location> newLocations = Collections.unmodifiableList(locations);
-    return newLocations;
-  }
-
-  public int numberOfLocations()
-  {
-    int number = locations.size();
-    return number;
-  }
-
-  public boolean hasLocations()
-  {
-    boolean has = locations.size() > 0;
-    return has;
-  }
-
-  public int indexOfLocation(Location aLocation)
-  {
-    int index = locations.indexOf(aLocation);
-    return index;
-  }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfCards()
   {
@@ -355,65 +325,13 @@ cards.addAll(cardList);
   {
     return 0;
   }
-  /* Code from template association_AddUnidirectionalMany */
-  public boolean addLocation(Location aLocation)
-  {
-    boolean wasAdded = false;
-    if (locations.contains(aLocation)) { return false; }
-    locations.add(aLocation);
-    wasAdded = true;
-    return wasAdded;
-  }
 
-  public boolean removeLocation(Location aLocation)
-  {
-    boolean wasRemoved = false;
-    if (locations.contains(aLocation))
-    {
-      locations.remove(aLocation);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addLocationAt(Location aLocation, int index)
-  {  
-    boolean wasAdded = false;
-    if(addLocation(aLocation))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfLocations()) { index = numberOfLocations() - 1; }
-      locations.remove(aLocation);
-      locations.add(index, aLocation);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveLocationAt(Location aLocation, int index)
-  {
-    boolean wasAdded = false;
-    if(locations.contains(aLocation))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfLocations()) { index = numberOfLocations() - 1; }
-      locations.remove(aLocation);
-      locations.add(index, aLocation);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addLocationAt(aLocation, index);
-    }
-    return wasAdded;
-  }
 
   public void delete()
   {
     cards.clear();
     rooms.clear();
     players.clear();
-    locations.clear();
   }
   
   
@@ -466,7 +384,7 @@ public static void main(String[] args){
     }
   }
 
-}
+
   for(int i=0; i<25; i++) {
     for (int j=0; j<24; j++) {
       System.out.print("+");

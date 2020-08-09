@@ -56,6 +56,22 @@ distributionCards.addAll(cardList);
   //------------------------
 
 
+  private void movePlayerToLocation(Player p, Location l){
+	  p.getCurrentLocation().setPlayerOn(null);
+	  p.setCurrentLocation(l);
+	  l.setPlayerOn(p);
+  }
+  
+  private void movePlayerToRoom(Player p, Room r) {
+	  for(Location l : r.getLocations()) {
+		  if(l.getPlayerOn() == null) {
+			  movePlayerToLocation(p, l);
+			  break;
+		  }
+	  }
+  }
+  
+ 
 
   public static int randomGeneration(int low, int high){
 			Random r = new Random();

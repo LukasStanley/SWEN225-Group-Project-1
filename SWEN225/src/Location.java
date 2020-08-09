@@ -125,6 +125,10 @@ public class Location
   public Player getPlayerOn() {
     return playerOn;
   }
+  
+  public void setPlayerOn(Player toSet) {
+	playerOn = toSet;
+  }
 
   public Room getRoomIn() {
     return roomIn;

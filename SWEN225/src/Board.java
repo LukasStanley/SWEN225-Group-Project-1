@@ -483,7 +483,7 @@ private static void displayMap(){
 				if(player.getIsPlaying()) {
 					displayMap();
 					displayInfo(player);
-					currentTurnActive = excecuteTurn(player);
+					currentTurnActive = !excecuteTurn(player);
 				}
 			}
 		}

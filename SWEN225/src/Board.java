@@ -14,7 +14,7 @@ public class Board
   private List<Card> cards;
   private List<Room> rooms;
   private static List<Player> players;
-  private static Location[][] locations;
+  private static Location[][] locations = new Location[25][24];
 
   //------------------------
   // CONSTRUCTOR
@@ -23,7 +23,6 @@ public class Board
   public Board(Accugestion aMurder)
   {
     murder = aMurder;
-    locations = new Location[25][24];
     cards = new ArrayList<Card>();
     rooms = new ArrayList<Room>();
     players = new ArrayList<Player>();

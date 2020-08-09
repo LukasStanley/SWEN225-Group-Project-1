@@ -8,10 +8,13 @@ public class Board
   //------------------------
 
   //Board Attributes
-  private Accugestion murder;
+  private PersonCard mPerson;
+  private WeaponCard mWeapon;
+  private RoomCard mRoom;
 
   //Board Associations
-  private List<Card> cards;
+  private static List<Card> cards;
+  private static List<Card> distributionCards;
   private List<Room> rooms;
   private static List<Player> players;
   private static Location[][] locations = new Location[25][24];
@@ -20,26 +23,38 @@ public class Board
   // CONSTRUCTOR
   //------------------------
 
-  public Board(Accugestion aMurder)
+  public Board()
   {
-    murder = aMurder;
     cards = new ArrayList<Card>();
+    distributionCards = new ArrayList<Card>();
     rooms = new ArrayList<Room>();
     players = new ArrayList<Player>();
     generateCards();
+    chooseMurder();
   }
 
-  private void generateCards() {
+  private void chooseMurder() {
+	mPerson = (PersonCard) cards.get(randomGeneration(0,5));
+	 mWeapon = (WeaponCard) cards.get(randomGeneration(6,11));
+	 mRoom = (RoomCard) cards.get(randomGeneration(12,17));
+	distributionCards.remove(mPerson); distributionCards.remove(mWeapon); distributionCards.remove(mRoom);
+	
+}
+
+private void generateCards() {
 	  List<Card> cardList = Arrays.asList(new PersonCard("PEACOCK"), new PersonCard("PLUM"),new PersonCard("MUSTARD"), new PersonCard("WHITE"), new PersonCard("GREEN"), new PersonCard("SCARLETT"), new WeaponCard("GUN"), new WeaponCard("KNIFE"), 
 				new WeaponCard("PIPE"), new WeaponCard("ROPE"), new WeaponCard("CANDLESTICK"), new RoomCard("SPANNER"), new RoomCard("DINING"), new RoomCard("KITCHEN"),new RoomCard("BALLROOM"), new RoomCard("CONSERVATORY"),
 					new RoomCard("BILLIARD"), new RoomCard("LIBRARY"), new RoomCard("STUDY"), new RoomCard("HALL"), new RoomCard("LOUNGE"));
 cards.addAll(cardList);
+distributionCards.addAll(cardList);
 	
 }
+
 
 //------------------------
   // INTERFACE
   //------------------------
+
 
   private void movePlayerToLocation(Player p, Location l){
 	  p.getCurrentLocation().setPlayerOn(null);
@@ -56,18 +71,14 @@ cards.addAll(cardList);
 	  }
   }
   
-  public boolean setMurder(Accugestion aMurder)
-  {
-    boolean wasSet = false;
-    murder = aMurder;
-    wasSet = true;
-    return wasSet;
-  }
+ 
 
-  public Accugestion getMurder()
-  {
-    return murder;
-  }
+  public static int randomGeneration(int low, int high){
+			Random r = new Random();
+			int result = r.nextInt(high-low) + low;
+			return result;
+		}
+  
 
 
   //Card Stuff
@@ -365,11 +376,7 @@ cards.addAll(cardList);
   }
 
 
-  public String toString()
-  {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "murder" + "=" + (getMurder() != null ? !getMurder().equals(this)  ? getMurder().toString().replaceAll("  ","    ") : "this" : "null");
-  }
+ 
 
   public static void makeSuggestion(Accugestion suggestion) {
 
@@ -381,6 +388,10 @@ cards.addAll(cardList);
 			}
 			else{System.out.println("Your suggestion has not been refuted by any other player");}
 		}
+	}
+  
+  public static void makeAccusation(Accugestion accusation) {
+	
 	}
 
 public void displayMap(){
@@ -481,6 +492,8 @@ public static void main(String[] args){
 //  myBoard.displayMap();
 
 }
+
+
 
 
 }

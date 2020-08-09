@@ -282,13 +282,24 @@ public class Player
 
   // line 69 "model.ump"
    public void makeSuggestion(String person, String weapon, String room){
-    Card weaponCard =  Board.getCard(weapon);
+    	   
+	   
+	Card weaponCard =  Board.getCard(weapon);
     Card personCard =  Board.getCard(person);
     Card roomCard =  Board.getCard(room);
     //Verify they exist and are of correct type
     Accugestion suggestion = new Accugestion(weaponCard, personCard, roomCard, this);
     Board.makeSuggestion(suggestion);
   }
+   
+   public void makeAccusation(String person, String weapon, String room){
+	    Card weaponCard =  Board.getCard(weapon);
+	    Card personCard =  Board.getCard(person);
+	    Card roomCard =  Board.getCard(room);
+	    //Verify they exist and are of correct type
+	    Accugestion accusation = new Accugestion(weaponCard, personCard, roomCard, this);
+	    Board.makeAccusation(accusation);
+	  }
 
 
   public String toString()

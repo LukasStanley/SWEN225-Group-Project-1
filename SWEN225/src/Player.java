@@ -17,6 +17,7 @@ public class Player
   private Location currentLocation;
   private boolean isPlaying;
   private Location[][] locationArray;
+  private int stepsRemaining;
 
   //Player Associations
   private List<Card> hand;
@@ -25,7 +26,7 @@ public class Player
   // CONSTRUCTOR
   //------------------------
 
-  public Player(PersonCard aPlayerName, Room aCurrentRoom, Location aCurrentLocation, boolean aIsPlaying, Location [][] locations)
+  public Player(PersonCard aPlayerName, Room aCurrentRoom, Location aCurrentLocation, boolean aIsPlaying, Location[][] locations)
   {
     playerName = aPlayerName;
     currentRoom = aCurrentRoom;
@@ -38,6 +39,14 @@ public class Player
   //------------------------
   // INTERFACE
   //------------------------
+  
+  public void setSteps(int stepCount) {
+	  stepsRemaining = stepCount;
+  }
+  
+  public int getSteps() {
+	  return stepsRemaining;
+  }
 
   //direction is 0 = up 1 = right 2 = down 3 = left
   public Location movePlayer(ArrayList<Integer> movements) {
@@ -53,6 +62,10 @@ public class Player
 		 if(currentLocationStep.getRoomIn() == null) {
 			  //up
 			 if(current == 0) {
+				 if(currentLocationStep.getY()==0) {
+					 stillMovin = false;
+					 break;
+				 }
 				 nextLocation = locationArray[currentLocationStep.getY()-1][currentLocationStep.getX()];
 				 if(nextLocation.getWallDown()){
 					 stillMovin = false;
@@ -132,6 +145,15 @@ public class Player
 					 nextLocation = currentLocationStep.getRoomIn().getLeft();
 				 }
 			 }
+		 }
+		 
+		 if(stillMovin) {
+			 try {
+				 stepsRemaining--;
+			 }
+			 catch (Exception e) {
+		            e.printStackTrace();
+		     }
 		 }
 		 
 		 

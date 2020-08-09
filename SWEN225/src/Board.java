@@ -13,7 +13,7 @@ public class Board
   //Board Associations
   private List<Card> cards;
   private List<Room> rooms;
-  private static List<Player> players;
+  private List<Player> players;
   private List<Location> locations;
 
   //------------------------
@@ -27,18 +27,9 @@ public class Board
     rooms = new ArrayList<Room>();
     players = new ArrayList<Player>();
     locations = new ArrayList<Location>();
-    generateCards();
   }
 
-  private void generateCards() {
- List<Card> cardList = Arrays.asList(new Card("PEACOCK"), new Card("PLUM"),new Card("MUSTARD"), new Card("WHITE"), new Card("GREEN"), new Card("SCARLETT"), new Card("GUN"), new Card("KNIFE"), 
-		 								new Card("PIPE"), new Card("ROPE"), new Card("CANDLESTICK"), new Card("SPANNER"), new Card("DINING"), new Card("KITCHEN"),new Card("BALLROOM"), new Card("CONSERVATORY"),
-		 									new Card("BILLIARD"), new Card("LIBRARY"), new Card("STUDY"), new Card("HALL"), new Card("LOUNGE"));
- cards.addAll(cardList);
-	
-}
-
-//------------------------
+  //------------------------
   // INTERFACE
   //------------------------
 
@@ -439,9 +430,107 @@ public class Board
             "  " + "murder" + "=" + (getMurder() != null ? !getMurder().equals(this)  ? getMurder().toString().replaceAll("  ","    ") : "this" : "null");
   }
 
-public static void makeSuggestion(Accugestion suggestion) {
+  public static void makeSuggestion(Accugestion suggestion) {
+      // TODO Auto-generated method stub
 
-	for(Player p : players){}
-}
+  }
 
+  public void displayMap(){
+
+
+  }
+
+
+  public static void main(String[] args){
+    Location[][] locations = new Location[25][24];
+
+    for(int i=0;i<locations.length;i++) {
+      for(int j=0; j<locations[i].length;j++){
+
+        locations[i][j] = new Location(i,j,false,false,false,false,null,null);
+      }
+    }
+
+    for(int i=0; i<25; i++) {
+      for (int j=0; j<24; j++) {
+        System.out.print("+");
+        if (locations[i][j].getWallUp()) {
+          System.out.print("====");
+        }
+        if (i > 0 && locations[i - 1][j].getRoomIn() != null) {
+          System.out.print("   ");
+        } else {
+          System.out.print("----");
+        }
+      }
+      System.out.println("+");
+
+      for (int j=0; j<24; j++) {
+        if(j>0 && locations[i][j-1].getRoomIn()!=null){
+          System.out.print(" ");
+        }else{
+          System.out.print("|");
+        }
+        if(locations[i][j].getWallLeft()){
+          System.out.print("|");
+        }else {
+          System.out.print(" ");
+        }
+        if(locations[i][j].getPlayerOn()!=null) {
+          String name = locations[i][j].getPlayerOn().getPlayerName().getName();
+          switch (name){
+            case "White":
+              System.out.print("W");
+              break;
+
+            case "Green":
+              System.out.print("G");
+              break;
+
+            case "Mustard":
+              System.out.print("M");
+              break;
+
+            case "Peacock":
+              System.out.print("Pe");
+              break;
+
+            case "Plum":
+              System.out.print("Pl");
+              break;
+
+            case "Scarlett":
+              System.out.print("S");
+              break;
+
+          }
+        }else {
+          System.out.print("  ");
+        }
+        if(j<23){
+          System.out.print(" ");
+        }
+      }
+      if(locations[i][23].getWallRight()){
+        System.out.println("||");
+      }else{
+        System.out.println(" |");
+      }
+    }
+    for (int j=0; j<24; j++) {
+      System.out.print("+");
+      if (locations[24][j].getWallUp()) {
+        System.out.print("====");
+      }
+      if (locations[24][j].getRoomIn() != null) {
+        System.out.print("   ");
+      } else {
+        System.out.print("----");
+      }
+    }
+    System.out.println("+");
+//    Board myBoard = new Board();
+//    myBoard.displayMap();
+
+  }
 }

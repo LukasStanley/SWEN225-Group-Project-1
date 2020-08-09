@@ -21,7 +21,7 @@ public class Board
   private List<Room> rooms;
   private static List<Player> players;
   private static Location[][] locations = new Location[25][24];
-  static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP"};
+  static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
 
   //------------------------
   // CONSTRUCTOR

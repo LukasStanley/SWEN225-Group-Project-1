@@ -8,9 +8,10 @@ public class Board
   //------------------------
 
   //Board Attributes
-  private PersonCard mPerson;
-  private WeaponCard mWeapon;
-  private RoomCard mRoom;
+  private static PersonCard mPerson;
+  private static WeaponCard mWeapon;
+  private static RoomCard mRoom;
+  private static boolean isRunning; 
 
   //Board Associations
   private static List<Card> cards;
@@ -367,7 +368,7 @@ distributionCards.addAll(cardList);
 	return null;
     
   }
-   public int rollDice(){
+   public static int rollDice(){
 	int dice1 = (int)(Math.random()*6) + 1;
 	int dice2 = (int)(Math.random()*6) + 1;
 	   
@@ -391,6 +392,9 @@ distributionCards.addAll(cardList);
 	}
   
   public static void makeAccusation(Accugestion accusation) {
+	  
+	  if(accusation.getPerson() == mPerson && accusation.getRoom() == mRoom && accusation.getWeapon() == mWeapon) {System.out.println("yay you won"); isRunning = false;}
+	  else {System.out.println("Your guess was incorrect, you are now out of the game"); accusation.getOwner().setIsPlaying(false);}
 	
 	}
 
@@ -490,7 +494,22 @@ public static void main(String[] args){
   System.out.println("+");
 //  Board myBoard = new Board();
 //  myBoard.displayMap();
+  
+  isRunning = true;
+  playGame();
 
+}
+
+private static void playGame() {
+	while(isRunning) {
+		for(Player player : players) {
+			if(player.getIsPlaying());
+			player.setSteps(Board.rollDice());
+			
+		}
+		
+	}
+	
 }
 
 

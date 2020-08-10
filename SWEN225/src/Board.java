@@ -107,6 +107,17 @@ public class Board
 		  rooms[i] = new Room(roomNames[i]);
 	  }
   }
+  private void randomizeWeapons() {
+    int index = 0;
+    List<Integer> possibleRoom = Arrays.asList(0, 1, 2, 3 ,4, 5, 6, 7, 8);
+    Collections.shuffle(possibleRoom);
+    for(Card w : cards) {
+        if(w instanceof WeaponCard) {
+            moveWeaponToRoom((WeaponCard) w, rooms[possibleRoom.get(index)]);
+            index++;
+        }
+  }
+}
 
 
 //------------------------
@@ -119,18 +130,29 @@ public class Board
 	  p.setCurrentLocation(l);
 	  l.setPlayerOn(p);
   }
-  
   private void movePlayerToRoom(Player p, Room r) {
-//      This method is now broken with the updated Room class.
-//      Pls fix it if you want to use it.
-
-//	  for(Location l : r.getLocations()) {
-//		  if(l.getPlayerOn() == null) {
-//			  movePlayerToLocation(p, l);
-//			  break;
-//		  }
-//	  }
+      for(Location l : r.getLocations()) {
+          if(l.getPlayerOn() == null) {
+              movePlayerToLocation(p, l);
+              break;
+          }
+      }
   }
+
+  private static void moveWeaponToLocation(WeaponCard w, Location l){
+      w.getLocation().setWeaponOn(null);
+      w.setLocation(l);
+      l.setWeaponOn(w);
+  }
+
+  private void moveWeaponToRoom(WeaponCard w, Room r) {
+      for(Location l : r.getLocations()) {
+          if(l.getWeaponOn() == null) {
+              moveWeaponToLocation(w, l);
+              break;
+            }
+        }
+    }
   
  
 
@@ -540,47 +562,70 @@ private static void displayMap(){
 
     for (int j=0; j<24; j++) {
       if(locations[i][j].getWallLeft()){
-        System.out.print("| ");
+        System.out.print("|");
       }else {
-        System.out.print("  ");
+        System.out.print(" ");
       }
       if(locations[i][j].getPlayerOn()!=null) {
         String name = locations[i][j].getPlayerOn().getPlayerName().getName();
         switch (name){
           case "WHITE":
-            System.out.print("W ");
+            System.out.print(" W  ");
             break;
 
           case "GREEN":
-            System.out.print("G ");
+            System.out.print(" G  ");
             break;
 
           case "MUSTARD":
-            System.out.print("M ");
+            System.out.print(" M  ");
             break;
 
           case "PEACOCK":
-            System.out.print("Pe");
+            System.out.print(" Pe ");
             break;
 
           case "PLUM":
-            System.out.print("Pl");
+            System.out.print(" Pl ");
             break;
 
           case "SCARLETT":
-            System.out.print("S ");
+            System.out.print(" S  ");
             break;
 
         }
-      }else {
-        System.out.print("  ");
-      }
+      }else if(locations[i][j].getWeaponOn()!=null) {
+          String name = locations[i][j].getWeaponOn().getName();
+          switch (name){
+              case "GUN":
+                  System.out.print("gun ");
+                  break;
 
-      if(j<23){
-        System.out.print(" ");
+              case "KNIFE":
+                  System.out.print("knif");
+                  break;
+
+              case "PIPE":
+                  System.out.print("pipe");
+                  break;
+
+              case "ROPE":
+                  System.out.print("rope");
+                  break;
+
+              case "CANDLESTICK":
+                  System.out.print("cand");
+                  break;
+
+              case "SPANNER":
+                  System.out.print("span");
+                  break;
+          }
+      }else{
+          System.out.print("    ");
       }
     }
-    System.out.println(" |");
+    System.out.println("|");
 
   }
   for (int j=0; j<24; j++) {

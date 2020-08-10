@@ -18,6 +18,7 @@ public class Location
   private boolean wallDown;
 
   private Player playerOn;
+  private WeaponCard weaponOn;
   private Room roomIn;
 
   //------------------------
@@ -34,6 +35,7 @@ public class Location
     wallDown = aWallDown;
     playerOn = aPlayerOn;
     roomIn = aRoomIn;
+    weaponOn = null;
 
   }
 
@@ -125,6 +127,14 @@ public class Location
   
   public void setPlayerOn(Player toSet) {
 	playerOn = toSet;
+  }
+
+  public WeaponCard getWeaponOn() {
+    return weaponOn;
+  }
+
+  public void setWeaponOn(WeaponCard weaponOn) {
+    this.weaponOn = weaponOn;
   }
 
   public Room getRoomIn() {

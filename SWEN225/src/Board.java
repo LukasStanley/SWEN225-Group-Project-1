@@ -182,9 +182,9 @@ private static boolean excecuteTurn(Player p) {
 			System.out.println("Trying to ACCUSE with " + parameters);
 			return false;
 		}
-		Card personCard = Board.getCard(parameters[0]);
-		Card weaponCard = Board.getCard(parameters[1]);
-		Card roomCard = Board.getCard(p.getCurrentRoom().getName());
+		Card personCard = getCard(parameters[1]);
+		Card weaponCard = getCard(parameters[2]);
+		Card roomCard = getCard(parameters[3]);
 		Accugestion a = new Accugestion(weaponCard, personCard, roomCard, p);
 		makeAccusation(a);
 		
@@ -198,12 +198,15 @@ private static boolean excecuteTurn(Player p) {
 			System.out.println("Trying to SUGGEST with "+parameters);
 			return false;
 		}
-		Card personCard = Board.getCard(parameters[0]);
-		Card weaponCard = Board.getCard(parameters[1]);
-		Card roomCard = Board.getCard(p.getCurrentRoom().getName());
+		if(p.getCurrentRoom() != null) {
+		System.out.println(parameters.toString());
+		Card personCard = getCard(parameters[1]);
+		Card weaponCard = getCard(parameters[2]);
+		Card roomCard = getCard(p.getCurrentRoom().getName());
 		Accugestion a = new Accugestion(weaponCard, personCard, roomCard, p);
 		makeSuggestion(a);
-		
+		}
+		else {System.out.println("You must be in a room to make a suggestion"); return false;}
 	}
 	//NO COMMAND FOUND
 	else if(turnType == -1) {
@@ -296,10 +299,9 @@ private static String takeStringInput() {
    public static Card getCard(String cardName){
 	for(Card c : cards) {
 		if(c.getName().equalsIgnoreCase(cardName)) {return c;}
-		
 	}
 	System.out.println("Couldn't find the right card for " + cardName);
-	return null;
+	return cards.get(1);
     
   }
    public static int rollDice(){

@@ -26,7 +26,7 @@ public class Board
   static Room[] rooms;
   static String[] roomNames = {"KITCHEN", "BALLROOM", "CONSERVATORY", "BILLIARD", "LIBRARY", "STUDY", "HALL", "LOUNGE", "BALLROOM"};
   static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
-  static int[][] startingPoints = {{9,0}, {14,0}, {23,6}, {23,19}, {7,24}, {0,17}};
+  static int[][] startingPoints = {{7,24}, {9,0}, {14,0}, {23,6}, {23,19}, {0,17}};
 
 
   //------------------------
@@ -66,11 +66,11 @@ public class Board
   
   private void generateCards() {
 		  List<Card> cardList = Arrays.asList(
+                  new PersonCard("SCARLETT"),
                   new PersonCard("WHITE"),
                   new PersonCard("GREEN"),
                   new PersonCard("PEACOCK"),
                   new PersonCard("PLUM"),
-                  new PersonCard("SCARLETT"),
                   new PersonCard("MUSTARD"),
 
                   new WeaponCard("GUN"),

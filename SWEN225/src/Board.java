@@ -116,7 +116,6 @@ public class Board
         if(w instanceof WeaponCard) {
             moveWeaponToRoom((WeaponCard) w, rooms[possibleRoom.get(index)]);
             index++;
-            System.out.println("moved " + w.getName() + " to " + rooms[possibleRoom.get(index)].getName());
         }
   }
 }

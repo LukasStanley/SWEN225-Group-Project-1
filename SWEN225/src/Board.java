@@ -44,7 +44,7 @@ public class Board
 	
 	  for(int i = 0; i < distributionCards.size(); i++) {
 		  for(Player p : players) {
-			  if( i < 17) {p.addHand(distributionCards.get(i)); i++;}
+			  if( i < 18) {p.addHand(distributionCards.get(i)); i++;}
 			  else {break;}
 		  }
 		  
@@ -170,7 +170,7 @@ private static boolean excecuteTurn(Player p) {
         Location playerNewLoc = p.movePlayer(movementArray);
         //Move them this distance
         if(playerNewLoc != null) {
-            movePlayerToLocation(p, playerNewLoc);
+            movePlayerToLocation(p, playerNewLoc); 	displayMap(); displayInfo(p);
         }
         return false;
         
@@ -219,7 +219,7 @@ private static boolean excecuteTurn(Player p) {
 	//Cards
 	else if(turnType == 3) {
 		displayCards(p);
-		displayInfo(p);
+		return false;
 	}
 	//Map
 	else if(turnType == 3) {
@@ -508,10 +508,10 @@ private static void displayMap(){
 		for(Player player : players) {
 			currentTurnActive = true;
 			player.setSteps(Board.rollDice());
+			displayMap();
+			displayInfo(player);
 			while(currentTurnActive) {
 				if(player.getIsPlaying()) {
-					displayMap();
-					displayInfo(player);
 					currentTurnActive = !excecuteTurn(player);
 				}
 			}

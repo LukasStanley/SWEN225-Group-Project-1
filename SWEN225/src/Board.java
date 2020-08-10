@@ -433,8 +433,8 @@ private static String takeStringInput() {
 	      for(int i = 0; i<300; i++) {
 	          System.out.println();
 	      }	
-		  System.out.println("Player " + players[currentPlayer] + " has won the game");
-		  System.out.println("The correct solution was " + mPerson + " in the " + mRoom + " with the " + mWeapon);
+		  System.out.println("Player " + players[currentPlayer].getPlayerName().getName() + " has won the game!");
+		  System.out.println("The correct solution was " + mPerson.getName() + " in the " + mRoom.getName() + " with the " + mWeapon.getName());
 		  System.exit(100);
 		  isRunning = false;
 		  }

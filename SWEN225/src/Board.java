@@ -20,10 +20,11 @@ public class Board
   //Board Associations
   private static List<Card> cards;
   private static List<Card> distributionCards;
-  private List<Room> rooms;
   private static Location[][] locations = new Location[25][24];
   private static Player[] players = new Player[6];
   private static int playersPlaying;
+  static Room[] rooms;
+  static String[] roomNames = {"KITCHEN", "BALLROOM", "CONSERVATORY", "BILLIARD", "LIBRARY", "STUDY", "HALL", "LOUNGE", "BALLROOM"};
   static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
   static int[][] startingPoints = {{6, 3}, {7, 3}, {16, 3}, {17, 3}, {7, 23}, {15, 23}};
 
@@ -35,7 +36,7 @@ public class Board
   {
     cards = new ArrayList<Card>();
     distributionCards = new ArrayList<Card>();
-    rooms = new ArrayList<Room>();
+    rooms = new Room[roomNames.length];
  
   }
 
@@ -43,7 +44,8 @@ public class Board
 	  Collections.shuffle(distributionCards);
 	
 	  for(int i = 0; i < distributionCards.size(); i++) {
-		  for(Player p : players) {
+		  for(int j = 0; j<playersPlaying; j++) {
+			  Player p = players[j];
 			  if( i < 18) {p.addHand(distributionCards.get(i)); i++;}
 			  else {break;}
 		  }
@@ -51,18 +53,18 @@ public class Board
 	  }
 		  
 	
-}
+  }
 
-private static void chooseMurder() {
+  private static void chooseMurder() {
 	mPerson = (PersonCard) cards.get(randomGeneration(0,5));
 	 mWeapon = (WeaponCard) cards.get(randomGeneration(6,11));
 	 mRoom = (RoomCard) cards.get(randomGeneration(12,17));
 	distributionCards.remove(mPerson); distributionCards.remove(mWeapon); distributionCards.remove(mRoom);
 	
   }
-
+  
   private void generateCards() {
-		  List<Card> cardList = Arrays.asList(new PersonCard("PEACOCK"), new PersonCard("PLUM"),new PersonCard("MUSTARD"), new PersonCard("WHITE"), new PersonCard("GREEN"), new PersonCard("SCARLETT"), 
+		  List<Card> cardList = Arrays.asList(new PersonCard("SCARLETT"), new PersonCard("PEACOCK"), new PersonCard("PLUM"),new PersonCard("MUSTARD"), new PersonCard("WHITE"), new PersonCard("GREEN"), 
 				  new WeaponCard("GUN"), new WeaponCard("KNIFE"), new WeaponCard("PIPE"), new WeaponCard("ROPE"), new WeaponCard("CANDLESTICK"), new WeaponCard("SPANNER"), 
 				  new RoomCard("DINING"), new RoomCard("KITCHEN"),new RoomCard("BALLROOM"), new RoomCard("CONSERVATORY"), new RoomCard("BILLIARD"), new RoomCard("LIBRARY"), new RoomCard("STUDY"), new RoomCard("HALL"), new RoomCard("LOUNGE"));
 	cards.addAll(cardList);
@@ -77,7 +79,12 @@ private static void chooseMurder() {
   		  locations[startingPoints[i][1]][startingPoints[i][0]].setPlayerOn(players[i]);
 	  }
   }
-
+  
+  private void generateRooms() {
+	  for(int i = 0; i<roomNames.length; i++) {
+		  rooms[i] = new Room(roomNames[i]);
+	  }
+  }
 
 
 //------------------------
@@ -111,17 +118,13 @@ private static void chooseMurder() {
 			return result;
 		}
 
-  public void delete()
-  {
-    cards.clear();
-    rooms.clear();
-  }
 	
    public static void displayInfo(Player playerTurn) {
-	  System.out.println("DEBUG: COORDS " + playerTurn.getCurrentLocation().getX() + " , " + playerTurn.getCurrentLocation().getY());
+	  //System.out.println("DEBUG: COORDS " + playerTurn.getCurrentLocation().getX() + " , " + playerTurn.getCurrentLocation().getY());
 	  System.out.println("You are " + playerTurn.getPlayerName().getName());
 	  System.out.println("The other players are:");
-	  for(Player p : players) {
+	  for(int i = 0; i < playersPlaying; i++) {
+		  Player p = players[i];
 		  if(p!= playerTurn) {
 			  System.out.print("	"+p.getPlayerName().getName());
 		  }
@@ -162,6 +165,7 @@ private static boolean excecuteTurn(Player p) {
 	//MOVE
 	if(turnType == 2) {
         if(p.getSteps()==0) {
+        	System.out.println("You are out of moves!");
             return false;
         }
         //Raw list of inputs, needs to be cut down/checked for size
@@ -178,15 +182,33 @@ private static boolean excecuteTurn(Player p) {
 	//ACCUSE
 	else if(turnType == 0) {
 		parameters = inputLine.substring(commands[0].length()).split(" ");
-		if(parameters.length < 3){
-			System.out.println("Trying to ACCUSE with " + parameters);
+		if(parameters.length < 4){
+			System.out.println("Too few parameters! You need a WEAPON, PERSON and LOCATION");
 			return false;
 		}
 		Card personCard = getCard(parameters[1]);
 		Card weaponCard = getCard(parameters[2]);
 		Card roomCard = getCard(parameters[3]);
-		Accugestion a = new Accugestion(weaponCard, personCard, roomCard, p);
-		makeAccusation(a);
+		if(personCard instanceof PersonCard) {
+			if(weaponCard instanceof WeaponCard) {
+				if(roomCard instanceof RoomCard) {
+					Accugestion a = new Accugestion(weaponCard, personCard, roomCard, p);
+					makeAccusation(a);
+				}
+				else {
+					System.out.println("The third item must be a valid room!");
+					return false;
+				}
+			}
+			else {
+				System.out.println("The second item must be a valid weapon!");
+				return false;
+			}
+		}
+		else {
+			System.out.println("The first item must be a valid person!");
+			return false;
+		}
 		
 	}
 	
@@ -195,18 +217,31 @@ private static boolean excecuteTurn(Player p) {
 	else if(turnType == 1) {
 		parameters = inputLine.substring(commands[1].length()).split(" ");
 		if(parameters.length < 3){
-			System.out.println("Trying to SUGGEST with "+parameters);
+			System.out.println("Too few parameters! You need a WEAPON and PERSON");
 			return false;
 		}
 		if(p.getCurrentRoom() != null) {
-		System.out.println(parameters.toString());
-		Card personCard = getCard(parameters[1]);
-		Card weaponCard = getCard(parameters[2]);
-		Card roomCard = getCard(p.getCurrentRoom().getName());
-		Accugestion a = new Accugestion(weaponCard, personCard, roomCard, p);
-		makeSuggestion(a);
+			System.out.println(parameters.toString());
+			Card personCard = getCard(parameters[1]);
+			Card weaponCard = getCard(parameters[2]);
+			Card roomCard = getCard(p.getCurrentRoom().getName());
+			if(personCard instanceof PersonCard) {
+				if(weaponCard instanceof WeaponCard) {
+					Accugestion a = new Accugestion(weaponCard, personCard, roomCard, p);
+					makeAccusation(a);
+				}
+				else {
+					System.out.println("The first item must be a valid person!");
+					return false;
+				}
+			}
+			else {
+				System.out.println("The second item must be a valid weapon!");
+				return false;
+			}
 		}
 		else {System.out.println("You must be in a room to make a suggestion"); return false;}
+		
 	}
 	//NO COMMAND FOUND
 	else if(turnType == -1) {
@@ -225,6 +260,7 @@ private static boolean excecuteTurn(Player p) {
 	else if(turnType == 3) {
 		displayMap();
 		displayInfo(p);
+		return false;
 	}
 	return true;
 }
@@ -301,7 +337,7 @@ private static String takeStringInput() {
 		if(c.getName().equalsIgnoreCase(cardName)) {return c;}
 	}
 	System.out.println("Couldn't find the right card for " + cardName);
-	return cards.get(1);
+	return null;
     
   }
    public static int rollDice(){
@@ -419,11 +455,46 @@ private void loadMapFromCSV(){
     for(int j=0;j<24;j++) {
       String current = "";
       try{current = rows[i][j];}catch (Exception e){System.out.println(i+","+j);}
-      if(current.equals("")){
+      if(current.equals("0")){
         continue;
       }else{
-          //Placeholder room
-          locations[i][j].setRoomIn(new Room("a"));
+    	  if(current.equals("1")) {
+              //Placeholder room
+              locations[i][j].setRoomIn(rooms[0]);
+    	  }
+    	  else if(current.equals("2")) {
+              //Placeholder room
+              locations[i][j].setRoomIn(rooms[1]);
+    	  }
+    	  else if(current.equals("3")) {
+              //Placeholder room
+              locations[i][j].setRoomIn(rooms[2]);
+    	  }
+    	  else if(current.equals("4")) {
+              //Placeholder room
+              locations[i][j].setRoomIn(rooms[3]);
+    	  }
+    	  else if(current.equals("5")) {
+              //Placeholder room
+              locations[i][j].setRoomIn(rooms[4]);
+    	  }
+    	  else if(current.equals("6")) {
+              //Placeholder room
+              locations[i][j].setRoomIn(rooms[5]);
+    	  }
+    	  else if(current.equals("7")) {
+              //Placeholder room
+              locations[i][j].setRoomIn(rooms[6]);
+    	  }
+    	  else if(current.equals("8")) {
+              //Placeholder room
+              locations[i][j].setRoomIn(rooms[7]);
+    	  }
+    	  else if(current.equals("9")) {
+              //Placeholder room
+              locations[i][j].setRoomIn(rooms[8]);
+    	  }
+
       }
     }
   }
@@ -505,7 +576,8 @@ private static void displayMap(){
   private void playGame() {
 	boolean currentTurnActive = true;
 	while(isRunning) {
-		for(Player player : players) {
+		for(int i = 0; i<playersPlaying; i++) {
+			Player player = players[i];
 			currentTurnActive = true;
 			player.setSteps(Board.rollDice());
 			displayMap();

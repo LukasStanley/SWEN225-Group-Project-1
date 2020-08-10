@@ -681,9 +681,10 @@ private static void displayMap(){
 			while(currentTurnActive) {
 				if(player.getIsPlaying()) {
 					currentTurnActive = !executeTurn(player);
-					displayPassToPlayer(nextPlayer());
+					
 				}
 			}
+			displayPassToPlayer(nextPlayer());
 		}
 		
 	}

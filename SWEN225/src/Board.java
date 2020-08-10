@@ -1,6 +1,7 @@
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,7 +25,7 @@ public class Board
   private static Player[] players = new Player[6];
   private static int playersPlaying;
   static Room[] rooms;
-  static String[] roomNames = {"KITCHEN", "BALLROOM", "CONSERVATORY", "BILLIARD", "LIBRARY", "STUDY", "HALL", "LOUNGE", "BALLROOM"};
+  static String[] roomNames = {"KITCHEN", "BALLROOM", "CONSERVATORY", "BILLIARD", "LIBRARY", "STUDY", "HALL", "LOUNGE", "DINING"};
   static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
   static int[][] startingPoints = {{7,24}, {9,0}, {14,0}, {23,6}, {23,19}, {0,17}};
   static int currentPlayer = 0;
@@ -580,15 +581,20 @@ private void loadMapFromCSV(){
 
 private static void displayMap(){
  System.out.flush();
-  for(int i=0; i<25; i++) {
+
+
+	//clone rooms[] to arraylist
+	ArrayList<Room> roomsToDisplay = new ArrayList<>(Arrays.asList(rooms));
+
+	for(int i=0; i<25; i++) {
     for(int j=0; j<24; j++) {
 
       System.out.print("+");
 
       if (locations[i][j].getWallUp()) {
-          System.out.print("----");
+          System.out.print("-----");
       }else{
-        System.out.print("    ");
+        System.out.print("     ");
       }
     }
     System.out.println("+");
@@ -599,31 +605,32 @@ private static void displayMap(){
       }else {
         System.out.print(" ");
       }
+
       if(locations[i][j].getPlayerOn()!=null) {
         String name = locations[i][j].getPlayerOn().getPlayerName().getName();
         switch (name){
           case "WHITE":
-            System.out.print(" W  ");
+            System.out.print("  W  ");
             break;
 
           case "GREEN":
-            System.out.print(" G  ");
+            System.out.print("  G  ");
             break;
 
           case "MUSTARD":
-            System.out.print(" M  ");
+            System.out.print("  M  ");
             break;
 
           case "PEACOCK":
-            System.out.print(" Pe ");
+            System.out.print("  Pe ");
             break;
 
           case "PLUM":
-            System.out.print(" Pl ");
+            System.out.print("  Pl ");
             break;
 
           case "SCARLETT":
-            System.out.print(" S  ");
+            System.out.print("  S  ");
             break;
 
         }
@@ -631,32 +638,66 @@ private static void displayMap(){
           String name = locations[i][j].getWeaponOn().getName();
           switch (name){
               case "GUN":
-                  System.out.print("gun ");
+                  System.out.print(" gun ");
                   break;
 
               case "KNIFE":
-                  System.out.print("knif");
+                  System.out.print("knife");
                   break;
 
               case "PIPE":
-                  System.out.print("pipe");
+                  System.out.print("pipe ");
                   break;
 
               case "ROPE":
-                  System.out.print("rope");
+                  System.out.print("rope ");
                   break;
 
               case "CANDLESTICK":
-                  System.out.print("cand");
+                  System.out.print("candl");
                   break;
 
               case "SPANNER":
-                  System.out.print("span");
+                  System.out.print("spann");
                   break;
           }
-      }else{
-          System.out.print("    ");
       }
+      else if(locations[i][j].getRoomIn()!=null && roomsToDisplay.contains(locations[i][j].getRoomIn())){
+      	switch (locations[i][j].getRoomIn().getName()){
+			case "KITCHEN":
+				System.out.print("[Kit]");
+				break;
+			case "BALLROOM":
+				System.out.print("[Bal]");
+				break;
+			case "CONSERVATORY":
+				System.out.print("[Con]");
+				break;
+			case "BILLIARD":
+				System.out.print("[Bil]");
+				break;
+			case "LIBRARY":
+				System.out.print("[Lib]");
+				break;
+			case "STUDY":
+				System.out.print("[Stu]");
+				break;
+			case "HALL":
+				System.out.print("[Hal]");
+				break;
+			case "LOUNGE":
+				System.out.print("[Lou]");
+				break;
+			case "DINING":
+				System.out.print("[Din]");
+				break;
+		}
+		roomsToDisplay.remove(locations[i][j].getRoomIn());
+
+      }
+      else{
+      	System.out.print("     ");
+	  }
     }
     System.out.println("|");
 
@@ -664,9 +705,9 @@ private static void displayMap(){
   for (int j=0; j<24; j++) {
     System.out.print("+");
     if (locations[24][j].getWallDown()) {
-      System.out.print("----");
+      System.out.print("-----");
     } else {
-      System.out.print("    ");
+      System.out.print("     ");
     }
   }
   System.out.println("+");

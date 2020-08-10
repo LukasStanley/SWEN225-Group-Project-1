@@ -26,7 +26,8 @@ public class Board
   static Room[] rooms;
   static String[] roomNames = {"KITCHEN", "BALLROOM", "CONSERVATORY", "BILLIARD", "LIBRARY", "STUDY", "HALL", "LOUNGE", "BALLROOM"};
   static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
-  static int[][] startingPoints = {{6, 3}, {7, 3}, {16, 3}, {17, 3}, {7, 23}, {15, 23}};
+  static int[][] startingPoints = {{9,0}, {14,0}, {23,6}, {23,19}, {7,24}, {0,17}};
+
 
   //------------------------
   // CONSTRUCTOR
@@ -64,9 +65,30 @@ public class Board
   }
   
   private void generateCards() {
-		  List<Card> cardList = Arrays.asList(new PersonCard("SCARLETT"), new PersonCard("PEACOCK"), new PersonCard("PLUM"),new PersonCard("MUSTARD"), new PersonCard("WHITE"), new PersonCard("GREEN"), 
-				  new WeaponCard("GUN"), new WeaponCard("KNIFE"), new WeaponCard("PIPE"), new WeaponCard("ROPE"), new WeaponCard("CANDLESTICK"), new WeaponCard("SPANNER"), 
-				  new RoomCard("DINING"), new RoomCard("KITCHEN"),new RoomCard("BALLROOM"), new RoomCard("CONSERVATORY"), new RoomCard("BILLIARD"), new RoomCard("LIBRARY"), new RoomCard("STUDY"), new RoomCard("HALL"), new RoomCard("LOUNGE"));
+		  List<Card> cardList = Arrays.asList(
+                  new PersonCard("WHITE"),
+                  new PersonCard("GREEN"),
+                  new PersonCard("PEACOCK"),
+                  new PersonCard("PLUM"),
+                  new PersonCard("SCARLETT"),
+                  new PersonCard("MUSTARD"),
+
+                  new WeaponCard("GUN"),
+                  new WeaponCard("KNIFE"),
+                  new WeaponCard("PIPE"),
+                  new WeaponCard("ROPE"),
+                  new WeaponCard("CANDLESTICK"),
+                  new WeaponCard("SPANNER"),
+
+                  new RoomCard("DINING"),
+                  new RoomCard("KITCHEN"),
+                  new RoomCard("BALLROOM"),
+                  new RoomCard("CONSERVATORY"),
+                  new RoomCard("BILLIARD"),
+                  new RoomCard("LIBRARY"),
+                  new RoomCard("STUDY"),
+                  new RoomCard("HALL"),
+                  new RoomCard("LOUNGE"));
 	cards.addAll(cardList);
 	distributionCards.addAll(cardList); 
 

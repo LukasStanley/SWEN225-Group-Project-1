@@ -89,9 +89,7 @@ public class Board
                   new RoomCard("STUDY"),
                   new RoomCard("HALL"),
                   new RoomCard("LOUNGE"));
-		  List<Card> cardList = Arrays.asList(new PersonCard("SCARLETT"), new PersonCard("PEACOCK"), new PersonCard("PLUM"),new PersonCard("MUSTARD"), new PersonCard("WHITE"), new PersonCard("GREEN"), 
-				  new WeaponCard("GUN"), new WeaponCard("KNIFE"), new WeaponCard("PIPE"), new WeaponCard("ROPE"), new WeaponCard("CANDLESTICK"), new WeaponCard("SPANNER"), 
-				  new RoomCard("DINING"), new RoomCard("KITCHEN"),new RoomCard("BALLROOM"), new RoomCard("CONSERVATORY"), new RoomCard("BILLIARD"), new RoomCard("LIBRARY"), new RoomCard("STUDY"), new RoomCard("HALL"), new RoomCard("LOUNGE"));
+		  
 	cards.addAll(cardList);
 	distributionCards.addAll(cardList); 
 

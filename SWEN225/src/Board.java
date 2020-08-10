@@ -116,6 +116,7 @@ public class Board
         if(w instanceof WeaponCard) {
             moveWeaponToRoom((WeaponCard) w, rooms[possibleRoom.get(index)]);
             index++;
+            System.out.println("moved " + w.getName() + " to " + rooms[possibleRoom.get(index)].getName());
         }
   }
 }
@@ -692,9 +693,10 @@ private static void displayMap(){
   public static void main(String[] args) {
     Board myBoard = new Board();
     myBoard.generateCards();
+    myBoard.generateRooms();
     chooseMurder();
     myBoard.loadMapFromCSV();
-    
+    myBoard.randomizeWeapons();
     playersPlaying = 7;
     while(playersPlaying > 6 || playersPlaying <2) {
     	System.out.println("Pick the number of players:");

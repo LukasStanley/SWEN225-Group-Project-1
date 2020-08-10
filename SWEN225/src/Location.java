@@ -2,9 +2,6 @@
 /*This code was generated using the UMPLE 1.30.0.5105.3f8cbd5a3 modeling language!*/
 
 
-
-// line 53 "model.ump"
-// line 120 "model.ump"
 public class Location
 {
 

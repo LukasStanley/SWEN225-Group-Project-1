@@ -132,7 +132,7 @@ public class Board
 	  p.setCurrentLocation(l);
 	  l.setPlayerOn(p);
   }
-  private void movePlayerToRoom(Player p, Room r) {
+  private static void movePlayerToRoom(Player p, Room r) {
       for(Location l : r.getLocations()) {
           if(l.getPlayerOn() == null) {
               movePlayerToLocation(p, l);
@@ -149,7 +149,7 @@ public class Board
       l.setWeaponOn(w);
   }
 
-  private void moveWeaponToRoom(WeaponCard w, Room r) {
+  private static void moveWeaponToRoom(WeaponCard w, Room r) {
       for(Location l : r.getLocations()) {
           if(l.getWeaponOn() == null) {
               moveWeaponToLocation(w, l);
@@ -170,11 +170,23 @@ public class Board
    public static void displayInfo(Player playerTurn) {
 	  //System.out.println("DEBUG: COORDS " + playerTurn.getCurrentLocation().getX() + " , " + playerTurn.getCurrentLocation().getY());
 	  System.out.println("You are " + playerTurn.getPlayerName().getName());
-	  System.out.println("The other players are:");
+	  System.out.print("The other players are:");
 	  for(int i = 0; i < playersPlaying; i++) {
 		  Player p = players[i];
 		  if(p!= playerTurn) {
 			  System.out.print("	"+p.getPlayerName().getName());
+		  }
+	  }
+	  System.out.println();
+	  System.out.print("Possible Rooms:");
+	  for(Room r : rooms) {
+		System.out.print("	"+r.getName()); 
+	  }
+	  System.out.println();
+	  System.out.print("Possible Weapons:");
+	  for(Card w : cards) {
+		  if(w instanceof WeaponCard) {
+			  System.out.print("	"+w.getName()); 
 		  }
 	  }
 	  System.out.println();
@@ -409,14 +421,29 @@ private static String takeStringInput() {
 	      }
 	      System.out.println("It is now the turn of " + playerTurn.getPlayerName().getName());
 	      System.out.println("If you are "+  playerTurn.getPlayerName().getName() + ", please press the enter key to continue...");
-	      String inputLine = takeStringInput();
+	      takeStringInput();
 	  }
 
 
  
 
   public static void makeSuggestion(Accugestion suggestion) {
-
+	  Player accused = players[0];
+	  Room crimeScene = rooms[0];;
+	  for(Player p : players){	
+		  if(p.getPlayerName() == suggestion.getPerson()) {
+			  accused = p;
+			  break;
+		  }
+	  }
+	  for(Room r : rooms){	
+		  if(r.getName() == suggestion.getRoom().getName()) {
+			  crimeScene = r;
+			  break;
+		  }
+	  }
+	  movePlayerToRoom(accused, crimeScene);
+	  moveWeaponToRoom(suggestion.getWeapon(), crimeScene);
 		for(Player p : players){
 		
 			if( p.handContains(suggestion.getPerson().getName()) || p.handContains(suggestion.getRoom().getName()) || p.handContains(suggestion.getWeapon().getName()) ) {
@@ -427,10 +454,26 @@ private static String takeStringInput() {
 			
 		}
 		System.out.println("Your suggestion has not been refuted by any other player");
+		takeStringInput();
 	}
   
   public static void makeAccusation(Accugestion accusation) {
-	  
+	  Player accused = players[0];
+	  Room crimeScene = rooms[0];;
+	  for(Player p : players){	
+		  if(p.getPlayerName() == accusation.getPerson()) {
+			  accused = p;
+			  break;
+		  }
+	  }
+	  for(Room r : rooms){	
+		  if(r.getName() == accusation.getRoom().getName()) {
+			  crimeScene = r;
+			  break;
+		  }
+	  }
+	  movePlayerToRoom(accused, crimeScene);
+	  moveWeaponToRoom(accusation.getWeapon(), crimeScene);
 	  if(accusation.getPerson() == mPerson && accusation.getRoom() == mRoom && accusation.getWeapon() == mWeapon) {
 		  System.out.flush();
 	      for(int i = 0; i<300; i++) {
@@ -442,6 +485,7 @@ private static String takeStringInput() {
 		  isRunning = false;
 		  }
 	  else {System.out.println("Your guess was incorrect, you are now out of the game"); accusation.getOwner().setIsPlaying(false);}
+	  takeStringInput();
 	
 	}
 

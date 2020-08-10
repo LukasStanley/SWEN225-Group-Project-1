@@ -212,13 +212,10 @@ public class Player
 
 
   /* Code from template association_AddUnidirectionalMany */
-  public boolean addHand(Card aHand)
+  public void addHand(Card aHand)
   {
-    boolean wasAdded = false;
-    if (hand.contains(aHand)) { return false; }
     hand.add(aHand);
-    wasAdded = true;
-    return wasAdded;
+    
   }
 
   public boolean removeHand(Card aHand)

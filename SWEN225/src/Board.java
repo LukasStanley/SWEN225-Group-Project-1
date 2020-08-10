@@ -36,11 +36,24 @@ public class Board
     cards = new ArrayList<Card>();
     distributionCards = new ArrayList<Card>();
     rooms = new ArrayList<Room>();
-    generateCards();
-    chooseMurder();
+ 
   }
 
-  private void chooseMurder() {
+  private void distributeCards() {
+	  Collections.shuffle(distributionCards);
+	
+	  for(int i = 0; i < distributionCards.size(); i++) {
+		  for(Player p : players) {
+			  if( i < 17) {p.addHand(distributionCards.get(i)); i++;}
+			  else {break;}
+		  }
+		  
+	  }
+		  
+	
+}
+
+private static void chooseMurder() {
 	mPerson = (PersonCard) cards.get(randomGeneration(0,5));
 	 mWeapon = (WeaponCard) cards.get(randomGeneration(6,11));
 	 mRoom = (RoomCard) cards.get(randomGeneration(12,17));
@@ -53,7 +66,8 @@ public class Board
 				  new WeaponCard("GUN"), new WeaponCard("KNIFE"), new WeaponCard("PIPE"), new WeaponCard("ROPE"), new WeaponCard("CANDLESTICK"), new WeaponCard("SPANNER"), 
 				  new RoomCard("DINING"), new RoomCard("KITCHEN"),new RoomCard("BALLROOM"), new RoomCard("CONSERVATORY"), new RoomCard("BILLIARD"), new RoomCard("LIBRARY"), new RoomCard("STUDY"), new RoomCard("HALL"), new RoomCard("LOUNGE"));
 	cards.addAll(cardList);
-	distributionCards.addAll(cardList);
+	distributionCards.addAll(cardList); 
+
 		
   }
   
@@ -147,42 +161,49 @@ private static boolean excecuteTurn(Player p) {
 	
 	//MOVE
 	if(turnType == 2) {
-		if(p.getSteps()==0) {
-			return false;
-		}
-		//Raw list of inputs, needs to be cut down/checked for size
-		ArrayList<Integer> movementArrayFullSize = movementInputs(inputLine.substring(commands[2].length()));
-		//Cut down the number of inputs to the number of remaining steps for the player.
-		ArrayList<Integer> movementArray;
-		if(movementArrayFullSize.size()>p.getSteps()) {
-			movementArray = (ArrayList<Integer>) movementArrayFullSize.subList(0, p.getSteps()-1);
-		}
-		else {
-			movementArray = movementArrayFullSize;
-		}
-		//Let the player simulate how far they can reach
-		Location playerNewLoc = p.movePlayer(movementArray);
-		//Move them this distance
-		if(playerNewLoc != null) {
-			movePlayerToLocation(p, playerNewLoc);
-		}
-		
-	}
+        if(p.getSteps()==0) {
+            return false;
+        }
+        //Raw list of inputs, needs to be cut down/checked for size
+        ArrayList<Integer> movementArray = movementInputs(inputLine.substring(commands[2].length()));
+        //Let the player simulate how far they can reach
+        Location playerNewLoc = p.movePlayer(movementArray);
+        //Move them this distance
+        if(playerNewLoc != null) {
+            movePlayerToLocation(p, playerNewLoc);
+        }
+        return false;
+        
+    }
 	//ACCUSE
 	else if(turnType == 0) {
 		parameters = inputLine.substring(commands[0].length()).split(" ");
 		if(parameters.length < 3){
+			System.out.println("Trying to ACCUSE with " + parameters);
 			return false;
 		}
-		System.out.println("Trying to ACCUSE with "+parameters);
+		Card personCard = Board.getCard(parameters[0]);
+		Card weaponCard = Board.getCard(parameters[1]);
+		Card roomCard = Board.getCard(p.getCurrentRoom().getName());
+		Accugestion a = new Accugestion(weaponCard, personCard, roomCard, p);
+		makeAccusation(a);
+		
 	}
+	
+	
 	//SUGGEST
 	else if(turnType == 1) {
 		parameters = inputLine.substring(commands[1].length()).split(" ");
 		if(parameters.length < 3){
+			System.out.println("Trying to SUGGEST with "+parameters);
 			return false;
 		}
-		System.out.println("Trying to SUGGEST with "+parameters);
+		Card personCard = Board.getCard(parameters[0]);
+		Card weaponCard = Board.getCard(parameters[1]);
+		Card roomCard = Board.getCard(p.getCurrentRoom().getName());
+		Accugestion a = new Accugestion(weaponCard, personCard, roomCard, p);
+		makeSuggestion(a);
+		
 	}
 	//NO COMMAND FOUND
 	else if(turnType == -1) {
@@ -238,6 +259,7 @@ private static int findTurn(String inputLine) {
 private static ArrayList<Integer> movementInputs(String movementString) {
 	ArrayList<Integer> movements = new ArrayList<Integer>();
 	for (int i=0; i < movementString.length(); i++) {
+		
 	    if(movementString.charAt(i) == 'd' || movementString.charAt(i) == 'D') {
 	    	movements.add(2);
 	    }
@@ -272,6 +294,11 @@ private static String takeStringInput() {
 
 
    public static Card getCard(String cardName){
+	for(Card c : cards) {
+		if(c.getName().equalsIgnoreCase(cardName)) {return c;}
+		
+	}
+	System.out.println("Couldn't find the right card for " + cardName);
 	return null;
     
   }
@@ -494,6 +521,7 @@ private static void displayMap(){
   public static void main(String[] args) {
     Board myBoard = new Board();
     myBoard.generateCards();
+    chooseMurder();
     myBoard.loadMapFromCSV();
     
     playersPlaying = 7;
@@ -505,6 +533,7 @@ private static void displayMap(){
     myBoard.generatePlayers();
 
     isRunning = true;
+    myBoard.distributeCards();
     myBoard.playGame();
   }
 }

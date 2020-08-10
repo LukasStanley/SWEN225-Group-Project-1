@@ -86,6 +86,7 @@ public class Player
 				 stillMovin = false;
 				 break;
 			 }
+			 System.out.println("reached here");
 			 //Set the next location
 			 nextLocation = locationArray[currentLocationStep.getX()+1][currentLocationStep.getY()];
 			//Check the next location is not impeded by a wall
@@ -145,22 +146,23 @@ public class Player
 		}
 		 
 	  }
-	  //If no valid moves were made, return null
-	  if(currentLocationStep == currentLocation) {
-		  return null;
-	  }
 	  
-	  //Otherwise return the location the player was able to move to
+	  //return the location the player was able to move to
+	  //If the movelist finished with a valid step, return the last planned step.
+	  if(stillMovin) {
+		  return nextLocation;
+	  }
+	  //Otherwise, return the last valid step
 	  else {
-		  //If the movelist finished with a valid step, return the last planned step.
-		  if(stillMovin) {
-			  return nextLocation;
+		  //If no valid moves were made, return null
+		  if(currentLocationStep == currentLocation) {
+			  return null;
 		  }
-		  //Otherwise, return the last valid step
 		  else {
 			  return currentLocationStep;
 		  }
 	  }
+	  
   }
   public boolean setPlayerName(PersonCard aPlayerName)
   {

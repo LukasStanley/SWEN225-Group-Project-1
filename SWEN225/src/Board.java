@@ -27,6 +27,7 @@ public class Board
   static String[] roomNames = {"KITCHEN", "BALLROOM", "CONSERVATORY", "BILLIARD", "LIBRARY", "STUDY", "HALL", "LOUNGE", "BALLROOM"};
   static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
   static int[][] startingPoints = {{7,24}, {9,0}, {14,0}, {23,6}, {23,19}, {0,17}};
+  static int currentPlayer = 0;
 
 
   //------------------------
@@ -178,7 +179,7 @@ public class Board
 	}
 }
 
-private static boolean excecuteTurn(Player p) {
+private static boolean executeTurn(Player p) {
 	String inputLine = takeStringInput();
 	int turnType = findTurn(inputLine);
 	//For storing the weapons etc of a accusation or suggestion.
@@ -339,6 +340,12 @@ private static ArrayList<Integer> movementInputs(String movementString) {
 	return movements;
 }
 
+private static Player nextPlayer() {
+	if(currentPlayer < playersPlaying) { int i = currentPlayer + 1; return players[i]; }
+	else if( currentPlayer == playersPlaying){return players[0];}
+	return null;
+	}
+
 private static String takeStringInput() {
 	  InputStreamReader isr = new InputStreamReader(System.in);
 	  BufferedReader br = new BufferedReader(isr);
@@ -369,6 +376,16 @@ private static String takeStringInput() {
 	   return (dice1 + dice2);
     
   }
+   
+   public static void displayPassToPlayer(Player playerTurn) {
+	      System.out.flush();
+	      for(int i = 0; i<300; i++) {
+	          System.out.println();
+	      }
+	      System.out.println("It is now the turn of " + playerTurn.getPlayerName().getName());
+	      System.out.println("If you are "+  playerTurn.getPlayerName().getName() + ", please press the enter key to continue...");
+	      String inputLine = takeStringInput();
+	  }
 
 
  
@@ -381,13 +398,24 @@ private static String takeStringInput() {
 				Card c = p.checkHand(suggestion.getPerson(), suggestion.getRoom(), suggestion.getWeapon());
 				System.out.println(c + " has been refuted");
 			}
-			else{System.out.println("Your suggestion has not been refuted by any other player");}
+			displayPassToPlayer(nextPlayer());
+			
 		}
+		System.out.println("Your suggestion has not been refuted by any other player");
 	}
   
   public static void makeAccusation(Accugestion accusation) {
 	  
-	  if(accusation.getPerson() == mPerson && accusation.getRoom() == mRoom && accusation.getWeapon() == mWeapon) {System.out.println("yay you won"); isRunning = false;}
+	  if(accusation.getPerson() == mPerson && accusation.getRoom() == mRoom && accusation.getWeapon() == mWeapon) {
+		  System.out.flush();
+	      for(int i = 0; i<300; i++) {
+	          System.out.println();
+	      }	
+		  System.out.println("Player " + players[currentPlayer] + " has won the game");
+		  System.out.println("The correct solution was " + mPerson + " in the " + mRoom + " with the " + mWeapon);
+		  System.exit(100);
+		  isRunning = false;
+		  }
 	  else {System.out.println("Your guess was incorrect, you are now out of the game"); accusation.getOwner().setIsPlaying(false);}
 	
 	}
@@ -600,13 +628,15 @@ private static void displayMap(){
 	while(isRunning) {
 		for(int i = 0; i<playersPlaying; i++) {
 			Player player = players[i];
+			currentPlayer = i;
 			currentTurnActive = true;
 			player.setSteps(Board.rollDice());
 			displayMap();
 			displayInfo(player);
 			while(currentTurnActive) {
 				if(player.getIsPlaying()) {
-					currentTurnActive = !excecuteTurn(player);
+					currentTurnActive = !executeTurn(player);
+					displayPassToPlayer(nextPlayer());
 				}
 			}
 		}

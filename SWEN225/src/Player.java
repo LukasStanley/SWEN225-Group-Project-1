@@ -86,7 +86,6 @@ public class Player
 				 stillMovin = false;
 				 break;
 			 }
-			 System.out.println("reached here");
 			 //Set the next location
 			 nextLocation = locationArray[currentLocationStep.getX()+1][currentLocationStep.getY()];
 			//Check the next location is not impeded by a wall

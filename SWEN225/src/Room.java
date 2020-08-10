@@ -31,5 +31,9 @@ public class Room
   public ArrayList<WeaponCard> getWeapons() {
     return weapons;
   }
+
+  public void addLocation (Location l){
+      locations.add(l);
+  }
   
 }

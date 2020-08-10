@@ -57,7 +57,7 @@ public class Board
 	
   }
 
-  private static void chooseMurder() {
+  private void chooseMurder() {
 	mPerson = (PersonCard) cards.get(randomGeneration(0,5));
 	 mWeapon = (WeaponCard) cards.get(randomGeneration(6,11));
 	 mRoom = (RoomCard) cards.get(randomGeneration(12,17));
@@ -141,7 +141,9 @@ public class Board
   }
 
   private static void moveWeaponToLocation(WeaponCard w, Location l){
-      w.getLocation().setWeaponOn(null);
+      if(w.getLocation()!=null){
+		  w.getLocation().setWeaponOn(null);
+	  }
       w.setLocation(l);
       l.setWeaponOn(w);
   }
@@ -527,44 +529,47 @@ private void loadMapFromCSV(){
     for(int j=0;j<24;j++) {
       String current = "";
       try{current = rows[i][j];}catch (Exception e){System.out.println(i+","+j);}
-      if(current.equals("0")){
-        continue;
-      }else{
+      if(!current.equals("0")){
+
+//      	int roomInt = Integer.parseInt(current);
+//      	locations[i][j].setRoomIn(rooms[roomInt-1]);
+//        rooms[roomInt-1].addLocation(locations[i][j]);
+
     	  if(current.equals("1")) {
-              //Placeholder room
               locations[i][j].setRoomIn(rooms[0]);
+              rooms[0].addLocation(locations[i][j]);
     	  }
     	  else if(current.equals("2")) {
-              //Placeholder room
               locations[i][j].setRoomIn(rooms[1]);
+			  rooms[1].addLocation(locations[i][j]);
     	  }
     	  else if(current.equals("3")) {
-              //Placeholder room
               locations[i][j].setRoomIn(rooms[2]);
+			  rooms[2].addLocation(locations[i][j]);
     	  }
     	  else if(current.equals("4")) {
-              //Placeholder room
               locations[i][j].setRoomIn(rooms[3]);
+			  rooms[3].addLocation(locations[i][j]);
     	  }
     	  else if(current.equals("5")) {
-              //Placeholder room
               locations[i][j].setRoomIn(rooms[4]);
+			  rooms[4].addLocation(locations[i][j]);
     	  }
     	  else if(current.equals("6")) {
-              //Placeholder room
               locations[i][j].setRoomIn(rooms[5]);
+			  rooms[5].addLocation(locations[i][j]);
     	  }
     	  else if(current.equals("7")) {
-              //Placeholder room
               locations[i][j].setRoomIn(rooms[6]);
+			  rooms[6].addLocation(locations[i][j]);
     	  }
     	  else if(current.equals("8")) {
-              //Placeholder room
               locations[i][j].setRoomIn(rooms[7]);
+			  rooms[7].addLocation(locations[i][j]);
     	  }
     	  else if(current.equals("9")) {
-              //Placeholder room
               locations[i][j].setRoomIn(rooms[8]);
+			  rooms[8].addLocation(locations[i][j]);
     	  }
 
       }
@@ -693,8 +698,10 @@ private static void displayMap(){
   public static void main(String[] args) {
     Board myBoard = new Board();
     myBoard.generateCards();
-    chooseMurder();
+    myBoard.generateRooms();
+    myBoard.chooseMurder();
     myBoard.loadMapFromCSV();
+    myBoard.randomizeWeapons();
     
     playersPlaying = 7;
     while(playersPlaying > 6 || playersPlaying <2) {

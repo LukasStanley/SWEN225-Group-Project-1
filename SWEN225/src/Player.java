@@ -53,29 +53,27 @@ public class Player
 	  Location nextLocation = currentLocation;
 	  boolean stillMovin = true;
 	  boolean firstLoop = true;
+	  int initialStepsHad = stepsRemaining;
+	  int currentIndex = 0;
 	  for(Integer current : movements) {
-		  
+		  //If the player is trying to exceed the number of steps they had remaining to begin with.
+		 if(currentIndex == initialStepsHad) {
+			 stillMovin = false;
+			 break;
+		 }
 		 //The current location of the player as they are trying to perform their inputs. nextLocation will be initialized to the previous (valid) move.
 		 currentLocationStep = nextLocation;
-		 if(firstLoop) {
-			 firstLoop = false;
-		 }
-		 else {
-			 if(currentLocationStep.getRoomIn() == null) {
-				 stepsRemaining--;
-				 System.out.println("reduced by 1");
-			 }	
-			 else {
-				 System.out.println(currentLocationStep.getRoomIn().getName());
-			 }
-		 }
+
 		  //left
 		 if(current == 3) {
+			 //Check within bounds of the map (not possible with standard map)
 			 if(currentLocationStep.getY()==0) {
 				 stillMovin = false;
 				 break;
 			 }
+			 //Set the next location
 			 nextLocation = locationArray[currentLocationStep.getX()][currentLocationStep.getY()-1];
+			//Check the next location is not impeded by a wall
 			 if(nextLocation.getWallRight()){
 				 stillMovin = false;
 				 break;
@@ -83,11 +81,14 @@ public class Player
 		 }
 		 //down
 		 else if(current == 2) {
+			//Check within bounds of the map (not possible with standard map)
 			 if(currentLocationStep.getX()==23) {
 				 stillMovin = false;
 				 break;
 			 }
+			 //Set the next location
 			 nextLocation = locationArray[currentLocationStep.getX()+1][currentLocationStep.getY()];
+			//Check the next location is not impeded by a wall
 			 if(nextLocation.getWallUp()){
 				 stillMovin = false;
 				 break;
@@ -95,11 +96,14 @@ public class Player
 		 }
 		 //right
 		 else if(current == 1) {
+			//Check within bounds of the map (not possible with standard map)
 			 if(currentLocationStep.getY()==24) {
 				 stillMovin = false;
 				 break;
 			 }
+			 //Set the next location
 			 nextLocation = locationArray[currentLocationStep.getX()][currentLocationStep.getY()+1];
+			//Check the next location is not impeded by a wall
 			 if(nextLocation.getWallLeft()){
 				 stillMovin = false;
 				 break;
@@ -107,12 +111,15 @@ public class Player
 		 }
 		 //up or invalid (defaults to up)
 		 else{
-			 System.out.println(currentLocationStep);
+			//Check within bounds of the map (not possible with standard map)
 			 if(currentLocationStep.getX()==0) {
 				 stillMovin = false;
 				 break;
 			 }
+			 //Set the next location
 			 nextLocation = locationArray[currentLocationStep.getX()-1][currentLocationStep.getY()];
+			 
+			 //Check the next location is not impeded by a wall
 			 if(nextLocation.getWallDown()){
 				 stillMovin = false;
 				 break;
@@ -124,14 +131,35 @@ public class Player
 			 stillMovin = false;
 			 break;
 		 }
-	  }
 		 
+		 //"consume" a step, since a valid step must have been found to reach this point
+		 //Only if the player was not moving within a room
+		if(!(currentLocationStep.getRoomIn() != null && nextLocation.getRoomIn() !=null)) {
+			//Increase the number of moves attempted so far if made not within a room
+			currentIndex++;
+			stepsRemaining--;
+			System.out.println("reduced by 1");
+		}	
+		else {
+			System.out.println("inside a room");
+		}
+		 
+	  }
+	  //If no valid moves were made, return null
 	  if(currentLocationStep == currentLocation) {
 		  return null;
 	  }
 	  
+	  //Otherwise return the location the player was able to move to
 	  else {
-		  return currentLocationStep;
+		  //If the movelist finished with a valid step, return the last planned step.
+		  if(stillMovin) {
+			  return nextLocation;
+		  }
+		  //Otherwise, return the last valid step
+		  else {
+			  return currentLocationStep;
+		  }
 	  }
   }
   public boolean setPlayerName(PersonCard aPlayerName)

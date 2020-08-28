@@ -5,6 +5,7 @@ import java.lang.reflect.Array;
 import java.util.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import javax.swing.*;
 
 public class Board
 {
@@ -787,14 +788,29 @@ private static void displayMap(){
     myBoard.chooseMurder();
     myBoard.loadMapFromCSV();
     myBoard.randomizeWeapons();
-    
-    playersPlaying = 7;
+
+
+//    playersPlaying = 7;
+//    while(playersPlaying > 6 || playersPlaying <2) {
+//    System.out.println("Pick the number of players:");
+//    playersPlaying = Character.getNumericValue(takeStringInput().charAt(0));
+
+	 JFrame f = new JFrame();
+     f.setSize(1200,800);
+	 f.setLayout(null);//no layout manager
+	 f.setVisible(true);
+
+	JOptionPane numPlayersOptionPane = new JOptionPane();
+	playersPlaying = 7;
     while(playersPlaying > 6 || playersPlaying <2) {
     	System.out.println("Pick the number of players:");
-    	playersPlaying = Character.getNumericValue(takeStringInput().charAt(0));
+    	playersPlaying = Integer.parseInt(numPlayersOptionPane.showInputDialog("Choose number of players (2-6)"));
     }
     System.out.println(playersPlaying + " Players selected.");
+
     myBoard.generatePlayers();
+
+
 
     isRunning = true;
     myBoard.distributeCards();

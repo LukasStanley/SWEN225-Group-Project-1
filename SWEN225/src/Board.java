@@ -226,7 +226,7 @@ private static boolean executeTurn(Player p) {
 	String inputLine = takeStringInput();
 	int turnType = findTurn(inputLine);
 	//For storing the weapons etc of a accusation or suggestion.
-	String[] parameters;
+	//String[] parameters;
 	
 	//MOVE
 	if(turnType == 2) {
@@ -247,14 +247,14 @@ private static boolean executeTurn(Player p) {
     }
 	//ACCUSE
 	else if(turnType == 0) {
-		parameters = inputLine.substring(commands[0].length()).split(" ");
-		if(parameters.length < 4){
+		List<String> parameters = Input.getAccusation();
+		if(parameters.size() < 4){
 			System.out.println("Too few parameters! You need a WEAPON, PERSON and LOCATION");
 			return false;
 		}
-		Card personCard = getCard(parameters[1]);
-		Card weaponCard = getCard(parameters[2]);
-		Card roomCard = getCard(parameters[3]);
+		Card personCard = getCard(parameters.get(1));
+		Card weaponCard = getCard(parameters.get(2));
+		Card roomCard = getCard(parameters.get(3))	;
 		if(personCard instanceof PersonCard) {
 			if(weaponCard instanceof WeaponCard) {
 				if(roomCard instanceof RoomCard) {
@@ -281,15 +281,15 @@ private static boolean executeTurn(Player p) {
 	
 	//SUGGEST
 	else if(turnType == 1) {
-		parameters = inputLine.substring(commands[1].length()).split(" ");
-		if(parameters.length < 3){
+		List<String> parameters = Input.getSuggestion();
+		if(parameters.size() < 3){
 			System.out.println("Too few parameters! You need a WEAPON and PERSON");
 			return false;
 		}
 		if(p.getCurrentRoom() != null) {
 			System.out.println(parameters.toString());
-			Card personCard = getCard(parameters[1]);
-			Card weaponCard = getCard(parameters[2]);
+			Card personCard = getCard(parameters.get(1));
+			Card weaponCard = getCard(parameters.get(2));
 			Card roomCard = getCard(p.getCurrentRoom().getName());
 			if(personCard instanceof PersonCard) {
 				if(weaponCard instanceof WeaponCard) {

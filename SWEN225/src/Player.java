@@ -19,6 +19,7 @@ public class Player
   private boolean isPlaying;
   private Location[][] locationArray;
   private int stepsRemaining;
+  
 
   //Player Associations
   private List<Card> hand;

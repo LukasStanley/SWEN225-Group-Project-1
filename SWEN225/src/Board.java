@@ -100,7 +100,9 @@ public class Board
   
   private void generatePlayers() {
   	  for(int i = 0; i<players.length; i++) {
-  		  players[i] = new Player((PersonCard) cards.get(i), locations[startingPoints[i][1]][startingPoints[i][0]], true, locations);
+  		  String id = Input.askID();
+  		  String player = Input.askPlayer();
+  		  players[i] = new Player((PersonCard) getCard(player), locations[startingPoints[i][1]][startingPoints[i][0]], true, locations, id);
   		  locations[startingPoints[i][1]][startingPoints[i][0]].setPlayerOn(players[i]);
 	  }
   }
@@ -159,6 +161,7 @@ public class Board
         }
     }
   
+
  
 
   public static int randomGeneration(int low, int high){

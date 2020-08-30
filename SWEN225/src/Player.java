@@ -13,6 +13,7 @@ public class Player
 
   //Player Attributes
   private PersonCard playerName;
+  private String playerID;
   private Room currentRoom;
   private Location currentLocation;
   private boolean isPlaying;
@@ -26,9 +27,10 @@ public class Player
   // CONSTRUCTOR
   //------------------------
 
-  public Player(PersonCard aPlayerName, Location aCurrentLocation, boolean aIsPlaying, Location[][] locations)
+  public Player(PersonCard aPlayerName, Location aCurrentLocation, boolean aIsPlaying, Location[][] locations, String id)
   {
     playerName = aPlayerName;
+    playerID = id;
     currentLocation = aCurrentLocation;
     isPlaying = aIsPlaying;
     hand = new ArrayList<Card>();

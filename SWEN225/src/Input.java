@@ -21,6 +21,7 @@ public class Input implements KeyListener {
 	}
 
 	public void keyPressed(KeyEvent keyEvent){
+        System.out.println("Key Pressed: "+keyEvent.getKeyChar());
 //	    switch(){
 //
 //        }

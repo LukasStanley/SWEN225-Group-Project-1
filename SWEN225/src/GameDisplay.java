@@ -35,6 +35,8 @@ public class GameDisplay
 	static int canvasWidth = 800;
 	
 	static boolean shown = false;
+
+	static JComboBox playerCountCombo;
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -219,13 +221,26 @@ public class GameDisplay
   } 
 
   public static int displayPlayerPick() {
-	  if(shown != true){
+	  if(!shown){
 		  setUpGameBoard();
 		  shown = true;
 	  }
 	 
-	 int playersPlaying = 7;
-	 playersPlaying = Integer.parseInt(JOptionPane.showInputDialog("Choose number of players (2-6)"));
-	 return playersPlaying;
+	  Integer playerCountOptions[] = {2,3,4,5,6};
+
+      Object out = JOptionPane.showInputDialog(null,
+              "How many players are playing?",
+              "Pick Number of Players",
+              JOptionPane.PLAIN_MESSAGE,
+              null,
+              playerCountOptions,
+              3
+      );
+
+      if (out==null){
+        return 7;
+      }else{
+          return (int)out;
+      }
   }
 }

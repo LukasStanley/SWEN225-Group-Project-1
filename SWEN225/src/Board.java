@@ -789,22 +789,11 @@ private static void displayMap(){
     myBoard.loadMapFromCSV();
     myBoard.randomizeWeapons();
 
-
-//    playersPlaying = 7;
-//    while(playersPlaying > 6 || playersPlaying <2) {
-//    System.out.println("Pick the number of players:");
-//    playersPlaying = Character.getNumericValue(takeStringInput().charAt(0));
-
-	 JFrame f = new JFrame();
-     f.setSize(1200,800);
-	 f.setLayout(null);//no layout manager
-	 f.setVisible(true);
-
 	JOptionPane numPlayersOptionPane = new JOptionPane();
-	playersPlaying = 7;
+	playersPlaying = GameDisplay.displayPlayerPick();;
     while(playersPlaying > 6 || playersPlaying <2) {
     	System.out.println("Pick the number of players:");
-    	playersPlaying = Integer.parseInt(numPlayersOptionPane.showInputDialog("Choose number of players (2-6)"));
+    	playersPlaying = GameDisplay.displayPlayerPick();;
     }
     System.out.println(playersPlaying + " Players selected.");
 

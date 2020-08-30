@@ -22,7 +22,7 @@ public class Board
   //Board Associations
   private static List<Card> cards;
   private static List<Card> distributionCards;
-  private static Location[][] locations = new Location[25][24];
+  static Location[][] locations = new Location[25][24];
   private static Player[] players = new Player[6];
   private static int playersPlaying;
   static Room[] rooms;
@@ -30,6 +30,7 @@ public class Board
   static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
   static int[][] startingPoints = {{7,24}, {9,0}, {14,0}, {23,6}, {23,19}, {0,17}};
   static int currentPlayer = 0;
+  static boolean hasRolled;
 
 
   //------------------------
@@ -105,6 +106,7 @@ public class Board
   		  players[i] = new Player((PersonCard) getCard(player), locations[startingPoints[i][1]][startingPoints[i][0]], true, locations, id);
   		  locations[startingPoints[i][1]][startingPoints[i][0]].setPlayerOn(players[i]);
 	  }
+  	  //GameDisplayer.players(players);
   }
   
   private void generateRooms() {
@@ -410,12 +412,13 @@ private static String takeStringInput() {
 	return null;
     
   }
-   public static int rollDice(){
+   public static void rollDice(){
 	int dice1 = (int)(Math.random()*6) + 1;
 	int dice2 = (int)(Math.random()*6) + 1;
 	   
-	   return (dice1 + dice2);
-    
+	   players[currentPlayer].setSteps((dice1 + dice2));
+	   hasRolled = true;
+    //GameDisplay.UpdateDie(dice1, dice2);
   }
    
    public static void displayPassToPlayer(Player playerTurn) {
@@ -769,9 +772,10 @@ private static void displayMap(){
 			Player player = players[i];
 			currentPlayer = i;
 			currentTurnActive = true;
-			player.setSteps(Board.rollDice());
-			displayMap();
-			displayInfo(player);
+			hasRolled = false;
+			while(!hasRolled) {}
+			//displayMap();
+			//displayInfo(player);
 			while(currentTurnActive) {
 				if(player.getIsPlaying()) {
 					currentTurnActive = !executeTurn(player);

@@ -1,7 +1,6 @@
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -31,6 +30,8 @@ public class Board
   static int[][] startingPoints = {{7,24}, {9,0}, {14,0}, {23,6}, {23,19}, {0,17}};
   static int currentPlayer = 0;
 
+  private Input myInput;
+
 
   //------------------------
   // CONSTRUCTOR
@@ -41,6 +42,9 @@ public class Board
     cards = new ArrayList<Card>();
     distributionCards = new ArrayList<Card>();
     rooms = new Room[roomNames.length];
+
+//    Associates the model and the Input with each other
+    myInput = new Input(this);
  
   }
 
@@ -100,8 +104,8 @@ public class Board
   
   private void generatePlayers() {
   	  for(int i = 0; i<players.length; i++) {
-  		  String id = Input.askID();
-  		  String player = Input.askPlayer();
+  		  String id = myInput.askID();
+  		  String player = myInput.askPlayer();
   		  players[i] = new Player((PersonCard) getCard(player), locations[startingPoints[i][1]][startingPoints[i][0]], true, locations, id);
   		  locations[startingPoints[i][1]][startingPoints[i][0]].setPlayerOn(players[i]);
 	  }

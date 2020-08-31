@@ -414,23 +414,23 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
         switch(keyEvent.getKeyCode()){
             //Left Key
             case 37:
-            myBoard.stepCurrentPlayer(0);
-            break;
+                myBoard.stepCurrentPlayer(0);
+                break;
 
             //Up Key
             case 38:
-            myBoard.stepCurrentPlayer(3);
-            break;
+                myBoard.stepCurrentPlayer(3);
+                break;
 
             //Right Key
             case 39:
-            myBoard.stepCurrentPlayer(2);
-            break;
+                myBoard.stepCurrentPlayer(2);
+                break;
 
             //Down Key
             case 40:
-            myBoard.stepCurrentPlayer(1);
-            break;
+                myBoard.stepCurrentPlayer(1);
+                break;
 
             //Enter
             case 10:
@@ -442,7 +442,6 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
 
             default:
         }
-        redraw();
         System.out.print("Key Pressed:");
         System.out.println(keyEvent.getExtendedKeyCode());
     }

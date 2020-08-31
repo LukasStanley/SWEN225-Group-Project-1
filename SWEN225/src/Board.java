@@ -132,6 +132,7 @@ public class Board
       //Move them this distance
       if(playerNewLoc != null) {
           movePlayerToLocation(p, playerNewLoc);
+          myGameDisplay.redraw();
       }
 	}
   

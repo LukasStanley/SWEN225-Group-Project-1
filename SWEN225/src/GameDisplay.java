@@ -84,7 +84,7 @@ public class GameDisplay extends JFrame implements KeyListener
                             //	  					 if(Board.locations[i][j].getPlayerOn().getPlayerName().getName() == null) {
                             //	  						 System.out.println("WOAH");
                             //	  					 }
-                            String imageFilePath = "./src/MUSTARD.jpg";//"./src/" + Board.locations[i][j].getPlayerOn().getPlayerName().getName() + ".jpeg";
+                            String imageFilePath = "./src/" + Board.locations[i][j].getPlayerOn().getPlayerName().getName() + ".jpg";
                             BufferedImage img = null;
                             try {
                                 img = ImageIO.read(new File(imageFilePath));
@@ -284,8 +284,7 @@ public class GameDisplay extends JFrame implements KeyListener
                 
                 if(currentPlayer != null) {
                 	//Get thumbnail of current player
-                    //String imageFilePath = "./src/" + currentPlayer.getPlayerName().getName() + ".jpg";
-                    String imageFilePath = "./src/MUSTARD.jpg";
+                    String imageFilePath = "./src/" + currentPlayer.getPlayerName().getName() + ".jpg";
                     
                     img = null;
                     try {
@@ -297,11 +296,9 @@ public class GameDisplay extends JFrame implements KeyListener
                     g2.drawImage(img, boardDisplayWidth + cellWidth, diceHeight + cellHeight*4, boardDisplayWidth + cellWidth*3,  diceHeight + cellHeight*6, 0, 0, img.getWidth(), img.getHeight(), null);
                 	
                 	//Print info font
-                    g2.drawString("You are MUSTARD" , boardDisplayWidth + cellWidth*4, diceHeight + cellHeight*5);
-                    //g2.drawString("You are " + currentPlayer.getPlayerName().getName() , boardDisplayWidth + cellWidth, cellHeight);
-                    
-                    g2.drawString("You have " + currentPlayer.getSteps() + " steps remaining." , boardDisplayWidth + cellWidth*4, diceHeight + cellHeight*6);
-                    //g2.drawString("You have yet to roll." , boardDisplayWidth + cellWidth, img.getHeight() + cellHeight*5);
+                    g2.drawString("You are: " + currentPlayer.getPlayerId(), boardDisplayWidth + cellWidth*4, diceHeight + cellHeight*5);
+                    g2.drawString("You're playing as: " + currentPlayer.getPlayerName().getName() , boardDisplayWidth + cellWidth*4, diceHeight + cellHeight*6);
+                    g2.drawString("You have " + currentPlayer.getSteps() + " steps remaining." , boardDisplayWidth + cellWidth*4, diceHeight + cellHeight*7);
                     g2.drawString("Your hand:" , cellWidth*1, (int)(boardDisplayHeight + cellHeight*0.5));
                     for(int i = 0; i < currentPlayer.getHand().size(); i++) {
                     	imageFilePath = "./src/" + currentPlayer.getHand().get(i).getName() + ".jpg";

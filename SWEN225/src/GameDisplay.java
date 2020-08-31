@@ -5,15 +5,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.lang.reflect.Array;
-import java.util.*;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -349,14 +343,28 @@ public class GameDisplay
 
         canvas.setVisible(true);
     } 
+   
     public static int displayPlayerPick() {
-        if(shown != true){
-            setUpGameBoard();
-            shown = true;
-        }
+	    if(!shown){
+		    setUpGameBoard();
+		    shown = true;
+	    }
+	 
+	    Integer playerCountOptions[] = {2,3,4,5,6};
 
-        int playersPlaying = 7;
-        playersPlaying = Integer.parseInt(JOptionPane.showInputDialog("Choose number of players (2-6)"));
-        return playersPlaying;
-    }
+      Object out = JOptionPane.showInputDialog(null,
+              "How many players are playing?",
+              "Pick Number of Players",
+              JOptionPane.PLAIN_MESSAGE,
+              null,
+              playerCountOptions,
+              3
+      );
+
+      if (out==null){
+        return 7;
+      }else{
+          return (int)out;
+      }
+  }
 }

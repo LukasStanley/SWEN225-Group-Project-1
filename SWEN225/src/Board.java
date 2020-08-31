@@ -753,10 +753,10 @@ private static void displayMap(){
     myBoard.randomizeWeapons();
 
 	JOptionPane numPlayersOptionPane = new JOptionPane();
-	playersPlaying = GameDisplay.displayPlayerPick();;
+	playersPlaying = GameDisplay.displayPlayerPick();
     while(playersPlaying > 6 || playersPlaying <2) {
     	System.out.println("Pick the number of players:");
-    	playersPlaying = GameDisplay.displayPlayerPick();;
+    	playersPlaying = GameDisplay.displayPlayerPick();
     }
     System.out.println(playersPlaying + " Players selected.");
 

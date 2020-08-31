@@ -107,7 +107,7 @@ public class Board
   }
   
   private void generatePlayers() {
-  	  for(int i = 0; i<players.length; i++) {
+  	  for(int i = 0; i < playersPlaying; i++) {
   		  String id = myInput.askID(i);
   		  String player = myInput.askPlayer();
   		  players[i] = new Player((PersonCard) getCard(player), locations[startingPoints[i][1]][startingPoints[i][0]], true, locations, id);

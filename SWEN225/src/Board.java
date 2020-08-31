@@ -105,7 +105,7 @@ public class Board
   
   private void generatePlayers() {
   	  for(int i = 0; i<players.length; i++) {
-  		  String id = myInput.askID();
+  		  String id = myInput.askID(i);
   		  String player = myInput.askPlayer();
   		  players[i] = new Player((PersonCard) getCard(player), locations[startingPoints[i][1]][startingPoints[i][0]], true, locations, id);
   		  locations[startingPoints[i][1]][startingPoints[i][0]].setPlayerOn(players[i]);
@@ -228,12 +228,11 @@ public class Board
 
 private static boolean executeTurn(Player p) {
 	String inputLine = takeStringInput();
-	int turnType = findTurn(inputLine);
+
 	//For storing the weapons etc of a accusation or suggestion.
-	String[] parameters;
+	//String[] parameters;
 	
 	//MOVE
-	if(turnType == 2) {
         if(p.getSteps()==0) {
         	System.out.println("You are out of moves!");
             return false;
@@ -247,18 +246,19 @@ private static boolean executeTurn(Player p) {
             movePlayerToLocation(p, playerNewLoc); 	displayMap(); displayInfo(p);
         }
         return false;
-        
-    }
-	//ACCUSE
-	else if(turnType == 0) {
-		parameters = inputLine.substring(commands[0].length()).split(" ");
-		if(parameters.length < 4){
+	}
+    
+	
+public boolean Accuse() {
+	Player p = players[currentPlayer];
+		List<String> parameters = Input.getAccusation();
+		if(parameters.size() < 4){
 			System.out.println("Too few parameters! You need a WEAPON, PERSON and LOCATION");
 			return false;
 		}
-		Card personCard = getCard(parameters[1]);
-		Card weaponCard = getCard(parameters[2]);
-		Card roomCard = getCard(parameters[3]);
+		Card personCard = getCard(parameters.get(1));
+		Card weaponCard = getCard(parameters.get(2));
+		Card roomCard = getCard(parameters.get(3))	;
 		if(personCard instanceof PersonCard) {
 			if(weaponCard instanceof WeaponCard) {
 				if(roomCard instanceof RoomCard) {
@@ -279,21 +279,22 @@ private static boolean executeTurn(Player p) {
 			System.out.println("The first item must be a valid person!");
 			return false;
 		}
+		return true;
 		
 	}
+
 	
-	
-	//SUGGEST
-	else if(turnType == 1) {
-		parameters = inputLine.substring(commands[1].length()).split(" ");
-		if(parameters.length < 3){
+public boolean Suggest() {
+	Player p = players[currentPlayer];
+	List<String> parameters = Input.getSuggestion();
+		if(parameters.size() < 3){
 			System.out.println("Too few parameters! You need a WEAPON and PERSON");
 			return false;
 		}
 		if(p.getCurrentRoom() != null) {
 			System.out.println(parameters.toString());
-			Card personCard = getCard(parameters[1]);
-			Card weaponCard = getCard(parameters[2]);
+			Card personCard = getCard(parameters.get(1));
+			Card weaponCard = getCard(parameters.get(2));
 			Card roomCard = getCard(p.getCurrentRoom().getName());
 			if(personCard instanceof PersonCard) {
 				if(weaponCard instanceof WeaponCard) {
@@ -311,59 +312,10 @@ private static boolean executeTurn(Player p) {
 			}
 		}
 		else {System.out.println("You must be in a room to make a suggestion"); return false;}
-		
-	}
-	//NO COMMAND FOUND
-	else if(turnType == -1) {
-		return false;
-	}
-	//Go to next turn
-	else if(turnType == 6) {
 		return true;
-	}
-	//Cards
-	else if(turnType == 3) {
-		displayCards(p);
-		return false;
-	}
-	//Map
-	else if(turnType == 3) {
-		displayMap();
-		displayInfo(p);
-		return false;
-	}
-	return true;
-}
-
-private static int findTurn(String inputLine) {
-	boolean commandFound = true;
-	int commandIndex = -1;
-	for(String command : commands) {
-		commandIndex ++;
-		commandFound = true;
-		if(command.length() <= inputLine.length()) {
-			for (int i=0; i < command.length(); i++) {	
-				if(inputLine.charAt(i) != command.charAt(i)) {
-					commandFound = false;
-				}
-			}
-		}
-		else {
-			commandFound = false;
-		}
 		
-		if(commandFound == true) {
-			break;
-		}
 	}
 	
-	if(commandFound) {
-		return commandIndex;
-	}
-	else {
-		return -1;
-	}	
-}
 
 private static ArrayList<Integer> movementInputs(String movementString) {
 	ArrayList<Integer> movements = new ArrayList<Integer>();

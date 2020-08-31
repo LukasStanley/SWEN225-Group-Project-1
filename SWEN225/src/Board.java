@@ -22,7 +22,7 @@ public class Board
   private static List<Card> cards;
   private static List<Card> distributionCards;
   static Location[][] locations = new Location[25][24];
-  private static Player[] players = new Player[6];
+  static Player[] players = new Player[6];
   private static int playersPlaying;
   static Room[] rooms;
   static String[] roomNames = {"KITCHEN", "BALLROOM", "CONSERVATORY", "BILLIARD", "LIBRARY", "STUDY", "HALL", "LOUNGE", "DINING"};

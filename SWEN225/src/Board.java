@@ -13,23 +13,23 @@ public class Board
   //------------------------
 
   //Board Attributes
-  private static PersonCard mPerson;
-  private static WeaponCard mWeapon;
-  private static RoomCard mRoom;
-  private static boolean isRunning; 
+  private PersonCard mPerson;
+  private WeaponCard mWeapon;
+  private RoomCard mRoom;
+  private boolean isRunning; 
 
   //Board Associations
-  private static List<Card> cards;
-  private static List<Card> distributionCards;
-  static Location[][] locations = new Location[25][24];
-  static Player[] players = new Player[6];
-  private static int playersPlaying;
-  static Room[] rooms;
-  static String[] roomNames = {"KITCHEN", "BALLROOM", "CONSERVATORY", "BILLIARD", "LIBRARY", "STUDY", "HALL", "LOUNGE", "DINING"};
-  static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
-  static int[][] startingPoints = {{7,24}, {9,0}, {14,0}, {23,6}, {23,19}, {0,17}};
-  static int currentPlayer = 0;
-  static boolean hasRolled;
+  private List<Card> cards;
+  private List<Card> distributionCards;
+  Location[][] locations = new Location[25][24];
+  Player[] players = new Player[6];
+  private int playersPlaying;
+  Room[] rooms;
+  String[] roomNames = {"KITCHEN", "BALLROOM", "CONSERVATORY", "BILLIARD", "LIBRARY", "STUDY", "HALL", "LOUNGE", "DINING"};
+  String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
+  int[][] startingPoints = {{7,24}, {9,0}, {14,0}, {23,6}, {23,19}, {0,17}};
+  int currentPlayer = 0;
+  boolean hasRolled;
 
   Input myInput;
   GameDisplay myGameDisplay;
@@ -80,8 +80,7 @@ public class Board
 	distributionCards.remove(mPerson); distributionCards.remove(mWeapon); distributionCards.remove(mRoom);
 	
   }
-  private static void StateChange() {
-	  GameDisplay.ChangeOccured();
+  public void StateChange() { GameDisplay.ChangeOccured();
   }
   
   private void generateCards() {
@@ -148,12 +147,12 @@ public class Board
   //------------------------
 
 
-  private static void movePlayerToLocation(Player p, Location l){
+  private void movePlayerToLocation(Player p, Location l){
 	  p.getCurrentLocation().setPlayerOn(null);
 	  p.setCurrentLocation(l);
 	  l.setPlayerOn(p);
   }
-  private static void movePlayerToRoom(Player p, Room r) {
+  private void movePlayerToRoom(Player p, Room r) {
       for(Location l : r.getLocations()) {
           if(l.getPlayerOn() == null) {
               movePlayerToLocation(p, l);
@@ -162,7 +161,7 @@ public class Board
       }
   }
 
-  private static void moveWeaponToLocation(WeaponCard w, Location l){
+  private void moveWeaponToLocation(WeaponCard w, Location l){
       if(w.getLocation()!=null){
 		  w.getLocation().setWeaponOn(null);
 	  }
@@ -170,7 +169,7 @@ public class Board
       l.setWeaponOn(w);
   }
 
-  private static void moveWeaponToRoom(WeaponCard w, Room r) {
+  private void moveWeaponToRoom(WeaponCard w, Room r) {
       for(Location l : r.getLocations()) {
           if(l.getWeaponOn() == null) {
               moveWeaponToLocation(w, l);
@@ -182,7 +181,7 @@ public class Board
 
  
 
-  public static int randomGeneration(int low, int high){
+  public int randomGeneration(int low, int high){
 			Random r = new Random();
 			int result = r.nextInt(high-low) + low;
 			return result;
@@ -190,7 +189,7 @@ public class Board
 
  
 
-private static boolean executeTurn(Player p) {
+private boolean executeTurn(Player p) {
 	//Method to send current player information to View
 	//Await input
 	
@@ -267,7 +266,7 @@ public boolean Suggest() {
 	}
 	
 
-private static ArrayList<Integer> movementInputs(String movementString) {
+private ArrayList<Integer> movementInputs(String movementString) {
 	ArrayList<Integer> movements = new ArrayList<Integer>();
 	for (int i=0; i < movementString.length(); i++) {
 		
@@ -289,7 +288,7 @@ private static ArrayList<Integer> movementInputs(String movementString) {
 	return movements;
 }
 
-private static Player nextPlayer() {
+private Player nextPlayer() {
 	if(currentPlayer < playersPlaying) { int i = currentPlayer + 1; return players[i]; }
 	else if( currentPlayer == playersPlaying){return players[0];}
 	return null;
@@ -297,7 +296,7 @@ private static Player nextPlayer() {
   																			//Actual Board Stuff
 
 
-   public static Card getCard(String cardName){
+   public Card getCard(String cardName){
 	for(Card c : cards) {
 		if(c.getName().equalsIgnoreCase(cardName)) {return c;}
 	}
@@ -305,7 +304,7 @@ private static Player nextPlayer() {
 	return null;
     
   }
-   public static void rollDice(){
+   public void rollDice(){
 	int dice1 = (int)(Math.random()*6) + 1;
 	int dice2 = (int)(Math.random()*6) + 1;
 	   
@@ -318,7 +317,7 @@ private static Player nextPlayer() {
 
  
 
-  public static void makeSuggestion(Accugestion suggestion) {
+  public void makeSuggestion(Accugestion suggestion) {
 	  Player accused = players[0];
 	  Room crimeScene = rooms[0];;
 	  for(Player p : players){	
@@ -347,7 +346,7 @@ private static Player nextPlayer() {
 	
 	}
   
-  public static void makeAccusation(Accugestion accusation) {
+  public void makeAccusation(Accugestion accusation) {
 	  Player accused = players[0];
 	  Room crimeScene = rooms[0];;
 	  for(Player p : players){	
@@ -535,7 +534,7 @@ private void loadMapFromCSV(){
 	}
 }
 
-  public static void main(String[] args) {
+  public void main(String[] args) {
     Board myBoard = new Board();
     myBoard.generateCards();
     myBoard.generateRooms();

@@ -45,10 +45,7 @@ public class GameDisplay
     {
 
     }
-
-    public static void ChangeOccured() {
-  	  //Notification for change state
-    }
+    
 
     public static void redraw() {
         f.repaint();

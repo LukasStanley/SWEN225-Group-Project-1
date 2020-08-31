@@ -25,6 +25,7 @@ public class Board
   static Player[] players = new Player[6];
   private static int playersPlaying;
   static Room[] rooms;
+  static String[] characterNames =  {"SCARLETT", "WHITE", "GREEN", "PEACOCK", "PLUM", "MUSTARD"};
   static String[] roomNames = {"KITCHEN", "BALLROOM", "CONSERVATORY", "BILLIARD", "LIBRARY", "STUDY", "HALL", "LOUNGE", "DINING"};
   static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
   static int[][] startingPoints = {{7,24}, {9,0}, {14,0}, {23,6}, {23,19}, {0,17}};
@@ -116,9 +117,40 @@ public class Board
   }
   
   private void generatePlayers() {
+	  //Characters not yet chosen by a player
+	  List<String> untakenCharacters = new ArrayList(Arrays.asList(characterNames));
   	  for(int i = 0; i < playersPlaying; i++) {
-  		  String id = myInput.askID(i);
-  		  String player = myInput.askPlayer();
+  		  
+  		  //Make sure the player picks a unique and existing name.
+  		  boolean isUnique = false;
+  		  String id = null;
+  		  while(isUnique != true) {
+  			//Get the player name from a text field input
+  			id = myInput.askID(i);
+  			  if(id != null && id != "") {
+  				  boolean foundMismatch = false;
+  				  for(Player p : players) {
+  					  if(p != null) {
+  						  if(p.getPlayerId().equals(id)) {
+  							  foundMismatch = true;
+  						  }
+  					  }
+  					  
+  				  }
+  				  if(foundMismatch == false) {
+  					  isUnique = true;
+  				  }
+  			  }
+  		  }
+  		  
+  		  //Get the player choice from a radio button popup
+  		  String player = myInput.askPlayer(untakenCharacters.toArray(new String[0]));
+  		  //Remove the choice from available options
+  		  for(int j = 0; j < untakenCharacters.size(); j++) {
+  			  if(untakenCharacters.get(j) == player) {
+  				  untakenCharacters.remove(j);
+  			  }
+  		  }
   		  players[i] = new Player((PersonCard) getCard(player), locations[startingPoints[i][1]][startingPoints[i][0]], true, locations, id);
   		  locations[startingPoints[i][1]][startingPoints[i][0]].setPlayerOn(players[i]);
 	  }
@@ -316,18 +348,18 @@ private static Player nextPlayer() {
 
 
 
- 
+
 
   public static void makeSuggestion(Accugestion suggestion) {
 	  Player accused = players[0];
 	  Room crimeScene = rooms[0];;
-	  for(Player p : players){	
+	  for(Player p : players){
 		  if(p.getPlayerName() == suggestion.getPerson()) {
 			  accused = p;
 			  break;
 		  }
 	  }
-	  for(Room r : rooms){	
+	  for(Room r : rooms){
 		  if(r.getName() == suggestion.getRoom().getName()) {
 			  crimeScene = r;
 			  break;
@@ -336,27 +368,27 @@ private static Player nextPlayer() {
 	  movePlayerToRoom(accused, crimeScene);
 	  moveWeaponToRoom(suggestion.getWeapon(), crimeScene);
 		for(Player p : players){
-		
+
 			if( p.handContains(suggestion.getPerson().getName()) || p.handContains(suggestion.getRoom().getName()) || p.handContains(suggestion.getWeapon().getName()) ) {
 				Card c = p.checkHand(suggestion.getPerson(), suggestion.getRoom(), suggestion.getWeapon());
 				JOptionPane.showMessageDialog(null, c + "has been refuted");
 			}
-			
+
 		}
 		JOptionPane.showMessageDialog(null, "Your suggestion has not been refuted by any other player");
-	
+
 	}
-  
+
   public static void makeAccusation(Accugestion accusation) {
 	  Player accused = players[0];
 	  Room crimeScene = rooms[0];;
-	  for(Player p : players){	
+	  for(Player p : players){
 		  if(p.getPlayerName() == accusation.getPerson()) {
 			  accused = p;
 			  break;
 		  }
 	  }
-	  for(Room r : rooms){	
+	  for(Room r : rooms){
 		  if(r.getName() == accusation.getRoom().getName()) {
 			  crimeScene = r;
 			  break;
@@ -368,14 +400,14 @@ private static Player nextPlayer() {
 		  System.out.flush();
 	      for(int i = 0; i<300; i++) {
 	          System.out.println();
-	      }	
+	      }
 		  System.out.println("Player " + players[currentPlayer].getPlayerName().getName() + " has won the game!");
 		  System.out.println("The correct solution was " + mPerson.getName() + " in the " + mRoom.getName() + " with the " + mWeapon.getName());
 		  System.exit(100);
 		  isRunning = false;
 		  }
 	  else {JOptionPane.showMessageDialog(null, "Your guess was incorrect, you have been removed from play"); accusation.getOwner().setIsPlaying(false); StateChange();}
-	
+
 	}
 
 private void loadMapFromCSV(){
@@ -510,6 +542,10 @@ private void loadMapFromCSV(){
     }
   }
 
+}
+
+public void stepCurrentPlayer(Integer direction){
+    players[currentPlayer].stepPlayer(direction);
 }
 
 

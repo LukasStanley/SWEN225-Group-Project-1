@@ -25,6 +25,7 @@ public class Board
   static Player[] players = new Player[6];
   private static int playersPlaying;
   static Room[] rooms;
+  static String[] characterNames =  {"SCARLETT", "WHITE", "GREEN", "PEACOCK", "PLUM", "MUSTARD"};
   static String[] roomNames = {"KITCHEN", "BALLROOM", "CONSERVATORY", "BILLIARD", "LIBRARY", "STUDY", "HALL", "LOUNGE", "DINING"};
   static String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
   static int[][] startingPoints = {{7,24}, {9,0}, {14,0}, {23,6}, {23,19}, {0,17}};
@@ -116,9 +117,18 @@ public class Board
   }
   
   private void generatePlayers() {
+	  //Characters not yet chosen by a player
+	  List<String> untakenCharacters = new ArrayList(Arrays.asList(characterNames));
   	  for(int i = 0; i < playersPlaying; i++) {
   		  String id = myInput.askID(i);
-  		  String player = myInput.askPlayer();
+  		  //Get the player choice from a radio button popup
+  		  String player = myInput.askPlayer(untakenCharacters.toArray(new String[0]));
+  		  //Remove the choice from available options
+  		  for(int j = 0; j < untakenCharacters.size(); j++) {
+  			  if(untakenCharacters.get(j) == player) {
+  				  untakenCharacters.remove(j);
+  			  }
+  		  }
   		  players[i] = new Player((PersonCard) getCard(player), locations[startingPoints[i][1]][startingPoints[i][0]], true, locations, id);
   		  locations[startingPoints[i][1]][startingPoints[i][0]].setPlayerOn(players[i]);
 	  }

@@ -1,3 +1,4 @@
+import java.awt.GridLayout;
 import java.util.List;
 import javax.swing.*;
 
@@ -18,8 +19,8 @@ public class Input{
     	return text;
 	}
 
-	public static String askPlayer() {
-		String text = JOptionPane.showInputDialog("DEBUG PLACEHOLDER: Enter Character name in all caps");
+	public static String askPlayer(String[] optionArray) {
+		String text = radioButtonInput(optionArray, "Choose your character!");
 		return text;
 	}
 
@@ -32,4 +33,30 @@ public class Input{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	//Creates 
+    public static String radioButtonInput(String[] optionArray, String optionType) {
+        String returnString = null;
+        JPanel panel = new JPanel();
+        JRadioButton allButtons[] = new JRadioButton[optionArray.length];
+        panel.setLayout(new GridLayout(optionArray.length, 1));
+        ButtonGroup group = new ButtonGroup();
+        for(int i = 0; i < optionArray.length; i++){
+            JRadioButton newButton = new JRadioButton(optionArray[i]);
+            newButton.setActionCommand(optionArray[i]);
+            panel.add(newButton);
+            group.add(newButton);
+            allButtons[i] = newButton;
+            if(i == 0) {
+                newButton.setSelected(true);;
+            }
+        }
+        JOptionPane.showMessageDialog(panel, panel, optionType, 1);
+        for(JRadioButton jrb : allButtons) {
+            if(jrb.isSelected()) {
+                returnString = jrb.getActionCommand();
+            }
+        }
+        return returnString;
+    }
 }

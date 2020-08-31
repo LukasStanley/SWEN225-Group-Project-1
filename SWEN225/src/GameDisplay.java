@@ -53,13 +53,6 @@ public class GameDisplay extends JFrame implements KeyListener
         repaint();
     }
 
-    
-
-    public static void redraw() {
-        f.repaint();
-    }
-
-
     public static void updateDie(int dice, int dicetwo){
         dice1 = dice;
         dice2 = dicetwo;
@@ -384,7 +377,7 @@ public class GameDisplay extends JFrame implements KeyListener
 		// TODO Auto-generated method stub
 		
 	}
-    }
+    
 
     public void keyPressed(KeyEvent keyEvent){
         switch(keyEvent.getKeyCode()){

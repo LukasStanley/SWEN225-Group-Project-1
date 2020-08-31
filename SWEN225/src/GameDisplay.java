@@ -22,36 +22,38 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
     //------------------------
     // MEMBER VARIABLES
     //------------------------
-     JMenuBar mb;
-     JMenuItem m1, m2, m3;
-     JMenu jm;
-     Canvas canvas;
-     final int windowLength = 1200;
-     final int windowHeight = 900;
-     final int canvasHeight = (int) (windowHeight*0.9);
-     final int canvasWidth = (int) (windowLength*0.9);
-    
-     float textRatio = (float)canvasWidth/(float)960;
-    
-     final int boardDisplayHeight = (int) (canvasHeight*0.75);
-     final int boardDisplayWidth = (int) (canvasWidth*0.6);
+    JMenuBar mb;
+    JMenuItem m1, m2, m3;
+    JMenu jm;
+    Canvas canvas;
+    final int windowLength = 1200;
+    final int windowHeight = 900;
+    final int canvasHeight = (int) (windowHeight*0.9);
+    final int canvasWidth = (int) (windowLength*0.9);
+
+    float textRatio = (float)canvasWidth/(float)960;
+
+    final int boardDisplayHeight = (int) (canvasHeight*0.75);
+    final int boardDisplayWidth = (int) (canvasWidth*0.6);
 
     private  int dice1 = 1;
     private  int dice2 = 1;
-     boolean shown = false;
+    boolean shown = false;
 
     private Board myBoard;
-    
+
     //------------------------
     // CONSTRUCTOR
     //------------------------
 
     public GameDisplay(Board myBoard)
     {
-     this.myBoard = myBoard;
-     rootPane.setFocusable(true);
-     rootPane.addKeyListener(this);
+        this.myBoard = myBoard;
+        rootPane.setFocusable(true);
+        rootPane.addKeyListener(this);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+
     public void redraw() {
         repaint();
         canvas.paint(canvas.getGraphics());
@@ -70,6 +72,8 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
             // paint the canvas
             public void paint(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
+                g2.setColor(new Color(100, 200, 250));
+                g2.fillRect(canvas.getX(), canvas.getY(), canvas.getWidth(), canvas.getHeight());
                 Font currentFont;
                 Font newFont;
                 int boardHeight = myBoard.locations.length;
@@ -268,16 +272,10 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                 }
                 g2.drawImage(img, boardDisplayWidth + cellWidth*2 + img.getWidth(), cellHeight*3, null);
 
-
                 int diceHeight = img.getHeight();
-
                 //DISPLAY PLAYER INFO
-
                 //set current player
                 Player currentPlayer = myBoard.players[myBoard.currentPlayer];
-
-
-
 
                 //Prepare info font
                 currentFont = g2.getFont();
@@ -285,11 +283,10 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                 g2.setFont(newFont);
                 g2.setColor(new Color(255, 255, 255));
 
-
                 if(currentPlayer != null) {
-                	//Get thumbnail of current player
+                    //Get thumbnail of current player
                     String imageFilePath = "./src/" + currentPlayer.getPlayerName().getName() + ".jpg";
-                    
+
                     img = null;
                     try {
                         img = ImageIO.read(new File(imageFilePath));
@@ -299,13 +296,13 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                     //Draw the thumbnail
                     g2.drawImage(img, boardDisplayWidth + cellWidth, diceHeight + cellHeight*4, boardDisplayWidth + cellWidth*3,  diceHeight + cellHeight*6, 0, 0, img.getWidth(), img.getHeight(), null);
 
-                	//Print info font
+                    //Print info font
                     g2.drawString("You are: " + currentPlayer.getPlayerId(), boardDisplayWidth + cellWidth*4, diceHeight + cellHeight*5);
                     g2.drawString("You're playing as: " + currentPlayer.getPlayerName().getName() , boardDisplayWidth + cellWidth*4, diceHeight + cellHeight*6);
                     g2.drawString("You have " + currentPlayer.getSteps() + " steps remaining." , boardDisplayWidth + cellWidth*4, diceHeight + cellHeight*7);
                     g2.drawString("Your hand:" , cellWidth*1, (int)(boardDisplayHeight + cellHeight*0.5));
                     for(int i = 0; i < currentPlayer.getHand().size(); i++) {
-                    	imageFilePath = "./src/" + currentPlayer.getHand().get(i).getName() + ".jpg";
+                        imageFilePath = "./src/" + currentPlayer.getHand().get(i).getName() + ".jpg";
                         img = null;
                         try {
                             img = ImageIO.read(new File(imageFilePath));
@@ -319,7 +316,6 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                         g2.drawString(currentPlayer.getHand().get(i).getName() , cellWidth + i*4*cellWidth, boardDisplayHeight + cellHeight*4);
                     }
                 }
-
 
             }
         };
@@ -348,12 +344,12 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
         ImageIcon buttonIcon = new ImageIcon("./src/GUN.jpg");
         JButton jb = new JButton("Roll dice");
         jb.addActionListener( new ActionListener(){
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("dice rolled");
-                myBoard.rollDice();
-            }
-        });
-        
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println("dice rolled");
+                    myBoard.rollDice();
+                }
+            });
+
         this.add(jb);
         setLayout(new FlowLayout());
 
@@ -361,66 +357,63 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
     }
 
     public int displayPlayerPick() {
-	    if(!shown){
-		    setUpGameBoard();
-		    shown = true;
-	    }
+        if(!shown){
+            setUpGameBoard();
+            shown = true;
+        }
 
-	    Integer playerCountOptions[] = {2,3,4,5,6};
+        Integer playerCountOptions[] = {2,3,4,5,6};
 
         Object out = JOptionPane.showInputDialog(null,
-          "How many players are playing?",
-          "Pick Number of Players",
-          JOptionPane.PLAIN_MESSAGE,
-          null,
-          playerCountOptions,
-          3
-        );
+                "How many players are playing?",
+                "Pick Number of Players",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                playerCountOptions,
+                3
+            );
 
         if (out==null){
-        return 7;
+            return 7;
         }else{
-          return (int)out;
+            return (int)out;
         }
     }
 
-
-	public void ChangeOccured() {
-		redraw();
-		
+    public void ChangeOccured() {
+        redraw();
 
     }
-
 
     public void keyPressed(KeyEvent keyEvent){
         switch(keyEvent.getKeyCode()){
             //Left Key
             case 37:
-                myBoard.stepCurrentPlayer(0);
-                break;
+            myBoard.stepCurrentPlayer(0);
+            break;
 
             //Up Key
             case 38:
-                myBoard.stepCurrentPlayer(3);
-                break;
+            myBoard.stepCurrentPlayer(3);
+            break;
 
             //Right Key
             case 39:
-                myBoard.stepCurrentPlayer(2);
-                break;
+            myBoard.stepCurrentPlayer(2);
+            break;
 
             //Down Key
             case 40:
-                myBoard.stepCurrentPlayer(1);
-                break;
+            myBoard.stepCurrentPlayer(1);
+            break;
 
             //Enter
             case 10:
-                break;
+            break;
 
             //SpaceBar
             case 32:
-                break;
+            break;
 
             default:
         }
@@ -432,13 +425,15 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
     public void keyReleased(KeyEvent keyEvent){
         //Unused
     }
+
     public void keyTyped(KeyEvent keyEvent){
         //Unused
     }
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-    
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

@@ -54,6 +54,7 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
     }
     public void redraw() {
         repaint();
+        canvas.paint(canvas.getGraphics());
     }
 
     public  void updateDie(int dice, int dicetwo){

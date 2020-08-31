@@ -96,7 +96,7 @@ public class Player
 		 //down
 		 else if(current == 2) {
 			//Check within bounds of the map (not possible with standard map)
-			 if(currentLocationStep.getX()==23) {
+			 if(currentLocationStep.getX()==24) {
 				 stillMovin = false;
 				 break;
 			 }
@@ -111,7 +111,7 @@ public class Player
 		 //right
 		 else if(current == 1) {
 			//Check within bounds of the map (not possible with standard map)
-			 if(currentLocationStep.getY()==24) {
+			 if(currentLocationStep.getY()==23) {
 				 stillMovin = false;
 				 break;
 			 }

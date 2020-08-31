@@ -591,6 +591,7 @@ private void loadMapFromCSV(){
 
 	    isRunning = true;
 	    distributeCards();
+	    myGameDisplay.redraw();
 	    playGame();
   }
 

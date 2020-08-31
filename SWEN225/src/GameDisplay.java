@@ -56,9 +56,6 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
         repaint();
     }
 
-    
-
-
     public static void updateDie(int dice, int dicetwo){
         dice1 = dice;
         dice2 = dicetwo;
@@ -67,10 +64,10 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
     public void setUpGameBoard() {
         mb = new JMenuBar();
         jm = new JMenu("Menu");
-        canvas = new Canvas() { 
+        canvas = new Canvas() {
 
-            // paint the canvas 
-            public void paint(Graphics g) { 
+            // paint the canvas
+            public void paint(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g;
                 Font currentFont;
                 Font newFont;
@@ -90,7 +87,7 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                             //	  					 if(Board.locations[i][j].getPlayerOn().getPlayerName().getName() == null) {
                             //	  						 System.out.println("WOAH");
                             //	  					 }
-                            String imageFilePath = "./src/MUSTARD.jpg";//"./src/" + Board.locations[i][j].getPlayerOn().getPlayerName().getName() + ".jpeg";
+                            String imageFilePath = "./src/" + Board.locations[i][j].getPlayerOn().getPlayerName().getName() + ".jpg";
                             BufferedImage img = null;
                             try {
                                 img = ImageIO.read(new File(imageFilePath));
@@ -162,7 +159,7 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                         g2.drawLine((i)*cellWidth, (j+1)*cellHeight, (i+1)*cellWidth, (j+1)*cellHeight);
 
                         if(Board.locations[i][j].getWallLeft()) {
-                            g2.setColor(new Color(0, 0, 0));	
+                            g2.setColor(new Color(0, 0, 0));
                             g2.setStroke(new BasicStroke(2));
                         }
                         else {
@@ -210,17 +207,17 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
 
                                 }
                         }
-                    } 
+                    }
 
                 }
-                
+
                 //DISPLAY THE GAME TITLE
                 currentFont = g2.getFont();
                 newFont = currentFont.deriveFont(currentFont.getSize() * 2F  * textRatio);
                 g2.setFont(newFont);
                 g2.setColor(new Color(255, 30, 30));
                 g2.drawString("CLUEDO", boardDisplayWidth + cellWidth, cellHeight*2);
-                
+
                 //DISPLAY THE DIE
                 String diceImage = "./src/ONE.jpg";
                 if(dice1 == 2) {
@@ -245,7 +242,7 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                     System.out.println(diceImage + " could not be found");
                 }
                 g2.drawImage(img, boardDisplayWidth + cellWidth, cellHeight*3, null);
-                
+
                 diceImage = "./src/ONE.jpg";
                 if(dice2 == 2) {
                     diceImage = "./src/TWO.jpg";
@@ -269,29 +266,28 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                     System.out.println(diceImage + " could not be found");
                 }
                 g2.drawImage(img, boardDisplayWidth + cellWidth*2 + img.getWidth(), cellHeight*3, null);
-                
-                
+
+
                 int diceHeight = img.getHeight();
-                
+
                 //DISPLAY PLAYER INFO
-                
+
                 //set current player
                 Player currentPlayer = Board.players[Board.currentPlayer];
-                
-                
-                
-                
+
+
+
+
                 //Prepare info font
                 currentFont = g2.getFont();
                 newFont = currentFont.deriveFont(currentFont.getSize() * 0.5F  * textRatio);
                 g2.setFont(newFont);
                 g2.setColor(new Color(255, 255, 255));
-                
-                
+
+
                 if(currentPlayer != null) {
                 	//Get thumbnail of current player
-                    //String imageFilePath = "./src/" + currentPlayer.getPlayerName().getName() + ".jpg";
-                    String imageFilePath = "./src/MUSTARD.jpg";
+                    String imageFilePath = "./src/" + currentPlayer.getPlayerName().getName() + ".jpg";
                     
                     img = null;
                     try {
@@ -301,13 +297,11 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                     }
                     //Draw the thumbnail
                     g2.drawImage(img, boardDisplayWidth + cellWidth, diceHeight + cellHeight*4, boardDisplayWidth + cellWidth*3,  diceHeight + cellHeight*6, 0, 0, img.getWidth(), img.getHeight(), null);
-                	
+
                 	//Print info font
-                    g2.drawString("You are MUSTARD" , boardDisplayWidth + cellWidth*4, diceHeight + cellHeight*5);
-                    //g2.drawString("You are " + currentPlayer.getPlayerName().getName() , boardDisplayWidth + cellWidth, cellHeight);
-                    
-                    g2.drawString("You have " + currentPlayer.getSteps() + " steps remaining." , boardDisplayWidth + cellWidth*4, diceHeight + cellHeight*6);
-                    //g2.drawString("You have yet to roll." , boardDisplayWidth + cellWidth, img.getHeight() + cellHeight*5);
+                    g2.drawString("You are: " + currentPlayer.getPlayerId(), boardDisplayWidth + cellWidth*4, diceHeight + cellHeight*5);
+                    g2.drawString("You're playing as: " + currentPlayer.getPlayerName().getName() , boardDisplayWidth + cellWidth*4, diceHeight + cellHeight*6);
+                    g2.drawString("You have " + currentPlayer.getSteps() + " steps remaining." , boardDisplayWidth + cellWidth*4, diceHeight + cellHeight*7);
                     g2.drawString("Your hand:" , cellWidth*1, (int)(boardDisplayHeight + cellHeight*0.5));
                     for(int i = 0; i < currentPlayer.getHand().size(); i++) {
                     	imageFilePath = "./src/" + currentPlayer.getHand().get(i).getName() + ".jpg";
@@ -324,10 +318,10 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                         g2.drawString(currentPlayer.getHand().get(i).getName() , cellWidth + i*4*cellWidth, boardDisplayHeight + cellHeight*4);
                     }
                 }
-                
-                
+
+
             }
-        }; 
+        };
 
         m1 = new JMenuItem("Test1");
         m2 = new JMenuItem("Test2");
@@ -363,55 +357,60 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
         setLayout(new FlowLayout());
 
         canvas.setVisible(true);
-    } 
-   
+    }
+
     public int displayPlayerPick() {
 	    if(!shown){
 		    setUpGameBoard();
 		    shown = true;
 	    }
-	 
+
 	    Integer playerCountOptions[] = {2,3,4,5,6};
 
-      Object out = JOptionPane.showInputDialog(null,
+        Object out = JOptionPane.showInputDialog(null,
           "How many players are playing?",
           "Pick Number of Players",
           JOptionPane.PLAIN_MESSAGE,
           null,
           playerCountOptions,
           3
-      );
+        );
 
-      if (out==null){
+        if (out==null){
         return 7;
-      }else{
+        }else{
           return (int)out;
-      }
-
-  }
+        }
+    }
 
 
 	public void ChangeOccured() {
 		redraw();
 		
+
     }
+
 
     public void keyPressed(KeyEvent keyEvent){
         switch(keyEvent.getKeyCode()){
             //Left Key
             case 37:
+                myBoard.stepCurrentPlayer(3);
                 break;
 
             //Up Key
             case 38:
+                myBoard.stepCurrentPlayer(0);
                 break;
 
             //Right Key
             case 39:
+                myBoard.stepCurrentPlayer(1);
                 break;
 
             //Down Key
             case 40:
+                myBoard.stepCurrentPlayer(2);
                 break;
 
             //Enter

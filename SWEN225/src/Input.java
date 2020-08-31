@@ -1,13 +1,11 @@
-
 import java.util.List;
-import java.awt.event.*;
 import javax.swing.*;
 
-public class Input implements KeyListener, ActionListener{
+public class Input{
 
-	private static JTextField textField;
+	private static JTextField textField ;
 	private static JLabel jLabel1;
-	
+
     //Allows access to the Board.
     Board myBoard;
 
@@ -34,20 +32,4 @@ public class Input implements KeyListener, ActionListener{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	public void keyPressed(KeyEvent keyEvent){
-        System.out.println("Key Pressed: "+keyEvent.getKeyChar());
-//	    switch(){
-//
-//        }
-    }
-	public void keyReleased(KeyEvent keyEvent){}
-	public void keyTyped(KeyEvent keyEvent){}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

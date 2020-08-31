@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,13 +14,11 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-public class GameDisplay
+public class GameDisplay extends JFrame implements KeyListener
 {
     //------------------------
     // MEMBER VARIABLES
     //------------------------
-    static JOptionPane numPlayersOptionPane = new JOptionPane();
-    static JFrame f;
     static JMenuBar mb;
     static JMenuItem m1, m2, m3;
     static JMenu jm;
@@ -37,18 +37,37 @@ public class GameDisplay
     private static int dice1 = 1;
     private static int dice2 = 1;
     static boolean shown = false;
+
+    private Board myBoard;
     
     //------------------------
     // CONSTRUCTOR
     //------------------------
 
-    public GameDisplay()
+    public GameDisplay(Board myBoard)
     {
+     this.myBoard = myBoard;
+     setFocusable(true);
+     addKeyListener(new KeyListener() {
+         @Override
+         public void keyTyped(KeyEvent e) {
+             System.out.println("AAAAAAAAAAAAAAAAAbb");
+         }
 
+         @Override
+         public void keyPressed(KeyEvent e) {
+
+         }
+
+         @Override
+         public void keyReleased(KeyEvent e) {
+
+         }
+     });
     }
 
-    public static void redraw() {
-        f.repaint();
+    public void redraw() {
+        repaint();
     }
 
     public static void updateDie(int dice, int dicetwo){
@@ -56,12 +75,7 @@ public class GameDisplay
         dice2 = dicetwo;
     }
 
-    public static void setUpGameBoard() {
-        f = new JFrame("Cluedo");
-        f.setSize(windowLength,windowHeight);
-        f.setLayout(null);//no layout manager
-        f.setVisible(true);
-
+    public void setUpGameBoard() {
         mb = new JMenuBar();
         jm = new JMenu("Menu");
         canvas = new Canvas() { 
@@ -336,15 +350,15 @@ public class GameDisplay
 
         mb.add(jm);
 
-        f.setJMenuBar(mb);
+        setJMenuBar(mb);
         canvas.setSize(canvasWidth, canvasHeight);
         canvas.setBackground(new Color(100, 200, 250));
-        f.add(canvas);
+        add(canvas);
 
         canvas.setVisible(true);
     } 
    
-    public static int displayPlayerPick() {
+    public int displayPlayerPick() {
 	    if(!shown){
 		    setUpGameBoard();
 		    shown = true;
@@ -353,12 +367,12 @@ public class GameDisplay
 	    Integer playerCountOptions[] = {2,3,4,5,6};
 
       Object out = JOptionPane.showInputDialog(null,
-              "How many players are playing?",
-              "Pick Number of Players",
-              JOptionPane.PLAIN_MESSAGE,
-              null,
-              playerCountOptions,
-              3
+          "How many players are playing?",
+          "Pick Number of Players",
+          JOptionPane.PLAIN_MESSAGE,
+          null,
+          playerCountOptions,
+          3
       );
 
       if (out==null){
@@ -366,5 +380,19 @@ public class GameDisplay
       }else{
           return (int)out;
       }
-  }
+    }
+
+    public void keyPressed(KeyEvent keyEvent){
+        System.out.print("Key Pressed:");
+        System.out.println(keyEvent.getKeyChar());
+    }
+
+    public void keyReleased(KeyEvent keyEvent){
+        //Unused
+    }
+    public void keyTyped(KeyEvent keyEvent){
+        //Unused
+    }
+
+
 }

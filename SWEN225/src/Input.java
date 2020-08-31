@@ -4,8 +4,8 @@ import javax.swing.*;
 
 public class Input{
 
-	private static JTextField textField ;
-	private static JLabel jLabel1;
+	private  JTextField textField ;
+	private  JLabel jLabel1;
 
     //Allows access to the Board.
     Board myBoard;
@@ -14,28 +14,28 @@ public class Input{
         this.myBoard = myBoard;
     }
 
-    public static String askID(int i) {
+    public  String askID(int i) {
     	String text = JOptionPane.showInputDialog("Player " + i + " please enter your name");    	
     	return text;
 	}
 
-	public static String askPlayer(String[] optionArray) {
+	public  String askPlayer(String[] optionArray) {
 		String text = radioButtonInput(optionArray, "Choose your character!");
 		return text;
 	}
 
-	public static List<String> getAccusation() {
+	public  List<String> getAccusation() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static List<String> getSuggestion() {
+	public  List<String> getSuggestion() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	//Creates 
-    public static String radioButtonInput(String[] optionArray, String optionType) {
+    public  String radioButtonInput(String[] optionArray, String optionType) {
         String returnString = null;
         JPanel panel = new JPanel();
         JRadioButton allButtons[] = new JRadioButton[optionArray.length];

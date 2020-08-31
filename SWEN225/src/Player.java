@@ -19,7 +19,7 @@ public class Player
   private boolean isPlaying;
   private Location[][] locationArray;
   private int stepsRemaining = 0;
-  
+  private Board myBoard;
 
   //Player Associations
   private List<Card> hand;
@@ -28,7 +28,7 @@ public class Player
   // CONSTRUCTOR
   //------------------------
 
-  public Player(PersonCard aPlayerName, Location aCurrentLocation, boolean aIsPlaying, Location[][] locations, String id)
+  public Player(PersonCard aPlayerName, Location aCurrentLocation, boolean aIsPlaying, Location[][] locations, String id, Board board)
   {
     playerName = aPlayerName;
     playerID = id;
@@ -36,6 +36,7 @@ public class Player
     isPlaying = aIsPlaying;
     hand = new ArrayList<Card>();
     locationArray = locations;
+    myBoard = board;
   }
 
   //------------------------
@@ -280,21 +281,21 @@ public class Player
    public void makeSuggestion(String person, String weapon, String room){
     	   
 	   
-	Card weaponCard =  Board.getCard(weapon);
-    Card personCard =  Board.getCard(person);
-    Card roomCard =  Board.getCard(room);
+	Card weaponCard =  myBoard.getCard(weapon);
+    Card personCard =  myBoard.getCard(person);
+    Card roomCard =  myBoard.getCard(room);
     //Verify they exist and are of correct type
     Accugestion suggestion = new Accugestion(weaponCard, personCard, roomCard, this);
-    Board.makeSuggestion(suggestion);
+    myBoard.makeSuggestion(suggestion);
   }
    
    public void makeAccusation(String person, String weapon, String room){
-	    Card weaponCard =  Board.getCard(weapon);
-	    Card personCard =  Board.getCard(person);
-	    Card roomCard =  Board.getCard(room);
+	    Card weaponCard =  myBoard.getCard(weapon);
+	    Card personCard =  myBoard.getCard(person);
+	    Card roomCard =  myBoard.getCard(room);
 	    //Verify they exist and are of correct type
 	    Accugestion accusation = new Accugestion(weaponCard, personCard, roomCard, this);
-	    Board.makeAccusation(accusation);
+	    myBoard.makeAccusation(accusation);
 	  }
 
 

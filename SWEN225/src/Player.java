@@ -18,7 +18,7 @@ public class Player
   private Location currentLocation;
   private boolean isPlaying;
   private Location[][] locationArray;
-  private int stepsRemaining;
+  private int stepsRemaining = 0;
   
 
   //Player Associations

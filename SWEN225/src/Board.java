@@ -311,7 +311,7 @@ private static Player nextPlayer() {
 	   
 	   players[currentPlayer].setSteps((dice1 + dice2));
 	   hasRolled = true;
-    //ameDisplay.UpdateDie(dice1, dice2);
+    GameDisplay.updateDie(dice1, dice2);
   }
 
 
@@ -522,9 +522,7 @@ private void loadMapFromCSV(){
 			currentPlayer = i;
 			currentTurnActive = true;
 			hasRolled = false;
-			while(!hasRolled) {}
-			//displayMap();
-			//displayInfo(player);
+			while(!hasRolled) {rollDice(); hasRolled = true;}
 			while(currentTurnActive) {
 				if(player.getIsPlaying()) {
 					currentTurnActive = !executeTurn(player);

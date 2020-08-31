@@ -344,6 +344,7 @@ private  Player nextPlayer() {
 	   players[currentPlayer].setSteps((dice1 + dice2));
 	   hasRolled = true;
     myGameDisplay.updateDie(dice1, dice2);
+    StateChange();
   }
 
 

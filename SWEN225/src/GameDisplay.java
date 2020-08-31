@@ -385,7 +385,7 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
 
 
 	public  void ChangeOccured() {
-		// TODO Auto-generated method stub
+		redraw();
 		
 
     }

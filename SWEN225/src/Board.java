@@ -124,8 +124,8 @@ public class Board
 	}
   
   private void generatePlayers() {
+	  List<String> untakenCharacters = new ArrayList(Arrays.asList(characterNames));
   	  for(int i = 0; i < playersPlaying; i++) {
-  		  List<String> untakenCharacters = new ArrayList(Arrays.asList(characterNames));
   		  //Make sure the player picks a unique and existing name.
   		  boolean isUnique = false;
   		  String id = null;

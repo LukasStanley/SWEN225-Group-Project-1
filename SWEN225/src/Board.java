@@ -119,6 +119,10 @@ public class Board
 		
   }
   
+  public void stepCurrentPlayer(Integer direction){	
+	    players[currentPlayer].stepPlayer(direction);	
+	}
+  
   private void generatePlayers() {
   	  for(int i = 0; i < playersPlaying; i++) {
   		  List<String> untakenCharacters = new ArrayList(Arrays.asList(characterNames));

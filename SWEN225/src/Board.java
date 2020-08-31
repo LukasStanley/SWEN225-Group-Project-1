@@ -558,7 +558,7 @@ public void stepCurrentPlayer(Integer direction){
 			currentPlayer = i;
 			currentTurnActive = true;
 			hasRolled = false;
-			while(!hasRolled) {rollDice(); hasRolled = true;}
+			while(!hasRolled) {}
 			while(currentTurnActive) {
 				if(player.getIsPlaying()) {
 					currentTurnActive = !executeTurn(player);

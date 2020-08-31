@@ -13,23 +13,25 @@ public class Board
   //------------------------
 
   //Board Attributes
-  private PersonCard mPerson;
-  private WeaponCard mWeapon;
-  private RoomCard mRoom;
-  private boolean isRunning; 
+
+  private  PersonCard mPerson;
+  private  WeaponCard mWeapon;
+  private  RoomCard mRoom;
+  private  boolean isRunning; 
 
   //Board Associations
-  private List<Card> cards;
-  private List<Card> distributionCards;
-  Location[][] locations = new Location[25][24];
-  Player[] players = new Player[6];
-  private int playersPlaying;
-  Room[] rooms;
-  String[] roomNames = {"KITCHEN", "BALLROOM", "CONSERVATORY", "BILLIARD", "LIBRARY", "STUDY", "HALL", "LOUNGE", "DINING"};
-  String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
-  int[][] startingPoints = {{7,24}, {9,0}, {14,0}, {23,6}, {23,19}, {0,17}};
-  int currentPlayer = 0;
-  boolean hasRolled;
+  private  List<Card> cards;
+  private  List<Card> distributionCards;
+   Location[][] locations = new Location[25][24];
+   Player[] players = new Player[6];
+  private  int playersPlaying;
+   Room[] rooms;
+   String[] characterNames =  {"SCARLETT", "WHITE", "GREEN", "PEACOCK", "PLUM", "MUSTARD"};
+   String[] roomNames = {"KITCHEN", "BALLROOM", "CONSERVATORY", "BILLIARD", "LIBRARY", "STUDY", "HALL", "LOUNGE", "DINING"};
+   String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
+   int[][] startingPoints = {{7,24}, {9,0}, {14,0}, {23,6}, {23,19}, {0,17}};
+   int currentPlayer = 0;
+   boolean hasRolled;
 
   Input myInput;
   GameDisplay myGameDisplay;
@@ -53,7 +55,7 @@ public class Board
 
 //    setup JFrame display
       myGameDisplay.setTitle("Cluedo");
-      myGameDisplay.setSize(GameDisplay.windowLength, GameDisplay.windowHeight);
+      myGameDisplay.setSize(myGameDisplay.windowLength, myGameDisplay.windowHeight);
       myGameDisplay.setLayout(null);//no layout manager
       myGameDisplay.setVisible(true);
   }
@@ -80,7 +82,10 @@ public class Board
 	distributionCards.remove(mPerson); distributionCards.remove(mWeapon); distributionCards.remove(mRoom);
 	
   }
-  public void StateChange() { GameDisplay.ChangeOccured();
+
+  private  void StateChange() {
+	  myGameDisplay.ChangeOccured();
+
   }
   
   private void generateCards() {
@@ -116,9 +121,38 @@ public class Board
   
   private void generatePlayers() {
   	  for(int i = 0; i < playersPlaying; i++) {
-  		  String id = myInput.askID(i);
-  		  String player = myInput.askPlayer();
-  		  players[i] = new Player((PersonCard) getCard(player), locations[startingPoints[i][1]][startingPoints[i][0]], true, locations, id);
+  		  
+  		  //Make sure the player picks a unique and existing name.
+  		  boolean isUnique = false;
+  		  String id = null;
+  		  while(isUnique != true) {
+  			//Get the player name from a text field input
+  			id = myInput.askID(i);
+  			  if(id != null && id != "") {
+  				  boolean foundMismatch = false;
+  				  for(Player p : players) {
+  					  if(p != null) {
+  						  if(p.getPlayerId().equals(id)) {
+  							  foundMismatch = true;
+  						  }
+  					  }
+  					  
+  				  }
+  				  if(foundMismatch == false) {
+  					  isUnique = true;
+  				  }
+  			  }
+  		  }
+  		  
+  		  //Get the player choice from a radio button popup
+  		  String player = myInput.askPlayer(untakenCharacters.toArray(new String[0]));
+  		  //Remove the choice from available options
+  		  for(int j = 0; j < untakenCharacters.size(); j++) {
+  			  if(untakenCharacters.get(j) == player) {
+  				  untakenCharacters.remove(j);
+  			  }
+  		  }
+  		  players[i] = new Player((PersonCard) getCard(player), locations[startingPoints[i][1]][startingPoints[i][0]], true, locations, id, this);
   		  locations[startingPoints[i][1]][startingPoints[i][0]].setPlayerOn(players[i]);
 	  }
   	  //GameDisplayer.players(players);
@@ -146,12 +180,12 @@ public class Board
   // INTERFACE
   //------------------------
 
-
   private void movePlayerToLocation(Player p, Location l){
 	  p.getCurrentLocation().setPlayerOn(null);
 	  p.setCurrentLocation(l);
 	  l.setPlayerOn(p);
   }
+
   private void movePlayerToRoom(Player p, Room r) {
       for(Location l : r.getLocations()) {
           if(l.getPlayerOn() == null) {
@@ -160,8 +194,9 @@ public class Board
           }
       }
   }
-
+  
   private void moveWeaponToLocation(WeaponCard w, Location l){
+
       if(w.getLocation()!=null){
 		  w.getLocation().setWeaponOn(null);
 	  }
@@ -180,14 +215,15 @@ public class Board
   
 
  
-
   public int randomGeneration(int low, int high){
+
 			Random r = new Random();
 			int result = r.nextInt(high-low) + low;
 			return result;
 		}
 
  
+
 
 private boolean executeTurn(Player p) {
 	//Method to send current player information to View
@@ -200,7 +236,7 @@ private boolean executeTurn(Player p) {
 	
 public boolean Accuse() {
 	Player p = players[currentPlayer];
-		List<String> parameters = Input.getAccusation();
+		List<String> parameters = myInput.getAccusation();
 		if(parameters.size() < 4){
 			System.out.println("Too few parameters! You need a WEAPON, PERSON and LOCATION");
 			return false;
@@ -235,7 +271,7 @@ public boolean Accuse() {
 	
 public boolean Suggest() {
 	Player p = players[currentPlayer];
-	List<String> parameters = Input.getSuggestion();
+	List<String> parameters = myInput.getSuggestion();
 		if(parameters.size() < 3){
 			JOptionPane.showMessageDialog(null, "You must select both a weapon and a person");
 			return false;
@@ -296,7 +332,8 @@ private Player nextPlayer() {
   																			//Actual Board Stuff
 
 
-   public Card getCard(String cardName){
+
+ public Card getCard(String cardName){
 	for(Card c : cards) {
 		if(c.getName().equalsIgnoreCase(cardName)) {return c;}
 	}
@@ -305,17 +342,20 @@ private Player nextPlayer() {
     
   }
    public void rollDice(){
+
 	int dice1 = (int)(Math.random()*6) + 1;
 	int dice2 = (int)(Math.random()*6) + 1;
 	   
 	   players[currentPlayer].setSteps((dice1 + dice2));
 	   hasRolled = true;
-    GameDisplay.updateDie(dice1, dice2);
+    myGameDisplay.updateDie(dice1, dice2);
+    StateChange();
   }
 
 
 
  
+
 
   public void makeSuggestion(Accugestion suggestion) {
 	  Player accused = players[0];
@@ -533,6 +573,22 @@ private void loadMapFromCSV(){
 		
 	}
 }
+  
+  private void startGame() {
+//		JOptionPane numPlayersOptionPane = new JOptionPane();
+		playersPlaying = myGameDisplay.displayPlayerPick();
+	    while(playersPlaying > 6 || playersPlaying <2) {
+	    	System.out.println("Pick the number of players:");
+	    	playersPlaying = myGameDisplay.displayPlayerPick();
+	    }
+	    System.out.println(playersPlaying + " Players selected.");
+
+	    generatePlayers();
+
+	    isRunning = true;
+	    distributeCards();
+	    playGame();
+  }
 
   public void main(String[] args) {
     Board myBoard = new Board();
@@ -541,19 +597,7 @@ private void loadMapFromCSV(){
     myBoard.chooseMurder();
     myBoard.loadMapFromCSV();
     myBoard.randomizeWeapons();
+    myBoard.startGame();
 
-//	JOptionPane numPlayersOptionPane = new JOptionPane();
-	playersPlaying = myBoard.myGameDisplay.displayPlayerPick();
-    while(playersPlaying > 6 || playersPlaying <2) {
-    	System.out.println("Pick the number of players:");
-    	playersPlaying = myBoard.myGameDisplay.displayPlayerPick();
-    }
-    System.out.println(playersPlaying + " Players selected.");
-
-    myBoard.generatePlayers();
-
-    isRunning = true;
-    myBoard.distributeCards();
-    myBoard.playGame();
   }
 }

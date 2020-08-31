@@ -22,23 +22,23 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
     //------------------------
     // MEMBER VARIABLES
     //------------------------
-    static JMenuBar mb;
-    static JMenuItem m1, m2, m3;
-    static JMenu jm;
-    static Canvas canvas;
-    static final int windowLength = 1200;
-    static final int windowHeight = 900;
-    static final int canvasHeight = (int) (windowHeight*0.9);
-    static final int canvasWidth = (int) (windowLength*0.9);
+     JMenuBar mb;
+     JMenuItem m1, m2, m3;
+     JMenu jm;
+     Canvas canvas;
+     final int windowLength = 1200;
+     final int windowHeight = 900;
+     final int canvasHeight = (int) (windowHeight*0.9);
+     final int canvasWidth = (int) (windowLength*0.9);
     
-    static float textRatio = (float)canvasWidth/(float)960;
+     float textRatio = (float)canvasWidth/(float)960;
     
-    static final int boardDisplayHeight = (int) (canvasHeight*0.75);
-    static final int boardDisplayWidth = (int) (canvasWidth*0.6);
+     final int boardDisplayHeight = (int) (canvasHeight*0.75);
+     final int boardDisplayWidth = (int) (canvasWidth*0.6);
 
-    private static int dice1 = 1;
-    private static int dice2 = 1;
-    static boolean shown = false;
+    private  int dice1 = 1;
+    private  int dice2 = 1;
+     boolean shown = false;
 
     private Board myBoard;
     
@@ -56,7 +56,7 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
         repaint();
     }
 
-    public static void updateDie(int dice, int dicetwo){
+    public  void updateDie(int dice, int dicetwo){
         dice1 = dice;
         dice2 = dicetwo;
     }
@@ -71,11 +71,11 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                 Graphics2D g2 = (Graphics2D) g;
                 Font currentFont;
                 Font newFont;
-                int boardHeight = Board.locations.length;
-                int boardWidth = Board.locations[0].length;
+                int boardHeight = myBoard.locations.length;
+                int boardWidth = myBoard.locations[0].length;
                 int cellHeight = boardDisplayHeight/boardWidth;
                 int cellWidth = boardDisplayWidth/boardHeight;
-                boolean[] roomLabelled = new boolean[Board.roomNames.length];
+                boolean[] roomLabelled = new boolean[myBoard.roomNames.length];
                 for(int i = 0; i < roomLabelled.length; i++) {
                     roomLabelled[i] = false;
                 }
@@ -83,11 +83,11 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                     for( int i = 0; i<boardHeight; i++) {
                         //Draw player picture
 
-                        if(Board.locations[i][j].getPlayerOn() != null) {
+                        if(myBoard.locations[i][j].getPlayerOn() != null) {
                             //	  					 if(Board.locations[i][j].getPlayerOn().getPlayerName().getName() == null) {
                             //	  						 System.out.println("WOAH");
                             //	  					 }
-                            String imageFilePath = "./src/" + Board.locations[i][j].getPlayerOn().getPlayerName().getName() + ".jpg";
+                            String imageFilePath = "./src/" + myBoard.locations[i][j].getPlayerOn().getPlayerName().getName() + ".jpg";
                             BufferedImage img = null;
                             try {
                                 img = ImageIO.read(new File(imageFilePath));
@@ -97,8 +97,8 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                             g2.drawImage(img, (i)*cellWidth, (j)*cellHeight, (i+1)*cellWidth, (j+1)*cellHeight, 0, 0, img.getWidth(), img.getHeight(), null);
                         }
                         //Draw weapon picture
-                        else if(Board.locations[i][j].getWeaponOn() != null) {
-                            String imageFilePath = "./src/" + Board.locations[i][j].getWeaponOn().getName() + ".jpg";
+                        else if(myBoard.locations[i][j].getWeaponOn() != null) {
+                            String imageFilePath = "./src/" + myBoard.locations[i][j].getWeaponOn().getName() + ".jpg";
                             BufferedImage img = null;
                             try {
                                 img = ImageIO.read(new File(imageFilePath));
@@ -109,33 +109,33 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                         }
                         //Draw coloured tile
                         else {
-                            if(Board.locations[i][j].getRoomIn() != null) {
+                            if(myBoard.locations[i][j].getRoomIn() != null) {
                                 //Coloure room tiles a set of colours
-                                if(Board.locations[i][j].getRoomIn().getName() == Board.roomNames[0]) {
+                                if(myBoard.locations[i][j].getRoomIn().getName() == myBoard.roomNames[0]) {
                                     g2.setColor(new Color(255, 30, 30));
                                 }
-                                else if(Board.locations[i][j].getRoomIn().getName() == Board.roomNames[1]) {
+                                else if(myBoard.locations[i][j].getRoomIn().getName() == myBoard.roomNames[1]) {
                                     g2.setColor(new Color(30, 255, 30));
                                 }
-                                else if(Board.locations[i][j].getRoomIn().getName() == Board.roomNames[2]) {
+                                else if(myBoard.locations[i][j].getRoomIn().getName() == myBoard.roomNames[2]) {
                                     g2.setColor(new Color(30, 30, 255));
                                 }
-                                else if(Board.locations[i][j].getRoomIn().getName() == Board.roomNames[3]) {
+                                else if(myBoard.locations[i][j].getRoomIn().getName() == myBoard.roomNames[3]) {
                                     g2.setColor(new Color(255, 220, 30));
                                 }
-                                else if(Board.locations[i][j].getRoomIn().getName() == Board.roomNames[4]) {
+                                else if(myBoard.locations[i][j].getRoomIn().getName() == myBoard.roomNames[4]) {
                                     g2.setColor(new Color(30, 255, 255));
                                 }
-                                else if(Board.locations[i][j].getRoomIn().getName() == Board.roomNames[5]) {
+                                else if(myBoard.locations[i][j].getRoomIn().getName() == myBoard.roomNames[5]) {
                                     g2.setColor(new Color(255, 30, 255));
                                 }
-                                else if(Board.locations[i][j].getRoomIn().getName() == Board.roomNames[6]) {
+                                else if(myBoard.locations[i][j].getRoomIn().getName() == myBoard.roomNames[6]) {
                                     g2.setColor(new Color(255, 150, 30));
                                 }
-                                else if(Board.locations[i][j].getRoomIn().getName() == Board.roomNames[7]) {
+                                else if(myBoard.locations[i][j].getRoomIn().getName() == myBoard.roomNames[7]) {
                                     g2.setColor(new Color(255, 30, 150));
                                 }
-                                else if(Board.locations[i][j].getRoomIn().getName() == Board.roomNames[8]) {
+                                else if(myBoard.locations[i][j].getRoomIn().getName() == myBoard.roomNames[8]) {
                                     g2.setColor(new Color(30, 100, 30));
                                 }
                             }
@@ -148,7 +148,7 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                         }
 
                         //Draw walls/dividing lines. Check for walls upwards, left right and down, and draw a thick line if there is one, thin if there is not.
-                        if(Board.locations[i][j].getWallRight()) {
+                        if(myBoard.locations[i][j].getWallRight()) {
                             g2.setColor(new Color(0, 0, 0));
                             g2.setStroke(new BasicStroke(2));
                         }
@@ -158,7 +158,7 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                         }
                         g2.drawLine((i)*cellWidth, (j+1)*cellHeight, (i+1)*cellWidth, (j+1)*cellHeight);
 
-                        if(Board.locations[i][j].getWallLeft()) {
+                        if(myBoard.locations[i][j].getWallLeft()) {
                             g2.setColor(new Color(0, 0, 0));
                             g2.setStroke(new BasicStroke(2));
                         }
@@ -168,7 +168,7 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                         }
                         g2.drawLine((i)*cellWidth, (j)*cellHeight, (i+1)*cellWidth, (j)*cellHeight);
 
-                        if(Board.locations[i][j].getWallUp()) {
+                        if(myBoard.locations[i][j].getWallUp()) {
                             g2.setColor(new Color(0, 0, 0));
                             g2.setStroke(new BasicStroke(2));
                         }
@@ -178,7 +178,7 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                         }
                         g2.drawLine((i)*cellWidth, (j+1)*cellHeight, (i)*cellWidth, (j)*cellHeight);
 
-                        if(Board.locations[i][j].getWallDown()) {
+                        if(myBoard.locations[i][j].getWallDown()) {
                             g2.setColor(new Color(0, 0, 0));
                             g2.setStroke(new BasicStroke(2));
                         }
@@ -195,14 +195,14 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                 //Add the room labels.
                 for( int j = 0; j<boardWidth; j++) {
                     for( int i = 0; i<boardHeight; i++) {
-                        if(Board.locations[i][j].getRoomIn() != null) {
-                            for(int k = 0; k < Board.roomNames.length; k++)
-                                if(Board.locations[i][j].getRoomIn().getName() == Board.roomNames[k]) {
+                        if(myBoard.locations[i][j].getRoomIn() != null) {
+                            for(int k = 0; k < myBoard.roomNames.length; k++)
+                                if(myBoard.locations[i][j].getRoomIn().getName() == myBoard.roomNames[k]) {
                                     if(roomLabelled[k] == false) {
                                         roomLabelled[k] = true;
                                         g2.setColor(new Color(255, 255, 255));
                                         g2.setStroke(new BasicStroke(2));
-                                        g2.drawString(Board.locations[i][j].getRoomIn().getName(), (int) (((float) i+ 0.2 )*cellWidth), (j+2)*cellHeight);
+                                        g2.drawString(myBoard.locations[i][j].getRoomIn().getName(), (int) (((float) i+ 0.2 )*cellWidth), (j+2)*cellHeight);
                                     }
 
                                 }
@@ -273,7 +273,7 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                 //DISPLAY PLAYER INFO
 
                 //set current player
-                Player currentPlayer = Board.players[Board.currentPlayer];
+                Player currentPlayer = myBoard.players[myBoard.currentPlayer];
 
 
 

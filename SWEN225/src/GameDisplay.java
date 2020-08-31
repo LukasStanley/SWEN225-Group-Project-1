@@ -25,10 +25,11 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
     JMenuBar mb;
     JMenuItem m1, m2, m3;
     JMenu jm;
+    JButton jb;
     Canvas canvas;
     final int windowLength = 1200;
     final int windowHeight = 900;
-    final int canvasHeight = (int) (windowHeight*0.9);
+    final int canvasHeight = (int) (windowHeight*1);
     final int canvasWidth = (int) (windowLength*0.9);
 
     float textRatio = (float)canvasWidth/(float)960;
@@ -57,6 +58,7 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
     public void redraw() {
         repaint();
         canvas.paint(canvas.getGraphics());
+        jb.repaint();
     }
 
     public  void updateDie(int dice, int dicetwo){
@@ -65,8 +67,6 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
     }
 
     public void setUpGameBoard() {
-        mb = new JMenuBar();
-        jm = new JMenu("Menu");
         canvas = new Canvas() {
 
             // paint the canvas
@@ -320,9 +320,32 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
             }
         };
 
-        m1 = new JMenuItem("Test1");
-        m2 = new JMenuItem("Test2");
-        m3 = new JMenuItem("Test3");
+        mb = new JMenuBar();
+        jm = new JMenu("Menu");
+        m1 = new JMenuItem("Make Accusation");
+        m2 = new JMenuItem("Make Suggestion");
+        m3 = new JMenuItem("End Turn");
+        m1.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent e) {
+                        myBoard.Accuse();
+                    }
+                }
+        );
+        m2.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent e) {
+                    	myBoard.Suggest();
+                    }
+                }
+        );
+        m3.addActionListener(
+                new ActionListener(){
+                    public void actionPerformed(ActionEvent e) {
+                        System.out.println("end turn");
+                    }
+                }
+        );
 
         m1.addKeyListener(this);
         m2.addKeyListener(this);
@@ -341,8 +364,8 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
         canvas.setBackground(new Color(100, 200, 250));
         add(canvas);
 
-        ImageIcon buttonIcon = new ImageIcon("./src/GUN.jpg");
-        JButton jb = new JButton("Roll dice");
+        //ImageIcon buttonIcon = new ImageIcon("./src/GUN.jpg");
+        jb = new JButton("Roll dice");
         jb.addActionListener( new ActionListener(){
                 public void actionPerformed(ActionEvent e) {
                     System.out.println("dice rolled");
@@ -351,6 +374,8 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
             });
 
         this.add(jb);
+        jb.setVisible(true);
+        jb.repaint();
         setLayout(new FlowLayout());
 
         canvas.setVisible(true);

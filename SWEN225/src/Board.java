@@ -577,6 +577,7 @@ private void loadMapFromCSV(){
 			currentPlayer = i;
 			currentTurnActive = true;
 			hasRolled = false;
+			myGameDisplay.redraw();
 			while(!hasRolled) {}
 			while(currentTurnActive) {
 				if(player.getIsPlaying()) {

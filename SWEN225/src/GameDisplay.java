@@ -367,4 +367,10 @@ public class GameDisplay
           return (int)out;
       }
   }
+
+
+	public static void ChangeOccured() {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -119,8 +119,20 @@ public class Board
 		
   }
   
-  public void stepCurrentPlayer(Integer direction){	
-	    players[currentPlayer].stepPlayer(direction);	
+  public void stepCurrentPlayer(Integer direction){
+      Player p = players[currentPlayer];
+      //MOVE
+      if(p.getSteps()==0) {
+          System.out.println("You are out of moves!");
+      }
+      //Raw list of inputs, needs to be cut down/checked for size
+      ArrayList<Integer> movementArray = new ArrayList<>(Arrays.asList(direction));
+      //Let the player simulate how far they can reach
+      Location playerNewLoc = p.movePlayer(movementArray);
+      //Move them this distance
+      if(playerNewLoc != null) {
+          movePlayerToLocation(p, playerNewLoc);
+      }
 	}
   
   private void generatePlayers() {

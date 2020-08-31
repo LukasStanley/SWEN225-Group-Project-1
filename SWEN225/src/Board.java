@@ -594,7 +594,7 @@ private void loadMapFromCSV(){
 	    playGame();
   }
 
-  public void main(String[] args) {
+  public static void main(String[] args) {
     Board myBoard = new Board();
     myBoard.generateCards();
     myBoard.generateRooms();

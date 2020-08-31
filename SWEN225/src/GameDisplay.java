@@ -48,6 +48,10 @@ public class GameDisplay
 	  f.repaint();
   }
   
+  public static void ChangeOccured() {
+	  //Notification for change state
+  }
+  
 
   public static void setUpGameBoard() {
 	  f = new JFrame("Cluedo");

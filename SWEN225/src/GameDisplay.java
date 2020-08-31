@@ -51,12 +51,11 @@ public class GameDisplay extends JFrame implements KeyListener
     }
     public void redraw() {
         repaint();
-
+    }
     public static void ChangeOccured() {
   	  //Notification for change state
     }
-
-    }
+    
 
     public static void updateDie(int dice, int dicetwo){
         dice1 = dice;

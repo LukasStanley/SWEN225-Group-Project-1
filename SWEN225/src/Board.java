@@ -31,7 +31,8 @@ public class Board
   static int currentPlayer = 0;
   static boolean hasRolled;
 
-  private Input myInput;
+  Input myInput;
+  GameDisplay myGameDisplay;
 
 
   //------------------------
@@ -45,8 +46,16 @@ public class Board
     rooms = new Room[roomNames.length];
 
 //    Associates the model and the Input with each other
-    myInput = new Input(this);
- 
+      myInput = new Input(this);
+
+//    Associates the model and the display with each other
+      myGameDisplay = new GameDisplay(this);
+
+//    setup JFrame display
+      myGameDisplay.setTitle("Cluedo");
+      myGameDisplay.setSize(GameDisplay.windowLength, GameDisplay.windowHeight);
+      myGameDisplay.setLayout(null);//no layout manager
+      myGameDisplay.setVisible(true);
   }
 
   private void distributeCards() {
@@ -534,17 +543,15 @@ private void loadMapFromCSV(){
     myBoard.loadMapFromCSV();
     myBoard.randomizeWeapons();
 
-	JOptionPane numPlayersOptionPane = new JOptionPane();
-	playersPlaying = GameDisplay.displayPlayerPick();
+//	JOptionPane numPlayersOptionPane = new JOptionPane();
+	playersPlaying = myBoard.myGameDisplay.displayPlayerPick();
     while(playersPlaying > 6 || playersPlaying <2) {
     	System.out.println("Pick the number of players:");
-    	playersPlaying = GameDisplay.displayPlayerPick();
+    	playersPlaying = myBoard.myGameDisplay.displayPlayerPick();
     }
     System.out.println(playersPlaying + " Players selected.");
 
     myBoard.generatePlayers();
-
-
 
     isRunning = true;
     myBoard.distributeCards();

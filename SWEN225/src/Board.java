@@ -80,6 +80,9 @@ public class Board
 	distributionCards.remove(mPerson); distributionCards.remove(mWeapon); distributionCards.remove(mRoom);
 	
   }
+  private static void StateChange() {
+	  GameDisplay.ChangeOccured();
+  }
   
   private void generateCards() {
 		  List<Card> cardList = Arrays.asList(
@@ -113,7 +116,7 @@ public class Board
   }
   
   private void generatePlayers() {
-  	  for(int i = 0; i<players.length; i++) {
+  	  for(int i = 0; i < playersPlaying; i++) {
   		  String id = myInput.askID(i);
   		  String player = myInput.askPlayer();
   		  players[i] = new Player((PersonCard) getCard(player), locations[startingPoints[i][1]][startingPoints[i][0]], true, locations, id);
@@ -185,77 +188,15 @@ public class Board
 			return result;
 		}
 
-	
-   public static void displayInfo(Player playerTurn) {
-	  //System.out.println("DEBUG: COORDS " + playerTurn.getCurrentLocation().getX() + " , " + playerTurn.getCurrentLocation().getY());
-	  System.out.println("You are " + playerTurn.getPlayerName().getName());
-	  System.out.print("The other players are:");
-	  for(int i = 0; i < playersPlaying; i++) {
-		  Player p = players[i];
-		  if(p!= playerTurn) {
-			  System.out.print("	"+p.getPlayerName().getName());
-		  }
-	  }
-	  System.out.println();
-	  System.out.print("Possible Rooms:");
-	  for(Room r : rooms) {
-		System.out.print("	"+r.getName()); 
-	  }
-	  System.out.println();
-	  System.out.print("Possible Weapons:");
-	  for(Card w : cards) {
-		  if(w instanceof WeaponCard) {
-			  System.out.print("	"+w.getName()); 
-		  }
-	  }
-	  System.out.println();
-	  System.out.println("You have "+ playerTurn.getSteps()+" moves remaining. You can move infinitely within a room.");
-	  System.out.println("use MOVE followed by any number of u(up) d(down) l(left) r(right) to move. Move once at a time, or using a long combination. Non u/d/r/l are ignored.");
-	  System.out.println("use END to finish your turn without doing anything else");
-	  System.out.println("use SUGGEST followed by a name, weapon and location to suggest a certain sequence of events. Seperate these with a space, not a comma.");
-	  System.out.println("use ACCUSE followed by a name, weapon and location to accuse a certain person. Seperate these with a space, not a comma. Fail = game over. Succeed = win!");
-	  System.out.println("use MAP to redisplay the map");
-	  System.out.println("use CARDS to display your hand");
-  }
-  
-  public static void displayCards(Player playerTurn){
-	System.out.flush();
-	for(Card c :playerTurn.getHand()) {
-		if(c instanceof PersonCard) {
-			System.out.print("Person: ");
-		}
-		else if(c instanceof WeaponCard) {
-			System.out.print("Weapon: ");
-		}
-		else{
-			System.out.print("Room: ");
-		}
-			System.out.println(c.getName());
-		
-	}
-}
+ 
 
 private static boolean executeTurn(Player p) {
-	String inputLine = takeStringInput();
-
-	//For storing the weapons etc of a accusation or suggestion.
-	//String[] parameters;
+	//Method to send current player information to View
+	//Await input
 	
-	//MOVE
-        if(p.getSteps()==0) {
-        	System.out.println("You are out of moves!");
-            return false;
-        }
-        //Raw list of inputs, needs to be cut down/checked for size
-        ArrayList<Integer> movementArray = movementInputs(inputLine.substring(commands[2].length()));
-        //Let the player simulate how far they can reach
-        Location playerNewLoc = p.movePlayer(movementArray);
-        //Move them this distance
-        if(playerNewLoc != null) {
-            movePlayerToLocation(p, playerNewLoc); 	displayMap(); displayInfo(p);
-        }
-        return false;
-	}
+	return false;
+	
+}
     
 	
 public boolean Accuse() {
@@ -275,17 +216,17 @@ public boolean Accuse() {
 					makeAccusation(a);
 				}
 				else {
-					System.out.println("The third item must be a valid room!");
+					JOptionPane.showMessageDialog(null, "You need a valid room");
 					return false;
 				}
 			}
 			else {
-				System.out.println("The second item must be a valid weapon!");
+				JOptionPane.showMessageDialog(null, "You need a valid weapon");
 				return false;
 			}
 		}
 		else {
-			System.out.println("The first item must be a valid person!");
+			JOptionPane.showMessageDialog(null, "You need a valid person");
 			return false;
 		}
 		return true;
@@ -297,7 +238,7 @@ public boolean Suggest() {
 	Player p = players[currentPlayer];
 	List<String> parameters = Input.getSuggestion();
 		if(parameters.size() < 3){
-			System.out.println("Too few parameters! You need a WEAPON and PERSON");
+			JOptionPane.showMessageDialog(null, "You must select both a weapon and a person");
 			return false;
 		}
 		if(p.getCurrentRoom() != null) {
@@ -311,16 +252,16 @@ public boolean Suggest() {
 					makeAccusation(a);
 				}
 				else {
-					System.out.println("The first item must be a valid person!");
+					JOptionPane.showMessageDialog(null, "You need a valid person");
 					return false;
 				}
 			}
 			else {
-				System.out.println("The second item must be a valid weapon!");
+				JOptionPane.showMessageDialog(null, "You need a valid weapon");
 				return false;
 			}
 		}
-		else {System.out.println("You must be in a room to make a suggestion"); return false;}
+		else {JOptionPane.showMessageDialog(null, "You must be in a room"); return false;}
 		return true;
 		
 	}
@@ -353,19 +294,6 @@ private static Player nextPlayer() {
 	else if( currentPlayer == playersPlaying){return players[0];}
 	return null;
 	}
-
-private static String takeStringInput() {
-	  InputStreamReader isr = new InputStreamReader(System.in);
-	  BufferedReader br = new BufferedReader(isr);
-	  String line = "woah";
-	  try {
-		line = br.readLine();
-	  } catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	  }
-	  return line;
-}
   																			//Actual Board Stuff
 
 
@@ -383,18 +311,9 @@ private static String takeStringInput() {
 	   
 	   players[currentPlayer].setSteps((dice1 + dice2));
 	   hasRolled = true;
-    //GameDisplay.UpdateDie(dice1, dice2);
+    //ameDisplay.UpdateDie(dice1, dice2);
   }
-   
-   public static void displayPassToPlayer(Player playerTurn) {
-	      System.out.flush();
-	      for(int i = 0; i<300; i++) {
-	          System.out.println();
-	      }
-	      System.out.println("It is now the turn of " + playerTurn.getPlayerName().getName());
-	      System.out.println("If you are "+  playerTurn.getPlayerName().getName() + ", please press the enter key to continue...");
-	      takeStringInput();
-	  }
+
 
 
  
@@ -420,13 +339,12 @@ private static String takeStringInput() {
 		
 			if( p.handContains(suggestion.getPerson().getName()) || p.handContains(suggestion.getRoom().getName()) || p.handContains(suggestion.getWeapon().getName()) ) {
 				Card c = p.checkHand(suggestion.getPerson(), suggestion.getRoom(), suggestion.getWeapon());
-				System.out.println(c + " has been refuted");
+				JOptionPane.showMessageDialog(null, c + "has been refuted");
 			}
-			displayPassToPlayer(nextPlayer());
 			
 		}
-		System.out.println("Your suggestion has not been refuted by any other player");
-		takeStringInput();
+		JOptionPane.showMessageDialog(null, "Your suggestion has not been refuted by any other player");
+	
 	}
   
   public static void makeAccusation(Accugestion accusation) {
@@ -456,8 +374,7 @@ private static String takeStringInput() {
 		  System.exit(100);
 		  isRunning = false;
 		  }
-	  else {System.out.println("Your guess was incorrect, you are now out of the game"); accusation.getOwner().setIsPlaying(false);}
-	  takeStringInput();
+	  else {JOptionPane.showMessageDialog(null, "Your guess was incorrect, you have been removed from play"); accusation.getOwner().setIsPlaying(false); StateChange();}
 	
 	}
 
@@ -595,162 +512,29 @@ private void loadMapFromCSV(){
 
 }
 
-private static void displayMap(){
- System.out.flush();
 
-
-	//clone rooms[] to arraylist
-	ArrayList<Room> roomsToDisplay = new ArrayList<>(Arrays.asList(rooms));
-
-	for(int i=0; i<25; i++) {
-    for(int j=0; j<24; j++) {
-
-      System.out.print("+");
-
-      if (locations[i][j].getWallUp()) {
-          System.out.print("-----");
-      }else{
-        System.out.print("     ");
-      }
-    }
-    System.out.println("+");
-
-    for (int j=0; j<24; j++) {
-      if(locations[i][j].getWallLeft()){
-        System.out.print("|");
-      }else {
-        System.out.print(" ");
-      }
-
-      if(locations[i][j].getPlayerOn()!=null) {
-        String name = locations[i][j].getPlayerOn().getPlayerName().getName();
-        switch (name){
-          case "WHITE":
-            System.out.print("  W  ");
-            break;
-
-          case "GREEN":
-            System.out.print("  G  ");
-            break;
-
-          case "MUSTARD":
-            System.out.print("  M  ");
-            break;
-
-          case "PEACOCK":
-            System.out.print("  Pe ");
-            break;
-
-          case "PLUM":
-            System.out.print("  Pl ");
-            break;
-
-          case "SCARLETT":
-            System.out.print("  S  ");
-            break;
-
-        }
-      }else if(locations[i][j].getWeaponOn()!=null) {
-          String name = locations[i][j].getWeaponOn().getName();
-          switch (name){
-              case "GUN":
-                  System.out.print(" gun ");
-                  break;
-
-              case "KNIFE":
-                  System.out.print("knife");
-                  break;
-
-              case "PIPE":
-                  System.out.print("pipe ");
-                  break;
-
-              case "ROPE":
-                  System.out.print("rope ");
-                  break;
-
-              case "CANDLESTICK":
-                  System.out.print("candl");
-                  break;
-
-              case "SPANNER":
-                  System.out.print("spann");
-                  break;
-          }
-      }
-      else if(locations[i][j].getRoomIn()!=null && roomsToDisplay.contains(locations[i][j].getRoomIn())){
-      	switch (locations[i][j].getRoomIn().getName()){
-			case "KITCHEN":
-				System.out.print("[Kit]");
-				break;
-			case "BALLROOM":
-				System.out.print("[Bal]");
-				break;
-			case "CONSERVATORY":
-				System.out.print("[Con]");
-				break;
-			case "BILLIARD":
-				System.out.print("[Bil]");
-				break;
-			case "LIBRARY":
-				System.out.print("[Lib]");
-				break;
-			case "STUDY":
-				System.out.print("[Stu]");
-				break;
-			case "HALL":
-				System.out.print("[Hal]");
-				break;
-			case "LOUNGE":
-				System.out.print("[Lou]");
-				break;
-			case "DINING":
-				System.out.print("[Din]");
-				break;
-		}
-		roomsToDisplay.remove(locations[i][j].getRoomIn());
-
-      }
-      else{
-      	System.out.print("     ");
-	  }
-    }
-    System.out.println("|");
-
-  }
-  for (int j=0; j<24; j++) {
-    System.out.print("+");
-    if (locations[24][j].getWallDown()) {
-      System.out.print("-----");
-    } else {
-      System.out.print("     ");
-    }
-  }
-  System.out.println("+");
-
-}
 
   private void playGame() {
-    boolean currentTurnActive = true;
-    while(isRunning) {
-        for(int i = 0; i<playersPlaying; i++) {
-            Player player = players[i];
-            currentPlayer = i;
-            currentTurnActive = true;
-            hasRolled = false;
-            while(!hasRolled) {}
-            //displayMap();
-            //displayInfo(player);
-            while(currentTurnActive) {
-                if(player.getIsPlaying()) {
-                    currentTurnActive = !executeTurn(player);
-
-                }
-            }
-            displayPassToPlayer(nextPlayer());
-        }
-
-    }
+	boolean currentTurnActive = true;
+	while(isRunning) {
+		for(int i = 0; i<playersPlaying; i++) {
+			Player player = players[i];
+			currentPlayer = i;
+			currentTurnActive = true;
+			hasRolled = false;
+			while(!hasRolled) {}
+			//displayMap();
+			//displayInfo(player);
+			while(currentTurnActive) {
+				if(player.getIsPlaying()) {
+					currentTurnActive = !executeTurn(player);
+					
+				}
+			}
+	
+		}
+		
+	}
 }
 
   public static void main(String[] args) {

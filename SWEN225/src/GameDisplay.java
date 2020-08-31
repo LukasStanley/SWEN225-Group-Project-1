@@ -23,7 +23,6 @@ public class GameDisplay extends JFrame implements KeyListener
     static JMenuItem m1, m2, m3;
     static JMenu jm;
     static Canvas canvas;
-
     static final int windowLength = 1200;
     static final int windowHeight = 900;
     static final int canvasHeight = (int) (windowHeight*0.9);
@@ -50,9 +49,13 @@ public class GameDisplay extends JFrame implements KeyListener
      rootPane.setFocusable(true);
      rootPane.addKeyListener(this);
     }
-
     public void redraw() {
         repaint();
+
+    public static void ChangeOccured() {
+  	  //Notification for change state
+    }
+
     }
 
     public static void updateDie(int dice, int dicetwo){

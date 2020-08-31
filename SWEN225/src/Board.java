@@ -731,26 +731,26 @@ private static void displayMap(){
 }
 
   private void playGame() {
-	boolean currentTurnActive = true;
-	while(isRunning) {
-		for(int i = 0; i<playersPlaying; i++) {
-			Player player = players[i];
-			currentPlayer = i;
-			currentTurnActive = true;
-			hasRolled = false;
-			while(!hasRolled) {}
-			//displayMap();
-			//displayInfo(player);
-			while(currentTurnActive) {
-				if(player.getIsPlaying()) {
-					currentTurnActive = !executeTurn(player);
-					
-				}
-			}
-			displayPassToPlayer(nextPlayer());
-		}
-		
-	}
+    boolean currentTurnActive = true;
+    while(isRunning) {
+        for(int i = 0; i<playersPlaying; i++) {
+            Player player = players[i];
+            currentPlayer = i;
+            currentTurnActive = true;
+            hasRolled = false;
+            while(!hasRolled) {}
+            //displayMap();
+            //displayInfo(player);
+            while(currentTurnActive) {
+                if(player.getIsPlaying()) {
+                    currentTurnActive = !executeTurn(player);
+
+                }
+            }
+            displayPassToPlayer(nextPlayer());
+        }
+
+    }
 }
 
   public static void main(String[] args) {

@@ -47,23 +47,8 @@ public class GameDisplay extends JFrame implements KeyListener
     public GameDisplay(Board myBoard)
     {
      this.myBoard = myBoard;
-     setFocusable(true);
-     addKeyListener(new KeyListener() {
-         @Override
-         public void keyTyped(KeyEvent e) {
-             System.out.println("AAAAAAAAAAAAAAAAAbb");
-         }
-
-         @Override
-         public void keyPressed(KeyEvent e) {
-
-         }
-
-         @Override
-         public void keyReleased(KeyEvent e) {
-
-         }
-     });
+     rootPane.setFocusable(true);
+     rootPane.addKeyListener(this);
     }
 
     public void redraw() {
@@ -344,6 +329,12 @@ public class GameDisplay extends JFrame implements KeyListener
         m2 = new JMenuItem("Test2");
         m3 = new JMenuItem("Test3");
 
+        m1.addKeyListener(this);
+        m2.addKeyListener(this);
+        m3.addKeyListener(this);
+        jm.addKeyListener(this);
+        canvas.addKeyListener(this);
+
         jm.add(m1);
         jm.add(m2);
         jm.add(m3);
@@ -383,8 +374,35 @@ public class GameDisplay extends JFrame implements KeyListener
     }
 
     public void keyPressed(KeyEvent keyEvent){
+        switch(keyEvent.getKeyCode()){
+            //Left Key
+            case 37:
+                break;
+
+            //Up Key
+            case 38:
+                break;
+
+            //Right Key
+            case 39:
+                break;
+
+            //Down Key
+            case 40:
+                break;
+
+            //Enter
+            case 10:
+                break;
+
+            //SpaceBar
+            case 32:
+                break;
+
+            default:
+        }
         System.out.print("Key Pressed:");
-        System.out.println(keyEvent.getKeyChar());
+        System.out.println(keyEvent.getExtendedKeyCode());
     }
 
     public void keyReleased(KeyEvent keyEvent){

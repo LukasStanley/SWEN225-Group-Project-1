@@ -381,18 +381,22 @@ public class GameDisplay extends JFrame implements KeyListener
         switch(keyEvent.getKeyCode()){
             //Left Key
             case 37:
+                myBoard.stepCurrentPlayer(3);
                 break;
 
             //Up Key
             case 38:
+                myBoard.stepCurrentPlayer(0);
                 break;
 
             //Right Key
             case 39:
+                myBoard.stepCurrentPlayer(1);
                 break;
 
             //Down Key
             case 40:
+                myBoard.stepCurrentPlayer(2);
                 break;
 
             //Enter

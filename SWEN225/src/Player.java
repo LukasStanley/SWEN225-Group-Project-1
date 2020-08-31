@@ -50,6 +50,12 @@ public class Player
 	  return stepsRemaining;
   }
 
+
+  //direction is 0 = up 1 = right 2 = down 3 = left
+  public Location stepPlayer(Integer direction){
+      return movePlayer(new ArrayList<>(Arrays.asList(direction)));
+  }
+
   //direction is 0 = up 1 = right 2 = down 3 = left
   public Location movePlayer(ArrayList<Integer> movements) {
 	  Location currentLocationStep = currentLocation;
@@ -121,20 +127,20 @@ public class Player
 			 }
 			 //Set the next location
 			 nextLocation = locationArray[currentLocationStep.getX()-1][currentLocationStep.getY()];
-			 
+
 			 //Check the next location is not impeded by a wall
 			 if(nextLocation.getWallDown()){
 				 stillMovin = false;
 				 break;
 			 }
 		 }
-		 
+
 		 //Trying to land on a tile with a player
 		 if(nextLocation.getPlayerOn() != null) {
 			 stillMovin = false;
 			 break;
 		 }
-		 
+
 		 //"consume" a step, since a valid step must have been found to reach this point
 		 //Only if the player was not moving within a room
 		if(!(currentLocationStep.getRoomIn() != null && nextLocation.getRoomIn() !=null)) {
@@ -142,13 +148,13 @@ public class Player
 			currentIndex++;
 			stepsRemaining--;
 			System.out.println("reduced by 1");
-		}	
+		}
 		else {
 			System.out.println("inside a room");
 		}
-		 
+
 	  }
-	  
+
 	  //return the location the player was able to move to
 	  //If the movelist finished with a valid step, return the last planned step.
 	  if(stillMovin) {
@@ -164,7 +170,7 @@ public class Player
 			  return currentLocationStep;
 		  }
 	  }
-	  
+
   }
   public boolean setPlayerName(PersonCard aPlayerName)
   {

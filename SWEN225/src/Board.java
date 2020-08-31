@@ -316,18 +316,18 @@ private static Player nextPlayer() {
 
 
 
- 
+
 
   public static void makeSuggestion(Accugestion suggestion) {
 	  Player accused = players[0];
 	  Room crimeScene = rooms[0];;
-	  for(Player p : players){	
+	  for(Player p : players){
 		  if(p.getPlayerName() == suggestion.getPerson()) {
 			  accused = p;
 			  break;
 		  }
 	  }
-	  for(Room r : rooms){	
+	  for(Room r : rooms){
 		  if(r.getName() == suggestion.getRoom().getName()) {
 			  crimeScene = r;
 			  break;
@@ -336,27 +336,27 @@ private static Player nextPlayer() {
 	  movePlayerToRoom(accused, crimeScene);
 	  moveWeaponToRoom(suggestion.getWeapon(), crimeScene);
 		for(Player p : players){
-		
+
 			if( p.handContains(suggestion.getPerson().getName()) || p.handContains(suggestion.getRoom().getName()) || p.handContains(suggestion.getWeapon().getName()) ) {
 				Card c = p.checkHand(suggestion.getPerson(), suggestion.getRoom(), suggestion.getWeapon());
 				JOptionPane.showMessageDialog(null, c + "has been refuted");
 			}
-			
+
 		}
 		JOptionPane.showMessageDialog(null, "Your suggestion has not been refuted by any other player");
-	
+
 	}
-  
+
   public static void makeAccusation(Accugestion accusation) {
 	  Player accused = players[0];
 	  Room crimeScene = rooms[0];;
-	  for(Player p : players){	
+	  for(Player p : players){
 		  if(p.getPlayerName() == accusation.getPerson()) {
 			  accused = p;
 			  break;
 		  }
 	  }
-	  for(Room r : rooms){	
+	  for(Room r : rooms){
 		  if(r.getName() == accusation.getRoom().getName()) {
 			  crimeScene = r;
 			  break;
@@ -368,14 +368,14 @@ private static Player nextPlayer() {
 		  System.out.flush();
 	      for(int i = 0; i<300; i++) {
 	          System.out.println();
-	      }	
+	      }
 		  System.out.println("Player " + players[currentPlayer].getPlayerName().getName() + " has won the game!");
 		  System.out.println("The correct solution was " + mPerson.getName() + " in the " + mRoom.getName() + " with the " + mWeapon.getName());
 		  System.exit(100);
 		  isRunning = false;
 		  }
 	  else {JOptionPane.showMessageDialog(null, "Your guess was incorrect, you have been removed from play"); accusation.getOwner().setIsPlaying(false); StateChange();}
-	
+
 	}
 
 private void loadMapFromCSV(){
@@ -510,6 +510,10 @@ private void loadMapFromCSV(){
     }
   }
 
+}
+
+public void stepCurrentPlayer(Integer direction){
+    players[currentPlayer].stepPlayer(direction);
 }
 
 

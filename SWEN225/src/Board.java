@@ -120,7 +120,29 @@ public class Board
 	  //Characters not yet chosen by a player
 	  List<String> untakenCharacters = new ArrayList(Arrays.asList(characterNames));
   	  for(int i = 0; i < playersPlaying; i++) {
-  		  String id = myInput.askID(i);
+  		  
+  		  //Make sure the player picks a unique and existing name.
+  		  boolean isUnique = false;
+  		  String id = null;
+  		  while(isUnique != true) {
+  			//Get the player name from a text field input
+  			id = myInput.askID(i);
+  			  if(id != null && id != "") {
+  				  boolean foundMismatch = false;
+  				  for(Player p : players) {
+  					  if(p != null) {
+  						  if(p.getPlayerId().equals(id)) {
+  							  foundMismatch = true;
+  						  }
+  					  }
+  					  
+  				  }
+  				  if(foundMismatch == false) {
+  					  isUnique = true;
+  				  }
+  			  }
+  		  }
+  		  
   		  //Get the player choice from a radio button popup
   		  String player = myInput.askPlayer(untakenCharacters.toArray(new String[0]));
   		  //Remove the choice from available options

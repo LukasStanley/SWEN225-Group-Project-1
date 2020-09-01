@@ -130,10 +130,6 @@ public class Board
   
   public void stepCurrentPlayer(Integer direction){
       Player p = players[currentPlayer];
-      //MOVE
-      if(p.getSteps()==0) {
-          System.out.println("You are out of moves!");
-      }
       //Raw list of inputs, needs to be cut down/checked for size
       ArrayList<Integer> movementArray = new ArrayList<>(Arrays.asList(direction));
       //Let the player simulate how far they can reach
@@ -275,7 +271,6 @@ public boolean Accuse() {
 		Player p = players[currentPlayer];
 		if(p.getCurrentRoom() == null || hasRolled == false) {return false;}
 		List<String> parameters = myInput.getSuggestion();
-		System.out.println(parameters.toString());
 		Card personCard = getCard(parameters.get(0));
 		Card weaponCard = getCard(parameters.get(1));
 		Card roomCard = getCard(parameters.get(2));
@@ -284,28 +279,6 @@ public boolean Accuse() {
 		return true;
 	}
 	
-
-private ArrayList<Integer> movementInputs(String movementString) {
-	ArrayList<Integer> movements = new ArrayList<Integer>();
-	for (int i=0; i < movementString.length(); i++) {
-		
-	    if(movementString.charAt(i) == 'd' || movementString.charAt(i) == 'D') {
-	    	movements.add(2);
-	    }
-	    else if(movementString.charAt(i) == 'u' || movementString.charAt(i) == 'U') {
-	    	movements.add(0);
-	    }
-	    else if(movementString.charAt(i) == 'l' || movementString.charAt(i) == 'L') {
-	    	movements.add(3);
-	    }
-	    else if(movementString.charAt(i) == 'r' || movementString.charAt(i) == 'R') {
-	    	movements.add(1);
-	    }
-	}
-	
-	System.out.println(movements);
-	return movements;
-}
 
 private Player nextPlayer() {
 	if(currentPlayer < playersPlaying) { int i = currentPlayer + 1; return players[i]; }
@@ -546,7 +519,6 @@ private void loadMapFromCSV(){
 			currentPlayer = i;
 			this.currentTurnActive = true;
 			this.hasRolled = false;
-			System.out.println(player.getPlayerName().getName() + " has started turn");
 			boolean playingCurrentTurn = true;
 			boolean hasDiceRolled = false;
 			if(player.getIsPlaying()) {
@@ -576,11 +548,8 @@ private void loadMapFromCSV(){
 //		JOptionPane numPlayersOptionPane = new JOptionPane();
 		playersPlaying = myGameDisplay.displayPlayerPick();
 	    while(playersPlaying > 6 || playersPlaying <2) {
-	    	System.out.println("Pick the number of players:");
 	    	playersPlaying = myGameDisplay.displayPlayerPick();
 	    }
-	    System.out.println(playersPlaying + " Players selected.");
-
 	    generatePlayers();
 
 	    isRunning = true;

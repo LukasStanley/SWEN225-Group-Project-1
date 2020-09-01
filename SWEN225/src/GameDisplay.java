@@ -344,7 +344,6 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
         m3.addActionListener(
                 new ActionListener(){
                     public void actionPerformed(ActionEvent e) {
-                        System.out.println("end turn");
                         myBoard.endTurn();
                     }
                 }
@@ -371,7 +370,6 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
         jb = new JButton("Roll dice");
         jb.addActionListener( new ActionListener(){
                 public void actionPerformed(ActionEvent e) {
-                    System.out.println("dice rolled");
                     myBoard.rollDice();
                 }
             });
@@ -454,8 +452,6 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
 
             default:
         }
-        System.out.print("Key Pressed:");
-        System.out.println(keyEvent.getExtendedKeyCode());
     }
 
     public void keyReleased(KeyEvent keyEvent){

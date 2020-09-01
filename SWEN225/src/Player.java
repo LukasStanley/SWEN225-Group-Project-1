@@ -152,10 +152,6 @@ public class Player
 			//Increase the number of moves attempted so far if made not within a room
 			currentIndex++;
 			stepsRemaining--;
-			System.out.println("reduced by 1");
-		}
-		else {
-			System.out.println("inside a room");
 		}
 
 	  }
@@ -315,10 +311,8 @@ public class Player
 	if(hand.contains(weapon)) { potential.add(weapon);}
 	if(hand.contains(room)) { potential.add(room);}
 	if(potential.size() == 1) {return potential.get(0);}
-	if(potential.size() == 2) {System.out.println("The suggestion involves two of your cards, pick which one to show the current player. Press 0 for " + potential.get(0) + " or press 1 for " + potential.get(1)); int choice = sc.nextInt(); return potential.get(choice);}
-	if(potential.size() == 3) {
-			System.out.println("The suggestion involves three of your cards, pick which one to show the current player. Press 0 for " + potential.get(0) + ", press 1 for " + potential.get(1) + " or press 2 for " + potential.get(2)); 
-				int choice = sc.nextInt(); return potential.get(choice);}
+	if(potential.size() == 2) {;}
+	if(potential.size() == 3) {;}
 	
 	return weapon;
 	

@@ -589,7 +589,7 @@ private void loadMapFromCSV(){
 					break;
 				}	
 			}
-			while(currentTurnActive) {
+			while(currentTurnActive == true) {
 				;
 			}
 		}

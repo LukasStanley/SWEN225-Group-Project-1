@@ -261,7 +261,7 @@ public class Board
 	
 public boolean Accuse() {
 	Player p = players[currentPlayer];
-	
+	if(hasRolled == false) {return false;}
 		List<String> parameters = myInput.getAccusation();
 		Card personCard = getCard(parameters.get(0));
 		Card weaponCard = getCard(parameters.get(1));
@@ -273,7 +273,7 @@ public boolean Accuse() {
 
 	public boolean Suggest() {
 		Player p = players[currentPlayer];
-		if(p.getCurrentRoom() == null) {return false;}
+		if(p.getCurrentRoom() == null || hasRolled == false) {return false;}
 		List<String> parameters = myInput.getSuggestion();
 		System.out.println(parameters.toString());
 		Card personCard = getCard(parameters.get(0));

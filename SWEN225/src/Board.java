@@ -28,6 +28,7 @@ public class Board
    Room[] rooms;
    String[] characterNames =  {"SCARLETT", "WHITE", "GREEN", "PEACOCK", "PLUM", "MUSTARD"};
    String[] roomNames = {"KITCHEN", "BALLROOM", "CONSERVATORY", "BILLIARD", "LIBRARY", "STUDY", "HALL", "LOUNGE", "DINING"};
+   String[] weaponNames = {"GUN", "KNIFE", "PIPE", "ROPE", "CANDLESTICK", "SPANNER"};
    String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
    int[][] startingPoints = {{7,24}, {9,0}, {14,0}, {23,6}, {23,19}, {0,17}};
    int currentPlayer = 0;
@@ -83,7 +84,7 @@ public class Board
 	
   }
 
-  private  void StateChange() {
+  private void StateChange() {
 	  myGameDisplay.ChangeOccured();
 
   }
@@ -254,13 +255,13 @@ private boolean executeTurn(Player p) {
 public boolean Accuse() {
 	Player p = players[currentPlayer];
 		List<String> parameters = myInput.getAccusation();
-		if(parameters.size() < 4){
+		if(parameters.size() < 3){
 			System.out.println("Too few parameters! You need a WEAPON, PERSON and LOCATION");
 			return false;
 		}
-		Card personCard = getCard(parameters.get(1));
-		Card weaponCard = getCard(parameters.get(2));
-		Card roomCard = getCard(parameters.get(3))	;
+		Card personCard = getCard(parameters.get(0));
+		Card weaponCard = getCard(parameters.get(1));
+		Card roomCard = getCard(parameters.get(2));
 		if(personCard instanceof PersonCard) {
 			if(weaponCard instanceof WeaponCard) {
 				if(roomCard instanceof RoomCard) {
@@ -288,6 +289,10 @@ public boolean Accuse() {
 	
 public boolean Suggest() {
 	Player p = players[currentPlayer];
+	if(p.getCurrentRoom()==null){
+	    JOptionPane.showMessageDialog(null, "You must be in a room to make a suggestion.");
+	    return false;
+    }
 	List<String> parameters = myInput.getSuggestion();
 		if(parameters.size() < 3){
 			JOptionPane.showMessageDialog(null, "You must select both a weapon and a person");
@@ -295,13 +300,13 @@ public boolean Suggest() {
 		}
 		if(p.getCurrentRoom() != null) {
 			System.out.println(parameters.toString());
-			Card personCard = getCard(parameters.get(1));
-			Card weaponCard = getCard(parameters.get(2));
-			Card roomCard = getCard(p.getCurrentRoom().getName());
+			Card personCard = getCard(parameters.get(0));
+			Card weaponCard = getCard(parameters.get(1));
+			Card roomCard = getCard(parameters.get(2));
 			if(personCard instanceof PersonCard) {
 				if(weaponCard instanceof WeaponCard) {
 					Accugestion a = new Accugestion(weaponCard, personCard, roomCard, p);
-					makeAccusation(a);
+					makeSuggestion(a);
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "You need a valid person");
@@ -376,7 +381,7 @@ private Player nextPlayer() {
 
   public void makeSuggestion(Accugestion suggestion) {
 	  Player accused = players[0];
-	  Room crimeScene = rooms[0];;
+	  Room crimeScene = rooms[0];
 	  for(Player p : players){	
 		  if(p.getPlayerName() == suggestion.getPerson()) {
 			  accused = p;
@@ -405,7 +410,7 @@ private Player nextPlayer() {
   
   public void makeAccusation(Accugestion accusation) {
 	  Player accused = players[0];
-	  Room crimeScene = rooms[0];;
+	  Room crimeScene = rooms[0];
 	  for(Player p : players){	
 		  if(p.getPlayerName() == accusation.getPerson()) {
 			  accused = p;

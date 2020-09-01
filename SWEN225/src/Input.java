@@ -1,4 +1,6 @@
 import java.awt.GridLayout;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.swing.*;
 
@@ -25,15 +27,49 @@ public class Input{
 	}
 
 	public  List<String> getAccusation() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        String person = radioButtonInput(myBoard.characterNames, "Pick a Character");
+        String weapon = radioButtonInput(myBoard.weaponNames, "Pick a Weapon");
+        String room = radioButtonInput(myBoard.roomNames, "Pick a Room");
+
+        if(Arrays.asList(myBoard.characterNames).contains(person)
+                && Arrays.asList(myBoard.weaponNames).contains(weapon)
+                && Arrays.asList(myBoard.roomNames).contains(room)
+                ){
+            if(JOptionPane.showConfirmDialog(null, "Confirm Accusation:\n"+person+"\nWith the "+weapon+"\nIn the "+room)==0){
+                return new ArrayList<>(Arrays.asList(person, weapon, room));
+            }
+            System.out.println("Accusation Failed (CANCELLED CHOICE)");
+            return null;
+        }
+        System.out.println("Accusation Failed (INVALID CHOICES)");
+        return null;
+    }
 
 	public  List<String> getSuggestion() {
-		// TODO Auto-generated method stub
-		return null;
+        String person = radioButtonInput(myBoard.characterNames, "Pick a Character");
+        String weapon = radioButtonInput(myBoard.weaponNames, "Pick a Weapon");
+        Room currentRoom = myBoard.players[myBoard.currentPlayer].getCurrentRoom();
+        String room;
+        if(currentRoom != null){
+            room = myBoard.players[myBoard.currentPlayer].getCurrentRoom().getName();
+
+            if(Arrays.asList(myBoard.characterNames).contains(person)
+                    && Arrays.asList(myBoard.weaponNames).contains(weapon)
+                    && Arrays.asList(myBoard.roomNames).contains(room)
+                    ){
+                if(JOptionPane.showConfirmDialog(null, "Confirm Suggestion:\n"+person+"\nWith the "+weapon+"\nIn the "+room)==0){
+                    return new ArrayList<>(Arrays.asList(person, weapon, room));
+                }
+                System.out.println("Suggestion Failed (CANCELLED CHOICE)");
+                return null;
+            }
+            System.out.println("Suggestion Failed (INVALID CHOICES)");
+            return null;
+        }
+        System.out.println("Suggestion Failed (NOT IN A ROOM)");
+        return null;
 	}
-	
+
 	//Creates 
     public  String radioButtonInput(String[] optionArray, String optionType) {
         String returnString = null;

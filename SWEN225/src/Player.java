@@ -216,7 +216,7 @@ public class Player
 
   public Room getCurrentRoom()
   {
-    return currentRoom;
+    return currentLocation.getRoomIn();
   }
 
   public Location getCurrentLocation()

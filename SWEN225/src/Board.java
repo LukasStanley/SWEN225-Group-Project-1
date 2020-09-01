@@ -584,12 +584,14 @@ private void loadMapFromCSV(){
 			currentTurnActive = true;
 			hasRolled = false;
 			myGameDisplay.redraw();
-			while(hasRolled == false) { if(hasRolled == true || currentTurnActive == false) {break;}
-			while(currentTurnActive == true) {
-				if(currentTurnActive == false) { break;}
-	
-		}
-	}
+			while(hasRolled == false) { 
+				if(currentTurnActive == false) {
+					break;
+				}	
+			}
+			while(currentTurnActive) {
+				;
+			}
 		}
 	}
 }

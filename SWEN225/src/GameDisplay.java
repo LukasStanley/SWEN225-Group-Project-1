@@ -59,7 +59,8 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
     public void redraw() {
         repaint();
         canvas.paint(canvas.getGraphics());
-        jb.repaint();
+        jb.paint(jb.getGraphics());
+        this.setVisible(true);
     }
 
     public  void updateDie(int dice, int dicetwo){

@@ -82,7 +82,6 @@ public class Board
 	 mWeapon = (WeaponCard) cards.get(randomGeneration(6,11));
 	 mRoom = (RoomCard) cards.get(randomGeneration(12,17));
 	distributionCards.remove(mPerson); distributionCards.remove(mWeapon); distributionCards.remove(mRoom);
-	//System.out.println("DEBUG: MURDER SOLUTION: " + mPerson.getName() + " " + mWeapon.getName() + " " + mRoom.getName());
 	
   }
 
@@ -93,6 +92,7 @@ public class Board
   
   public void endTurn(){
 	currentTurnActive = false; 
+	System.out.println("currentTurnActive is now false");
   }
   
   private void generateCards() {
@@ -399,7 +399,7 @@ private Player nextPlayer() {
 		
 			if( p.handContains(suggestion.getPerson().getName()) || p.handContains(suggestion.getRoom().getName()) || p.handContains(suggestion.getWeapon().getName()) ) {
 				Card c = p.checkHand(suggestion.getPerson(), suggestion.getRoom(), suggestion.getWeapon());
-				JOptionPane.showMessageDialog(null, c.getName() + "has been refuted");
+				JOptionPane.showMessageDialog(null, c + "has been refuted");
 			}
 			
 		}
@@ -429,7 +429,8 @@ private Player nextPlayer() {
 	      for(int i = 0; i<300; i++) {
 	          System.out.println();
 	      }	
-		  myGameDisplay.gameWon(accusation.getOwner());
+		  System.out.println("Player " + players[currentPlayer].getPlayerName().getName() + " has won the game!");
+		  System.out.println("The correct solution was " + mPerson.getName() + " in the " + mRoom.getName() + " with the " + mWeapon.getName());
 		  System.exit(100);
 		  isRunning = false;
 		  }
@@ -577,19 +578,22 @@ private void loadMapFromCSV(){
 	currentTurnActive = true;
 	while(isRunning) {
 		for(int i = 0; i<playersPlaying; i++) {
+			System.out.println("players: " + playersPlaying);
 			Player player = players[i];
 			player.setSteps(0);
-            myGameDisplay.updateDie(0, 0);
+			myGameDisplay.updateDie(0, 0);
 			currentPlayer = i;
 			currentTurnActive = true;
 			hasRolled = false;
 			myGameDisplay.redraw();
-			while(hasRolled == false) { if(hasRolled == true || currentTurnActive == false) {break;}
+			System.out.println("there");
+			while(!hasRolled) { if(hasRolled == true || currentTurnActive == false) {break;}}
+			System.out.println("where");
 			while(currentTurnActive == true) {
 				if(currentTurnActive == false) { break;}
-	
-		}
-	}
+				else {System.out.println("still going! " + currentTurnActive);}
+			}
+			System.out.println("here");
 		}
 	}
 }

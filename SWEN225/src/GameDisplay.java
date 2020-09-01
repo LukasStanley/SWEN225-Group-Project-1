@@ -343,6 +343,7 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
                 new ActionListener(){
                     public void actionPerformed(ActionEvent e) {
                         System.out.println("end turn");
+                        myBoard.endTurn();
                     }
                 }
         );

@@ -33,6 +33,7 @@ public class Board
    int[][] startingPoints = {{7,24}, {9,0}, {14,0}, {23,6}, {23,19}, {0,17}};
    int currentPlayer = 0;
    boolean hasRolled;
+   boolean currentTurnActive;
 
   Input myInput;
   GameDisplay myGameDisplay;
@@ -89,6 +90,10 @@ public class Board
 
   }
   
+  public void endTurn(){
+	currentTurnActive = false; 
+  }
+  
   private void generateCards() {
 		  List<Card> cardList = Arrays.asList(
                   new PersonCard("SCARLETT"),
@@ -138,7 +143,7 @@ public class Board
 	}
   
   private void generatePlayers() {
-	  List<String> untakenCharacters = new ArrayList(Arrays.asList(characterNames));
+	  List<String> untakenCharacters = new ArrayList<String>(Arrays.asList(characterNames));
   	  for(int i = 0; i < playersPlaying; i++) {
   		  //Make sure the player picks a unique and existing name.
   		  boolean isUnique = false;
@@ -242,14 +247,6 @@ public class Board
 
  
 
-
-private boolean executeTurn(Player p) {
-	//Method to send current player information to View
-	//Await input
-	
-	return false;
-	
-}
     
 	
 public boolean Accuse() {
@@ -577,7 +574,7 @@ private void loadMapFromCSV(){
 
 
   private void playGame() {
-	boolean currentTurnActive = true;
+	currentTurnActive = true;
 	while(isRunning) {
 		for(int i = 0; i<playersPlaying; i++) {
 			Player player = players[i];
@@ -585,17 +582,13 @@ private void loadMapFromCSV(){
 			currentTurnActive = true;
 			hasRolled = false;
 			myGameDisplay.redraw();
-			while(!hasRolled) {}
+			while(!hasRolled) { if(hasRolled == true) {break;}}
 			while(currentTurnActive) {
-				if(player.getIsPlaying()) {
-					currentTurnActive = !executeTurn(player);
-					
-				}
-			}
+				if(currentTurnActive == false) { break;}
 	
 		}
 		
-	}
+	}}
 }
   
   private void startGame() {

@@ -32,8 +32,8 @@ public class Board
    String[] commands = {"ACCUSE", "SUGGEST", "MOVE", "CARDS", "MAP", "END"};
    int[][] startingPoints = {{7,24}, {9,0}, {14,0}, {23,6}, {23,19}, {0,17}};
    int currentPlayer = 0;
-   boolean hasRolled;
-   boolean currentTurnActive;
+   boolean hasRolled = false;
+   boolean currentTurnActive = false;
 
   Input myInput;
   GameDisplay myGameDisplay;
@@ -92,7 +92,9 @@ public class Board
   }
   
   public void endTurn(){
-	currentTurnActive = false; 
+	if(hasRolled) {
+		currentTurnActive = false; 
+	}
   }
   
   private void generateCards() {
@@ -145,6 +147,7 @@ public class Board
   
   private void generatePlayers() {
 	  List<String> untakenCharacters = new ArrayList<String>(Arrays.asList(characterNames));
+	  //Make player characters
   	  for(int i = 0; i < playersPlaying; i++) {
   		  //Make sure the player picks a unique and existing name.
   		  boolean isUnique = false;
@@ -179,6 +182,12 @@ public class Board
   		  players[i] = new Player((PersonCard) getCard(player), locations[startingPoints[i][1]][startingPoints[i][0]], true, locations, id, this);
   		  locations[startingPoints[i][1]][startingPoints[i][0]].setPlayerOn(players[i]);
 	  }
+  	  
+  	  //Make NPC characters
+  	  for(int i = 0; i < untakenCharacters.size(); i++) {
+  		  players[i+playersPlaying] = new Player( (PersonCard) getCard(untakenCharacters.get(i)), locations[startingPoints[i+playersPlaying][1]][startingPoints[i+playersPlaying][0]], true, locations, untakenCharacters.get(i), this);
+  		  locations[startingPoints[i+playersPlaying][1]][startingPoints[i+playersPlaying][0]].setPlayerOn(players[i+playersPlaying]);
+  	  }
   	  //GameDisplayer.players(players);
   }
   
@@ -253,72 +262,24 @@ public class Board
 public boolean Accuse() {
 	Player p = players[currentPlayer];
 		List<String> parameters = myInput.getAccusation();
-		if(parameters.size() < 3){
-			System.out.println("Too few parameters! You need a WEAPON, PERSON and LOCATION");
-			return false;
-		}
 		Card personCard = getCard(parameters.get(0));
 		Card weaponCard = getCard(parameters.get(1));
 		Card roomCard = getCard(parameters.get(2));
-		if(personCard instanceof PersonCard) {
-			if(weaponCard instanceof WeaponCard) {
-				if(roomCard instanceof RoomCard) {
-					Accugestion a = new Accugestion(weaponCard, personCard, roomCard, p);
-					makeAccusation(a);
-				}
-				else {
-					JOptionPane.showMessageDialog(null, "You need a valid room");
-					return false;
-				}
-			}
-			else {
-				JOptionPane.showMessageDialog(null, "You need a valid weapon");
-				return false;
-			}
-		}
-		else {
-			JOptionPane.showMessageDialog(null, "You need a valid person");
-			return false;
-		}
-		return true;
-		
+		Accugestion a = new Accugestion(weaponCard, personCard, roomCard, p);
+		makeAccusation(a);
+		return true;	
 	}
 
-	
-public boolean Suggest() {
-	Player p = players[currentPlayer];
-	if(p.getCurrentRoom()==null){
-	    JOptionPane.showMessageDialog(null, "You must be in a room to make a suggestion.");
-	    return false;
-    }
-	List<String> parameters = myInput.getSuggestion();
-		if(parameters.size() < 3){
-			JOptionPane.showMessageDialog(null, "You must select both a weapon and a person");
-			return false;
-		}
-		if(p.getCurrentRoom() != null) {
-			System.out.println(parameters.toString());
-			Card personCard = getCard(parameters.get(0));
-			Card weaponCard = getCard(parameters.get(1));
-			Card roomCard = getCard(parameters.get(2));
-			if(personCard instanceof PersonCard) {
-				if(weaponCard instanceof WeaponCard) {
-					Accugestion a = new Accugestion(weaponCard, personCard, roomCard, p);
-					makeSuggestion(a);
-				}
-				else {
-					JOptionPane.showMessageDialog(null, "You need a valid person");
-					return false;
-				}
-			}
-			else {
-				JOptionPane.showMessageDialog(null, "You need a valid weapon");
-				return false;
-			}
-		}
-		else {JOptionPane.showMessageDialog(null, "You must be in a room"); return false;}
+	public boolean Suggest() {
+		Player p = players[currentPlayer];
+		List<String> parameters = myInput.getSuggestion();
+		System.out.println(parameters.toString());
+		Card personCard = getCard(parameters.get(0));
+		Card weaponCard = getCard(parameters.get(1));
+		Card roomCard = getCard(parameters.get(2));
+		Accugestion a = new Accugestion(weaponCard, personCard, roomCard, p);
+		makeSuggestion(a);
 		return true;
-		
 	}
 	
 
@@ -399,12 +360,15 @@ private Player nextPlayer() {
 		
 			if( p.handContains(suggestion.getPerson().getName()) || p.handContains(suggestion.getRoom().getName()) || p.handContains(suggestion.getWeapon().getName()) ) {
 				Card c = p.checkHand(suggestion.getPerson(), suggestion.getRoom(), suggestion.getWeapon());
-				JOptionPane.showMessageDialog(null, c.getName() + "has been refuted");
+				JOptionPane.showMessageDialog(null, "Your suggestion has been refuted, " + p.getPlayerId() + " has the card " +c.getName() + ".");
+				endTurn();
+				return;
 			}
 			
 		}
 		JOptionPane.showMessageDialog(null, "Your suggestion has not been refuted by any other player");
-	
+		endTurn();
+		return;
 	}
   
   public void makeAccusation(Accugestion accusation) {
@@ -425,16 +389,13 @@ private Player nextPlayer() {
 	  movePlayerToRoom(accused, crimeScene);
 	  moveWeaponToRoom(accusation.getWeapon(), crimeScene);
 	  if(accusation.getPerson() == mPerson && accusation.getRoom() == mRoom && accusation.getWeapon() == mWeapon) {
-		  System.out.flush();
-	      for(int i = 0; i<300; i++) {
-	          System.out.println();
-	      }	
 		  myGameDisplay.gameWon(accusation.getOwner());
 		  System.exit(100);
 		  isRunning = false;
 		  }
 	  else {JOptionPane.showMessageDialog(null, "Your guess was incorrect, you have been removed from play"); accusation.getOwner().setIsPlaying(false); StateChange();}
-	
+		endTurn();
+		return;
 	}
 
 private void loadMapFromCSV(){
@@ -581,16 +542,29 @@ private void loadMapFromCSV(){
 			player.setSteps(0);
             myGameDisplay.updateDie(0, 0);
 			currentPlayer = i;
-			currentTurnActive = true;
-			hasRolled = false;
-			myGameDisplay.redraw();
-			while(hasRolled == false) { 
-				if(currentTurnActive == false) {
-					break;
-				}	
-			}
-			while(currentTurnActive == true) {
-				;
+			this.currentTurnActive = true;
+			this.hasRolled = false;
+			System.out.println(player.getPlayerName().getName() + " has started turn");
+			boolean playingCurrentTurn = true;
+			boolean hasDiceRolled = false;
+			if(player.getIsPlaying()) {
+				myGameDisplay.redraw();
+				while(playingCurrentTurn == true) {
+					//Make sure the player has rolled first
+					if(this.hasRolled == true) {
+						if(this.currentTurnActive == false) {
+							playingCurrentTurn = false;
+						}
+						else {
+							//Needed to receive latest events from myGameDisplay
+							myGameDisplay.getFont();
+						}
+					}
+					else {
+						//Needed to receive latest events from myGameDisplay
+						myGameDisplay.getFont();
+					}
+				}
 			}
 		}
 	}

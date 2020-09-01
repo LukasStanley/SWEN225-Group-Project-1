@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -379,6 +380,15 @@ public class GameDisplay extends JFrame implements KeyListener, ActionListener
         setLayout(new FlowLayout());
 
         canvas.setVisible(true);
+    }
+    
+    public void gameWon(Player winner) {
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(2, 1));
+        JLabel jL = new JLabel(winner.getPlayerId() + " has won as " + winner.getPlayerName().getName() + "!");
+        panel.add(jL);
+        JOptionPane.showMessageDialog(null, panel);
+        System.exit(0);
     }
 
     public int displayPlayerPick() {

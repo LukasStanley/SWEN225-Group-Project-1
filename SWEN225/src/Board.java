@@ -364,14 +364,15 @@ private Player nextPlayer() {
     
   }
    public void rollDice(){
-
+	   if(!hasRolled) {
 	int dice1 = (int)(Math.random()*6) + 1;
 	int dice2 = (int)(Math.random()*6) + 1;
 	   
 	   players[currentPlayer].setSteps((dice1 + dice2));
 	   hasRolled = true;
     myGameDisplay.updateDie(dice1, dice2);
-    StateChange();
+    StateChange();}
+	   else {JOptionPane.showMessageDialog(null, "You can only roll the dice once per turn!");}
   }
 
 

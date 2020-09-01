@@ -82,6 +82,7 @@ public class Board
 	 mWeapon = (WeaponCard) cards.get(randomGeneration(6,11));
 	 mRoom = (RoomCard) cards.get(randomGeneration(12,17));
 	distributionCards.remove(mPerson); distributionCards.remove(mWeapon); distributionCards.remove(mRoom);
+	//System.out.println("DEBUG: MURDER SOLUTION: " + mPerson.getName() + " " + mWeapon.getName() + " " + mRoom.getName());
 	
   }
 
@@ -398,7 +399,7 @@ private Player nextPlayer() {
 		
 			if( p.handContains(suggestion.getPerson().getName()) || p.handContains(suggestion.getRoom().getName()) || p.handContains(suggestion.getWeapon().getName()) ) {
 				Card c = p.checkHand(suggestion.getPerson(), suggestion.getRoom(), suggestion.getWeapon());
-				JOptionPane.showMessageDialog(null, c + "has been refuted");
+				JOptionPane.showMessageDialog(null, c.getName() + "has been refuted");
 			}
 			
 		}
@@ -428,8 +429,7 @@ private Player nextPlayer() {
 	      for(int i = 0; i<300; i++) {
 	          System.out.println();
 	      }	
-		  System.out.println("Player " + players[currentPlayer].getPlayerName().getName() + " has won the game!");
-		  System.out.println("The correct solution was " + mPerson.getName() + " in the " + mRoom.getName() + " with the " + mWeapon.getName());
+		  myGameDisplay.gameWon(accusation.getOwner());
 		  System.exit(100);
 		  isRunning = false;
 		  }
@@ -578,17 +578,20 @@ private void loadMapFromCSV(){
 	while(isRunning) {
 		for(int i = 0; i<playersPlaying; i++) {
 			Player player = players[i];
+			player.setSteps(0);
+            myGameDisplay.updateDie(0, 0);
 			currentPlayer = i;
 			currentTurnActive = true;
 			hasRolled = false;
 			myGameDisplay.redraw();
-			while(!hasRolled) { if(hasRolled == true) {break;}}
-			while(currentTurnActive) {
+			while(hasRolled == false) { if(hasRolled == true || currentTurnActive == false) {break;}
+			while(currentTurnActive == true) {
 				if(currentTurnActive == false) { break;}
 	
 		}
-		
-	}}
+	}
+		}
+	}
 }
   
   private void startGame() {
